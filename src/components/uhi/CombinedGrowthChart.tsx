@@ -1,0 +1,101 @@
+import { useMemo, useState } from "react";
+import { ResponsiveContainer, ComposedChart, Area, Line, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Legend } from "recharts";
+import { combinedGrowth } from "@/lib/uhi-data";
+import { ChartContainer } from "./primitives";
+
+type ChartType = "line" | "area" | "bar";
+type ViewType = "cumulative" | "incremental";
+type Range = "ALL" | "1Y" | "6M";
+
+const SERIES: Array<{ key: string; name: string; color: string; paused?: boolean }> = [
+  { key: "PMJAY", name: "PMJAY HEM", color: "var(--color-chart-blue)" },
+  { key: "Blood", name: "Blood Bank", color: "var(--color-bar-coral)" },
+  { key: "Tele", name: "Teleconsult", color: "var(--color-chart-teal)", paused: true },
+  { key: "Phys", name: "Physical Consult", color: "var(--color-chart-purple)" },
+  { key: "Amb", name: "Ambulance", color: "var(--color-chart-orange)" },
+];
+
+export function CombinedGrowthChart() {
+  const [chart, setChart] = useState<ChartType>("area");
+  const [view, setView] = useState<ViewType>("cumulative");
+  const [range, setRange] = useState<Range>("1Y");
+
+  const data = useMemo(() => {
+    const arr = combinedGrowth.map((d) => ({ ...d }));
+    const sliced = range === "6M" ? arr.slice(-6) : range === "1Y" ? arr.slice(-10) : arr;
+    if (view === "incremental") {
+      return sliced.map((d, i, all) => {
+        if (i === 0) return d;
+        const prev = all[i - 1];
+        return {
+          month: d.month,
+          PMJAY: Math.max(0, d.PMJAY - prev.PMJAY),
+          Blood: Math.max(0, d.Blood - prev.Blood),
+          Tele: Math.max(0, d.Tele - prev.Tele),
+          Phys: Math.max(0, d.Phys - prev.Phys),
+          Amb: Math.max(0, d.Amb - prev.Amb),
+          Overall: Math.max(0, d.Overall - prev.Overall),
+        };
+      });
+    }
+    return sliced;
+  }, [view, range]);
+
+  return (
+    <ChartContainer label="TRAJECTORY" title="Combined Growth · All Services" onDownload={() => window.print()}>
+      <div className="flex flex-wrap items-center gap-4 mb-4 text-xs">
+        <ToggleGroup label="Chart:" value={chart} onChange={setChart} options={[["line","Line"],["area","Area"],["bar","Bar"]]} />
+        <ToggleGroup label="View:" value={view} onChange={setView} options={[["cumulative","Cumulative"],["incremental","Incremental"]]} />
+        <ToggleGroup label="Range:" value={range} onChange={setRange} options={[["ALL","ALL"],["1Y","1Y"],["6M","6M"]]} />
+        <div className="flex flex-wrap items-center gap-3 ml-auto">
+          {SERIES.map((s) => (
+            <span key={s.key} className="flex items-center gap-1.5 text-[11px]">
+              <span className="size-2.5 rounded-full" style={{ background: s.color, outline: s.paused ? `1.5px solid var(--color-paused)` : "none", outlineOffset: 1 }} />
+              {s.name}
+            </span>
+          ))}
+          <span className="flex items-center gap-1.5 text-[11px]">
+            <span className="w-4 border-t-2 border-dashed border-[var(--color-navy)]" /> Overall (Avg)
+          </span>
+        </div>
+      </div>
+
+      <div className="h-96">
+        <ResponsiveContainer width="100%" height="100%">
+          <ComposedChart data={data} margin={{ top: 10, right: 16, left: 16, bottom: 24 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+            <XAxis dataKey="month" tick={{ fontSize: 11 }} />
+            <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => v >= 1000 ? `${Math.round(v/1000)}K` : `${v}`} />
+            <Tooltip contentStyle={{ fontSize: 12, borderRadius: 6 }} />
+            <Legend wrapperStyle={{ display: "none" }} />
+            {SERIES.map((s) => {
+              if (chart === "bar") return <Bar key={s.key} dataKey={s.key} fill={s.color} name={s.name} />;
+              if (chart === "area") return <Area key={s.key} type="monotone" dataKey={s.key} stroke={s.color} fill={s.color} fillOpacity={0.25} name={s.name} />;
+              return <Line key={s.key} type="monotone" dataKey={s.key} stroke={s.color} strokeWidth={2} dot={false} name={s.name} />;
+            })}
+            <Line type="monotone" dataKey="Overall" stroke="var(--color-navy)" strokeDasharray="6 4" strokeWidth={2} dot={false} name="Overall (Avg)" />
+          </ComposedChart>
+        </ResponsiveContainer>
+      </div>
+    </ChartContainer>
+  );
+}
+
+function ToggleGroup<T extends string>({ label, value, onChange, options }: {
+  label: string; value: T; onChange: (v: T) => void; options: Array<[T, string]>;
+}) {
+  return (
+    <div className="flex items-center gap-2">
+      <span className="text-muted-foreground">{label}</span>
+      <div className="flex bg-muted rounded-md p-0.5">
+        {options.map(([v, l]) => (
+          <button
+            key={v}
+            onClick={() => onChange(v)}
+            className={`px-3 py-1 rounded text-xs font-medium transition ${value === v ? "bg-[var(--color-navy)] text-white" : "text-foreground hover:bg-white"}`}
+          >{l}</button>
+        ))}
+      </div>
+    </div>
+  );
+}
