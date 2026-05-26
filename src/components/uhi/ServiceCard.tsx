@@ -56,7 +56,7 @@ export function ServiceCard({ service, kind }: Props) {
         </div>
         <div className="h-44 mt-2">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={d.monthly} margin={{ top: 8, right: 12, left: 18, bottom: 28 }}>
+            <BarChart data={[...d.monthly]} margin={{ top: 8, right: 12, left: 18, bottom: 28 }}>
               <XAxis dataKey="month" tick={{ fontSize: 10 }} tickLine={false} axisLine={{ stroke: "#cbd5e1" }}>
                 <Label value="Month" position="insideBottom" offset={-12} style={{ fontSize: 10, fill: "var(--color-muted-foreground)" }} />
               </XAxis>
