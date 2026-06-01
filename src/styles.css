@@ -68,7 +68,7 @@
   --ring: oklch(0.7 0.04 256);
 
   /* UHI brand */
-  --navy: oklch(0.32 0.06 250);   /* #1a3553 */
+  --navy: oklch(0.41 0.14 258);   /* brighter brand blue, matches ABDM chart header */
   --navy-foreground: oklch(0.99 0 0);
   --amber-num: oklch(0.65 0.16 50); /* #e07b2a */
   --cream: oklch(0.975 0.02 80);    /* #fdf6ec */
