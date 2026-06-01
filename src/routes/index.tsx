@@ -324,148 +324,177 @@ function AdoptionFunnel({ service }: { service: string }) {
 function IntegrationJourneyCard() {
   const [view, setView] = useState<"public" | "private">("public");
   const [sortDesc, setSortDesc] = useState(true);
-  const max = Math.max(...integrationJourney.map((d) => d.days));
-  const rows = useMemo(() => {
+  const [serviceFilter, setServiceFilter] = useState("All Services");
+
+  // PUBLIC: service-wise averages
+  const publicMax = Math.max(...integrationJourney.map((d) => d.days));
+  const publicRows = useMemo(() => {
     const cp = [...integrationJourney];
     cp.sort((a, b) => sortDesc ? b.days - a.days : a.days - b.days);
     return cp;
   }, [sortDesc]);
 
+  // PRIVATE: integrator-wise timelines
+  const privateRows = useMemo(() => {
+    const filtered = integrators.filter((i) => serviceFilter === "All Services" || i.service === serviceFilter);
+    const withDays = filtered.map((i) => {
+      const o = new Date(i.onboardDate).getTime();
+      const g = new Date(i.goLiveDate).getTime();
+      return { ...i, days: Math.round((g - o) / (1000 * 60 * 60 * 24)), oMs: o, gMs: g };
+    });
+    withDays.sort((a, b) => sortDesc ? b.days - a.days : a.days - b.days);
+    return withDays;
+  }, [serviceFilter, sortDesc]);
+
+  const tMin = privateRows.length ? Math.min(...privateRows.map((r) => r.oMs)) : 0;
+  const tMax = privateRows.length ? Math.max(...privateRows.map((r) => r.gMs)) : 1;
+  const tRange = tMax - tMin || 1;
+  const fmtMonth = (ms: number) => new Date(ms).toLocaleDateString("en-IN", { month: "short", year: "2-digit" });
+
+  // 4 evenly spaced timeline ticks
+  const ticks = [0, 0.33, 0.66, 1].map((p) => tMin + p * tRange);
+
   return (
-    <ChartContainer label="ONBOARDING · SERVICE-WISE AVERAGE" title="Integration Journey"
+    <ChartContainer
+      label={view === "private" ? "ONBOARDING · INTEGRATOR-WISE (PRIVATE VIEW ONLY)" : "ONBOARDING · SERVICE-WISE AVERAGE"}
+      title="Integration Journey"
       right={
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <div className="flex bg-white/10 rounded-md p-0.5">
             <button onClick={() => setView("public")} className={`px-2.5 py-1 rounded text-xs font-medium ${view === "public" ? "bg-white text-[var(--color-navy)]" : "text-white"}`}>Public View</button>
             <button onClick={() => setView("private")} className={`px-2.5 py-1 rounded text-xs font-medium ${view === "private" ? "bg-white text-[var(--color-navy)]" : "text-white"}`}>Private View</button>
           </div>
-          <button onClick={() => setSortDesc(s => !s)} className="text-xs opacity-80 hover:opacity-100">↕ Sort</button>
+          {view === "private" && (
+            <select value={serviceFilter} onChange={(e) => setServiceFilter(e.target.value)}
+              className="text-xs border border-white/30 bg-white/10 text-white rounded px-2 py-1">
+              {["All Services", ...SERVICES].map((s) => <option key={s} className="text-foreground">{s}</option>)}
+            </select>
+          )}
+          <button onClick={() => setSortDesc((s) => !s)} className="text-xs opacity-80 hover:opacity-100">↕ Sort</button>
         </div>
       }
-      onDownload={() => downloadCSV("integration-journey.csv", integrationJourney)}
+      onDownload={() => downloadCSV(view === "public" ? "integration-journey.csv" : "integration-journey-integrators.csv", view === "public" ? integrationJourney : privateRows)}
     >
-      <p className="text-sm text-muted-foreground mb-4">
-        Average duration from <strong>Sandbox Onboarding</strong> to <strong>Go Live</strong> per service. {view === "public" && "Integrator names are not shown in public view."}
-      </p>
-      <div className="space-y-4">
-        {rows.map((r) => (
-          <div key={r.service} className="grid grid-cols-12 items-center gap-3">
-            <div className="col-span-3">
-              <div className="font-semibold text-sm">{r.service}</div>
-              <div className="text-xs text-muted-foreground">{r.integrators} integrators</div>
-            </div>
-            <div className="col-span-7">
-              <div className="h-7 rounded relative bg-muted/40">
-                <div className="h-full rounded flex items-center px-2 text-xs font-semibold text-white"
-                  style={{ width: `${(r.days / max) * 100}%`, background: r.color }}>
-                  {r.days} days
+      {view === "public" ? (
+        <div className="space-y-4">
+          {publicRows.map((r) => (
+            <div key={r.service} className="grid grid-cols-12 items-center gap-3">
+              <div className="col-span-3">
+                <div className="font-semibold text-sm">{r.service}</div>
+                <div className="text-xs text-muted-foreground">{r.integrators} integrators</div>
+              </div>
+              <div className="col-span-7">
+                <div className="h-7 rounded relative bg-muted/40">
+                  <div className="h-full rounded flex items-center px-2 text-xs font-semibold text-white"
+                    style={{ width: `${(r.days / publicMax) * 100}%`, background: r.color }}>
+                    {r.days} days
+                  </div>
                 </div>
               </div>
+              <div className="col-span-2 text-xs text-muted-foreground text-right">{r.from} → {r.to}</div>
             </div>
-            <div className="col-span-2 text-xs text-muted-foreground text-right">{r.from} → {r.to}</div>
-          </div>
-        ))}
-      </div>
-      <div className="text-xs text-muted-foreground mt-5">Each bar shows the average days between Date of Onboarding (Sandbox) and Date of Go Live across all integrators of that service.</div>
-      {view === "private" && <div className="text-xs italic text-muted-foreground mt-2">only in private view</div>}
-    </ChartContainer>
-  );
-}
-
-function GeographicCard() {
-  const [metric, setMetric] = useState("Total Searches");
-  const [serviceFilter, setServiceFilter] = useState("All Services");
-  const [sortDesc, setSortDesc] = useState(true);
-  const [view, setView] = useState<"bar" | "table">("bar");
-
-  const data = useMemo(() => {
-    const mult = serviceFilter === "All Services" ? 1 : 0.3;
-    const arr = states.map((s) => ({ ...s, value: Math.round(s.value * mult) }));
-    arr.sort((a, b) => sortDesc ? b.value - a.value : a.value - b.value);
-    return arr;
-  }, [serviceFilter, sortDesc]);
-
-  const max = Math.max(...data.map(d => d.value));
-
-  return (
-    <ChartContainer label="WHERE THE ACTION IS" title="Geographic Performance"
-      right={
-        <div className="flex items-center gap-2">
-          <div className="flex bg-white/10 rounded-md p-0.5">
-            <button onClick={() => setView("bar")} className={`px-2.5 py-1 rounded text-xs font-medium ${view === "bar" ? "bg-white text-[var(--color-navy)]" : "text-white"}`}>Bar</button>
-            <button onClick={() => setView("table")} className={`px-2.5 py-1 rounded text-xs font-medium ${view === "table" ? "bg-white text-[var(--color-navy)]" : "text-white"}`}>Table</button>
-          </div>
-          <select value={serviceFilter} onChange={(e) => setServiceFilter(e.target.value)}
-            className="text-xs border border-white/30 bg-white/10 text-white rounded px-2 py-1">
-            {["All Services", ...SERVICES].map((s) => <option key={s} className="text-foreground">{s}</option>)}
-          </select>
-          <select value={metric} onChange={(e) => setMetric(e.target.value)}
-            className="text-xs border border-white/30 bg-white/10 text-white rounded px-2 py-1">
-            <option className="text-foreground">Total Searches</option>
-            <option className="text-foreground">Bookings</option>
-            <option className="text-foreground">EUA Coverage</option>
-          </select>
-          <button onClick={() => setSortDesc(s => !s)} className="text-xs opacity-80 hover:opacity-100">↕ Sort</button>
-        </div>
-      }
-      onDownload={() => downloadCSV("geographic-performance.csv", data)}
-    >
-      <p className="text-sm text-muted-foreground mb-3">
-        All states &amp; UTs by <strong>{metric}</strong> · Service: <strong>{serviceFilter}</strong>
-      </p>
-
-      {/* Mini heat-grid (acts as the choropleth visual cue) */}
-      <div className="mb-4 grid grid-cols-10 gap-1">
-        {data.slice(0, 20).map((s) => {
-          const intensity = s.value / max;
-          return (
-            <div key={s.name} title={`${s.name}: ${s.value.toLocaleString("en-IN")}`}
-              className="aspect-square rounded-sm" style={{ background: `color-mix(in oklab, var(--color-chart-teal) ${intensity * 90 + 10}%, white)` }} />
-          );
-        })}
-      </div>
-
-      {view === "bar" ? (
-        <div className="max-h-[420px] overflow-y-auto pr-2">
-          <table className="w-full text-sm">
-            <thead className="sticky top-0 bg-white">
-              <tr className="border-b border-border">
-                <th className="text-left py-1.5 text-[11px] tracking-wider text-[var(--color-navy)] font-semibold">STATE / UT</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((s, i) => (
-                <tr key={s.name} className="border-b border-border/50">
-                  <td className="py-2 w-44">
-                    <span className="text-muted-foreground mr-2">{i + 1}.</span>
-                    <span className="font-medium">{s.name}</span>
-                  </td>
-                  <td className="py-2 pl-2">
-                    <div className="flex items-center gap-2">
-                      <div className="flex-1 h-5 rounded relative bg-muted/30">
-                        <div className="h-full rounded"
-                          style={{ width: `${(s.value / max) * 100}%`, background: "linear-gradient(90deg, var(--color-chart-teal), var(--color-chart-blue))" }} />
-                      </div>
-                      <span className="text-xs font-semibold tabular-nums w-16 text-right">{s.value.toLocaleString("en-IN")}</span>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          ))}
         </div>
       ) : (
-        <div className="max-h-[420px] overflow-y-auto">
-          <table className="w-full text-sm">
-            <thead><tr className="border-b border-border"><th className="text-left py-2 text-[11px] tracking-wider text-[var(--color-navy)] font-semibold">STATE / UT</th><th className="text-right text-[11px] tracking-wider text-[var(--color-navy)] font-semibold">VALUE</th></tr></thead>
-            <tbody>{data.map((s) => <tr key={s.name} className="border-b border-border/40"><td className="py-2">{s.name}</td><td className="py-2 text-right num-amber">{s.value.toLocaleString("en-IN")}</td></tr>)}</tbody>
-          </table>
+        <div>
+          {/* Timeline header */}
+          <div className="grid grid-cols-12 items-center gap-3 mb-2 pb-2 border-b border-border">
+            <div className="col-span-3"></div>
+            <div className="col-span-8 relative h-4">
+              {ticks.map((t, i) => (
+                <div key={i} className="absolute -top-0.5 text-[11px] text-muted-foreground" style={{ left: `${(i / (ticks.length - 1)) * 100}%`, transform: i === ticks.length - 1 ? "translateX(-100%)" : "translateX(-50%)" }}>
+                  {fmtMonth(t)}
+                </div>
+              ))}
+            </div>
+            <div className="col-span-1 text-right text-[11px] tracking-wider text-muted-foreground font-semibold">DAYS</div>
+          </div>
+
+          <div className="space-y-3">
+            {privateRows.map((r) => {
+              const left = ((r.oMs - tMin) / tRange) * 100;
+              const width = ((r.gMs - r.oMs) / tRange) * 100;
+              return (
+                <div key={r.name} className="grid grid-cols-12 items-center gap-3">
+                  <div className="col-span-3">
+                    <div className="font-semibold text-sm truncate" title={r.name}>{r.name}</div>
+                    <div className="text-[11px] text-muted-foreground">{r.role} · {r.service}</div>
+                  </div>
+                  <div className="col-span-8">
+                    <div className="relative h-6 bg-muted/30 rounded">
+                      <div className="absolute top-1/2 -translate-y-1/2 h-1.5 rounded-full bg-[var(--color-bar-coral)]/70" style={{ left: `${left}%`, width: `${width}%` }} />
+                      <div className="absolute top-1/2 -translate-y-1/2 size-2.5 rounded-full bg-[var(--color-chart-blue)] border-2 border-white" style={{ left: `calc(${left}% - 5px)` }} title={`Onboarded ${fmtMonth(r.oMs)}`} />
+                      <div className="absolute top-1/2 -translate-y-1/2 size-2.5 rounded-full bg-[var(--color-live)] border-2 border-white" style={{ left: `calc(${left + width}% - 5px)` }} title={`Go Live ${fmtMonth(r.gMs)}`} />
+                    </div>
+                  </div>
+                  <div className="col-span-1 text-sm font-semibold text-right num-amber">{r.days}</div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="flex items-center gap-4 mt-5 text-xs text-muted-foreground">
+            <span className="inline-flex items-center gap-1.5"><span className="size-2.5 rounded-full bg-[var(--color-chart-blue)]" /> Date of Onboarding</span>
+            <span className="inline-flex items-center gap-1.5"><span className="size-2.5 rounded-full bg-[var(--color-live)]" /> Date of Go Live</span>
+          </div>
+          <div className="text-xs italic text-muted-foreground mt-2">only in private view</div>
         </div>
       )}
     </ChartContainer>
   );
 }
+
+function GeographicCard() {
+  const [serviceFilter, setServiceFilter] = useState("All Services");
+
+  const data = useMemo(() => {
+    const mult = serviceFilter === "All Services" ? 1 : 0.3;
+    return states.map((s) => ({ ...s, value: Math.round(s.value * mult) }));
+  }, [serviceFilter]);
+
+  const sorted = useMemo(() => [...data].sort((a, b) => b.value - a.value), [data]);
+  const max = Math.max(...data.map((d) => d.value));
+
+  return (
+    <ChartContainer label="WHERE THE ACTION IS" title="Geographic Performance"
+      right={
+        <select value={serviceFilter} onChange={(e) => setServiceFilter(e.target.value)}
+          className="text-xs border border-white/30 bg-white/10 text-white rounded px-2 py-1">
+          {["All Services", ...SERVICES].map((s) => <option key={s} className="text-foreground">{s}</option>)}
+        </select>
+      }
+      onDownload={() => downloadCSV("geographic-performance.csv", data)}
+    >
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
+        <div className="lg:col-span-3">
+          <IndiaMap data={data} max={max} />
+        </div>
+        <div className="lg:col-span-2">
+          <div className="text-[11px] tracking-wider text-[var(--color-navy)] font-semibold mb-2">TOP STATES · {serviceFilter.toUpperCase()}</div>
+          <div className="max-h-[520px] overflow-y-auto pr-2">
+            <table className="w-full text-sm">
+              <tbody>
+                {sorted.map((s, i) => (
+                  <tr key={s.name} className="border-b border-border/40">
+                    <td className="py-2 w-8 text-muted-foreground text-xs">{i + 1}</td>
+                    <td className="py-2">
+                      <div className="font-medium text-sm">{s.name}</div>
+                      <div className="h-1.5 rounded mt-1 bg-muted/40 overflow-hidden">
+                        <div className="h-full rounded" style={{ width: `${(s.value / max) * 100}%`, background: "var(--color-bar-coral)" }} />
+                      </div>
+                    </td>
+                    <td className="py-2 pl-3 text-right num-amber tabular-nums text-sm">{s.value.toLocaleString("en-IN")}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </ChartContainer>
+  );
+}
+
 
 function Footer({ onOpenMetrics }: { onOpenMetrics: () => void }) {
   return (
