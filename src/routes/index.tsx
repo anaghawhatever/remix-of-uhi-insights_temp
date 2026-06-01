@@ -36,8 +36,7 @@ function Dashboard() {
 
       <main className="px-6 py-8 mx-auto max-w-[1600px] space-y-10">
         {/* GATEWAY AT A GLANCE */}
-        <Section label="DASHBOARD OVERVIEW" title="Gateway at a Glance"
-          desc="Topline KPIs across the UHI Gateway. Click any ⓘ icon for the full calculation.">
+        <Section label="DASHBOARD OVERVIEW" title="Gateway at a Glance">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <ServicePortfolioCard />
             <KPICard title="Total Searches"
@@ -52,6 +51,10 @@ function Dashboard() {
             <KPICard title="HSPAs Integrated" value={<CountUp value={4} />}
               footnote="Health Service Provider Apps"
               tooltip="HSPA breakdown: Teleconsult 4, Physical 2, PMJAY 1, Blood Bank 1, Ambulance 1."
+            />
+            <KPICard title="Total Ecosystem Partners" value={<CountUp value={19} />}
+              footnote="14 EUAs · 5 HSPAs integrated"
+              tooltip="Total count of live EUAs + live HSPAs across all services."
             />
             <KPICard title="Number of Bookings" value={<CountUp value={2234} />}
               footnote="Teleconsultation · Physical Consultation"
@@ -73,8 +76,7 @@ function Dashboard() {
         </Section>
 
         {/* REGISTRIES */}
-        <Section label="ECOSYSTEM SATURATION" title="Registries in UHI"
-          desc="How deeply ABDM registries are linked into the UHI Gateway.">
+        <Section label="ECOSYSTEM SATURATION" title="Registries in UHI">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <KPICard title="ABHA Saturation" value={<>68.4%</>}
               footnote="↗ +4.2pp QoQ"
@@ -92,8 +94,7 @@ function Dashboard() {
         </Section>
 
         {/* UHI LIVE SERVICES */}
-        <Section label="SERVICE-LEVEL PERFORMANCE" title="UHI Live Services"
-          desc="Headline performance across the 5 live UHI services. Discovery services show monthly searches; Fulfilment services show monthly bookings.">
+        <Section label="SERVICE-LEVEL PERFORMANCE" title="UHI Live Services">
           <div className="text-[11px] tracking-widest text-muted-foreground font-semibold mb-3">DISCOVERY SERVICES <span className="text-muted-foreground/70 normal-case tracking-normal">(PMJAY HEM, Blood Bank, Ambulance Discovery)</span></div>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-8">
             <ServiceCard service="PMJAY HEM" kind="discovery" />
@@ -109,22 +110,22 @@ function Dashboard() {
 
         {/* DETAILED INDICATORS */}
         <Section title="Detailed Indicators" desc="only in private view" descItalic>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <KPICard title="Booking Conversion Rate" value={<>0.81%</>}
               footnote={<span className="text-[var(--color-live)] font-medium">↗ +0.12pp vs last quarter</span>}
               tooltip="Total completed bookings ÷ Total searches across all services."
-            />
-            <KPICard title="Total Ecosystem Partners" value={<CountUp value={19} />}
-              footnote="14 EUAs · 5 HSPAs integrated"
-              tooltip="Total count of live EUAs + live HSPAs across all services."
             />
             <KPICard title="Search Growth (QoQ)" value={<span className="text-[var(--color-live)]">+38% <ArrowUpRight className="inline size-6"/></span>}
               footnote="Quarter-on-quarter total searches"
               tooltip="(Current quarter searches − Previous quarter searches) ÷ Previous quarter searches × 100."
             />
-            <ServicePortfolioCard variant="detailed" />
+            <KPICard title="Daily Active Integrators" value={<CountUp value={11} />}
+              footnote="Avg integrators active per day"
+              tooltip="Distinct EUAs/HSPAs making at least one API call per day, averaged across the quarter."
+            />
           </div>
         </Section>
+
 
         {/* COMBINED GROWTH */}
         <CombinedGrowthChart />
