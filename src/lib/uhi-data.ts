@@ -190,3 +190,54 @@ export const metricsLogic = [
   { metric: "Daily Search Requests", service: "All", definition: "Avg searches per day", source: "Gateway logs", calc: "Total searches ÷ Number of active days in period", unit: "Count/day", refresh: "Daily", location: "Gateway at a Glance" },
   { metric: "Number of Bookings", service: "Tele + Physical", definition: "Aggregate completed bookings", source: "Fulfilment logs", calc: "Total completed bookings from Teleconsultation + Physical Consultation", unit: "Count", refresh: "Daily", location: "Gateway at a Glance" },
 ];
+
+export type Integrator = {
+  name: string;
+  role: "EUA" | "HSPA";
+  service: ServiceKey;
+  onboardDate: string; // YYYY-MM-DD
+  goLiveDate: string;
+};
+
+export const integrators: Integrator[] = [
+  { name: "e-Raktkosh", role: "HSPA", service: "Blood Bank", onboardDate: "2024-09-15", goLiveDate: "2025-06-29" },
+  { name: "Driefcase Healthtech Pvt Ltd", role: "EUA", service: "Blood Bank", onboardDate: "2024-12-02", goLiveDate: "2025-08-30" },
+  { name: "Skearth Private Limited", role: "EUA", service: "Blood Bank", onboardDate: "2025-02-04", goLiveDate: "2025-10-29" },
+  { name: "Jdeanz Healthtech Pvt Ltd", role: "EUA", service: "Blood Bank", onboardDate: "2025-02-18", goLiveDate: "2025-11-08" },
+  { name: "Ublood Private Limited", role: "EUA", service: "Blood Bank", onboardDate: "2025-03-12", goLiveDate: "2025-11-30" },
+  { name: "Anahat Solutions Pvt Ltd", role: "EUA", service: "Blood Bank", onboardDate: "2024-11-20", goLiveDate: "2025-07-30" },
+  { name: "Secure", role: "EUA", service: "PMJAY HEM", onboardDate: "2025-05-10", goLiveDate: "2025-10-15" },
+  { name: "PMJAY Connect", role: "EUA", service: "PMJAY HEM", onboardDate: "2025-06-22", goLiveDate: "2025-12-01" },
+  { name: "Pmjay", role: "HSPA", service: "PMJAY HEM", onboardDate: "2025-05-01", goLiveDate: "2025-11-04" },
+  { name: "Apollo 24/7", role: "HSPA", service: "Physical Consultation", onboardDate: "2025-09-08", goLiveDate: "2026-03-26" },
+  { name: "Pristyn Care", role: "EUA", service: "Physical Consultation", onboardDate: "2025-10-04", goLiveDate: "2026-03-20" },
+  { name: "DocsApp", role: "EUA", service: "Teleconsultation", onboardDate: "2023-01-15", goLiveDate: "2023-06-12" },
+  { name: "eSanjeevani", role: "HSPA", service: "Teleconsultation", onboardDate: "2023-02-01", goLiveDate: "2023-07-04" },
+  { name: "C-Dac E-Sushrut", role: "HSPA", service: "Teleconsultation", onboardDate: "2023-01-20", goLiveDate: "2023-06-25" },
+  { name: "AmbuFleet", role: "EUA", service: "Ambulance Discovery", onboardDate: "2025-11-12", goLiveDate: "2026-05-02" },
+  { name: "Ziqitza HealthCare", role: "HSPA", service: "Ambulance Discovery", onboardDate: "2025-12-05", goLiveDate: "2026-05-20" },
+];
+
+// State name → key used in topojson india-states.json (st_nm)
+export const stateNameMap: Record<string, string> = {
+  "Maharashtra": "Maharashtra",
+  "Tamil Nadu": "Tamil Nadu",
+  "Karnataka": "Karnataka",
+  "Delhi": "Delhi",
+  "Uttar Pradesh": "Uttar Pradesh",
+  "Gujarat": "Gujarat",
+  "Telangana": "Telangana",
+  "Kerala": "Kerala",
+  "Andhra Pradesh": "Andhra Pradesh",
+  "West Bengal": "West Bengal",
+  "Rajasthan": "Rajasthan",
+  "Madhya Pradesh": "Madhya Pradesh",
+  "Haryana": "Haryana",
+  "Bihar": "Bihar",
+  "Punjab": "Punjab",
+  "Odisha": "Odisha",
+  "Jharkhand": "Jharkhand",
+  "Assam": "Assam",
+  "Chhattisgarh": "Chhattisgarh",
+  "Uttarakhand": "Uttarakhand",
+};
