@@ -6,8 +6,9 @@ import { DashboardHeader } from "@/components/uhi/DashboardHeader";
 import { ServiceCard } from "@/components/uhi/ServiceCard";
 import { CombinedGrowthChart } from "@/components/uhi/CombinedGrowthChart";
 import { KPICard, CountUp, ChartContainer, StatusBadge, downloadCSV, Tooltip } from "@/components/uhi/primitives";
-import { euaPartners, hspaPartners, integrationJourney, metricsLogic, serviceStatus, states, SERVICES, type ServiceKey } from "@/lib/uhi-data";
+import { euaPartners, hspaPartners, integrationJourney, integrators, metricsLogic, serviceStatus, states, SERVICES } from "@/lib/uhi-data";
 import { Info } from "lucide-react";
+import { IndiaMap } from "@/components/uhi/IndiaMap";
 
 export const Route = createFileRoute("/")({
   head: () => ({
