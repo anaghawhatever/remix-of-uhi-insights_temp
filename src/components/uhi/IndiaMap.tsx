@@ -35,8 +35,8 @@ export function IndiaMap({ data, max }: { data: Datum[]; max: number }) {
           height={620}
           style={{ width: "100%", height: "auto" }}
         >
-          {/* @ts-expect-error geoData type */}
-          <Geographies geography={geoData}>
+          <Geographies geography={geoData as object}>
+
             {({ geographies }: { geographies: Array<{ rsmKey: string; properties: { st_nm: string } }> }) =>
               geographies.map((geo) => {
                 const name = geo.properties.st_nm;
