@@ -197,26 +197,22 @@ function Section({ label, title, desc, descItalic, children }: { label?: string;
   );
 }
 
-function ServicePortfolioCard({ variant = "strip" }: { variant?: "strip" | "detailed" }) {
+function ServicePortfolioCard() {
   const items = SERVICES.map((s) => ({ name: s, status: serviceStatus[s] }));
   return (
     <div className="card-cream p-5 flex flex-col gap-3">
       <div className="flex items-start justify-between">
         <div className="section-label">Service Portfolio Status</div>
-        {variant === "strip" && (
-          <Tooltip content="Traffic-light status per live service. Green = Live, Red = Paused.">
-            <Info className="size-4" />
-          </Tooltip>
-        )}
+        <Tooltip content="Traffic-light status per live service. Green = Live, Red = Paused.">
+          <Info className="size-4" />
+        </Tooltip>
       </div>
-      {variant === "strip" ? (
-        <div className="flex gap-1 h-3 rounded overflow-hidden mt-1">
-          {items.map((i) => (
-            <div key={i.name} className="flex-1" title={`${i.name}: ${i.status}`}
-              style={{ background: i.status === "live" ? "var(--color-live)" : "var(--color-paused)" }} />
-          ))}
-        </div>
-      ) : null}
+      <div className="flex gap-1 h-3 rounded overflow-hidden mt-1">
+        {items.map((i) => (
+          <div key={i.name} className="flex-1" title={`${i.name}: ${i.status}`}
+            style={{ background: i.status === "live" ? "var(--color-live)" : "var(--color-paused)" }} />
+        ))}
+      </div>
       <ul className="space-y-1.5 mt-1">
         {items.map((i) => (
           <li key={i.name} className="flex items-center justify-between text-sm">
@@ -228,10 +224,10 @@ function ServicePortfolioCard({ variant = "strip" }: { variant?: "strip" | "deta
           </li>
         ))}
       </ul>
-      <div className="text-xs italic text-muted-foreground mt-1">5 services in portfolio, 4 fully live. Teleconsultation paused (pilot complete, payments layer pending).</div>
     </div>
   );
 }
+
 
 function PartnerTable({ title, columns, rows, numericCol, onDownload }: {
   title: string; columns: string[]; rows: Array<Array<string | number>>; numericCol: number; onDownload: () => void;
