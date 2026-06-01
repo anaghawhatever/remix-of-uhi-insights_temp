@@ -131,8 +131,7 @@ function Dashboard() {
         <CombinedGrowthChart />
 
         {/* PARTNER REGISTRY */}
-        <Section label="ECOSYSTEM PARTNERS" title="EUA & HSPA Registry"
-          desc="Live End User Applications (EUAs) and Health Service Provider Applications (HSPAs) on UHI, with searches and bookings attributed per service. Both lists update together when you change the service filter.">
+        <Section label="ECOSYSTEM PARTNERS" title="EUA & HSPA Registry">
           <div className="flex items-center gap-3 mb-4">
             <span className="text-[11px] tracking-wider text-muted-foreground font-semibold">FILTER BY SERVICE</span>
             <select value={partnerService} onChange={(e) => setPartnerService(e.target.value)}
