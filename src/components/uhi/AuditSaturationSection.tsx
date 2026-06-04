@@ -217,10 +217,10 @@ export function AuditSaturationSection() {
                 </tr>
                 <tr className="border-b border-border">
                   {ENDPOINTS.map((ep) => (
-                    <>
-                      <th key={`${ep}-c`} className="py-1.5 px-2 text-right text-[10px] tracking-wider text-muted-foreground font-semibold border-l border-border">CALLS</th>
-                      <th key={`${ep}-s`} className="py-1.5 px-2 text-right text-[10px] tracking-wider text-muted-foreground font-semibold">SAT %</th>
-                    </>
+                    <Fragment key={ep}>
+                      <th className="py-1.5 px-2 text-right text-[10px] tracking-wider text-muted-foreground font-semibold border-l border-border">CALLS</th>
+                      <th className="py-1.5 px-2 text-right text-[10px] tracking-wider text-muted-foreground font-semibold">SAT %</th>
+                    </Fragment>
                   ))}
                 </tr>
               </thead>
