@@ -64,10 +64,6 @@ function Dashboard() {
               footnote="↗ +4.2pp vs last quarter"
               tooltip={<>Number of requests with ABHA ID or ABHA address shared ÷ Total number of API endpoint hits.<div className="mt-1">Numerator: 1,88,100 · Denominator: 2,75,000</div></>}
             />
-            <KPICard title="Audit API Calls" value={<>41.8%</>}
-              footnote={<span className="text-muted-foreground italic">only in private view</span>}
-              tooltip="Audit API endpoint hits ÷ All API endpoint hits which have the Audit API endpoint designed. vs [Fulfilment + Post-Fulfilment HSPA Calls]."
-            />
             <KPICard title="Daily Search Requests" value={<CountUp value={9420} />}
               footnote="Avg searches/day · Peak: 14.2K (Mar 18)"
               tooltip="Total searches ÷ Number of active days in the period."
