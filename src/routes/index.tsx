@@ -9,6 +9,7 @@ import { KPICard, CountUp, ChartContainer, StatusBadge, downloadCSV, Tooltip } f
 import { euaPartners, hspaPartners, integrationJourney, integrators, metricsLogic, serviceStatus, states, SERVICES } from "@/lib/uhi-data";
 import { Info } from "lucide-react";
 import { IndiaMap } from "@/components/uhi/IndiaMap";
+import { AuditSaturationSection } from "@/components/uhi/AuditSaturationSection";
 
 export const Route = createFileRoute("/")({
   head: () => ({
