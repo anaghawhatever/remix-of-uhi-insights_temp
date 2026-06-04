@@ -232,10 +232,10 @@ export function AuditSaturationSection() {
                     {row.cells.map((c) => {
                       const color = c.pct >= 60 ? "var(--color-live)" : c.pct >= 40 ? "var(--color-caution)" : "var(--color-paused)";
                       return (
-                        <>
-                          <td key={`${c.ep}-c`} className="py-2.5 px-2 text-right tabular-nums text-xs border-l border-border/40">{c.called.toLocaleString("en-IN")}</td>
-                          <td key={`${c.ep}-s`} className="py-2.5 px-2 text-right tabular-nums text-sm" style={{ color }}>{c.pct.toFixed(1)}%</td>
-                        </>
+                        <Fragment key={c.ep}>
+                          <td className="py-2.5 px-2 text-right tabular-nums text-xs border-l border-border/40">{c.called.toLocaleString("en-IN")}</td>
+                          <td className="py-2.5 px-2 text-right tabular-nums text-sm" style={{ color }}>{c.pct.toFixed(1)}%</td>
+                        </Fragment>
                       );
                     })}
                     <td className="py-2.5 px-2 text-right num-amber tabular-nums">{row.avg.toFixed(1)}%</td>
