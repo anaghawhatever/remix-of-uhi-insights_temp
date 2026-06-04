@@ -174,6 +174,8 @@ function Dashboard() {
           <GeographicCard />
         </div>
 
+        <AuditSaturationSection />
+
         <Footer onOpenMetrics={() => setShowMetricsLogic(true)} />
       </main>
 
