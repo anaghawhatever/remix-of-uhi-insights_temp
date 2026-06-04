@@ -9,6 +9,7 @@ import { KPICard, CountUp, ChartContainer, StatusBadge, downloadCSV, Tooltip } f
 import { euaPartners, hspaPartners, integrationJourney, integrators, metricsLogic, serviceStatus, states, SERVICES } from "@/lib/uhi-data";
 import { Info } from "lucide-react";
 import { IndiaMap } from "@/components/uhi/IndiaMap";
+import { AuditSaturationSection } from "@/components/uhi/AuditSaturationSection";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -63,10 +64,6 @@ function Dashboard() {
             <KPICard title="% ABHA Saturation in UHI" value={<>68.4%</>}
               footnote="↗ +4.2pp vs last quarter"
               tooltip={<>Number of requests with ABHA ID or ABHA address shared ÷ Total number of API endpoint hits.<div className="mt-1">Numerator: 1,88,100 · Denominator: 2,75,000</div></>}
-            />
-            <KPICard title="Audit API Calls" value={<>41.8%</>}
-              footnote={<span className="text-muted-foreground italic">only in private view</span>}
-              tooltip="Audit API endpoint hits ÷ All API endpoint hits which have the Audit API endpoint designed. vs [Fulfilment + Post-Fulfilment HSPA Calls]."
             />
             <KPICard title="Daily Search Requests" value={<CountUp value={9420} />}
               footnote="Avg searches/day · Peak: 14.2K (Mar 18)"
@@ -176,6 +173,8 @@ function Dashboard() {
           <IntegrationJourneyCard />
           <GeographicCard />
         </div>
+
+        <AuditSaturationSection />
 
         <Footer onOpenMetrics={() => setShowMetricsLogic(true)} />
       </main>
