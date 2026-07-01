@@ -108,6 +108,19 @@ export const liveServices = {
       { month: "Mar", value: 22 },
     ],
   },
+  "Jan Aushadhi Kendra": {
+    totalSearches: 12480,
+    euas: 2,
+    hspas: 1,
+    liveSince: "Apr 2026",
+    extraLabel: "Kendras Listed",
+    extraValue: "10,500+",
+    monthly: [
+      { month: "Apr", value: 3200 },
+      { month: "May", value: 4180 },
+      { month: "Jun", value: 5100 },
+    ],
+  },
 } as const;
 
 export const combinedGrowth = (() => {
