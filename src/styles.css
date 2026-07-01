@@ -103,8 +103,8 @@
 
 @layer components {
   .card-cream {
-    background-color: var(--color-cream);
-    border: 1px solid color-mix(in oklab, var(--color-cream) 70%, var(--color-border));
+    background-color: #ffffff;
+    border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
   }
   .num-amber {

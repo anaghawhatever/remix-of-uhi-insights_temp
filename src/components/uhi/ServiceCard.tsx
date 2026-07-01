@@ -21,6 +21,7 @@ export function ServiceCard({ service, kind }: Props) {
     "Ambulance Discovery": "var(--color-chart-orange)",
     "Teleconsultation": "var(--color-chart-teal)",
     "Physical Consultation": "var(--color-chart-purple)",
+    "Jan Aushadhi Kendra": "var(--color-chart-green)",
   }[service];
 
   return (

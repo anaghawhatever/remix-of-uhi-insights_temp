@@ -1,5 +1,5 @@
 // Mock data for UHI Insights Dashboard
-export type ServiceKey = "PMJAY HEM" | "Blood Bank" | "Teleconsultation" | "Physical Consultation" | "Ambulance Discovery";
+export type ServiceKey = "PMJAY HEM" | "Blood Bank" | "Teleconsultation" | "Physical Consultation" | "Ambulance Discovery" | "Jan Aushadhi Kendra";
 
 export const SERVICES: ServiceKey[] = [
   "PMJAY HEM",
@@ -7,6 +7,7 @@ export const SERVICES: ServiceKey[] = [
   "Teleconsultation",
   "Physical Consultation",
   "Ambulance Discovery",
+  "Jan Aushadhi Kendra",
 ];
 
 export const serviceStatus: Record<ServiceKey, "live" | "paused"> = {
@@ -15,6 +16,7 @@ export const serviceStatus: Record<ServiceKey, "live" | "paused"> = {
   "Teleconsultation": "paused",
   "Physical Consultation": "live",
   "Ambulance Discovery": "live",
+  "Jan Aushadhi Kendra": "live",
 };
 
 export const serviceColor: Record<ServiceKey, string> = {
@@ -23,6 +25,7 @@ export const serviceColor: Record<ServiceKey, string> = {
   "Teleconsultation": "var(--color-chart-teal)",
   "Physical Consultation": "var(--color-chart-purple)",
   "Ambulance Discovery": "var(--color-chart-orange)",
+  "Jan Aushadhi Kendra": "var(--color-chart-green)",
 };
 
 export const liveServices = {
@@ -103,6 +106,19 @@ export const liveServices = {
       { month: "Jan", value: 0 },
       { month: "Feb", value: 4 },
       { month: "Mar", value: 22 },
+    ],
+  },
+  "Jan Aushadhi Kendra": {
+    totalSearches: 12480,
+    euas: 2,
+    hspas: 1,
+    liveSince: "Apr 2026",
+    extraLabel: "Kendras Listed",
+    extraValue: "10,500+",
+    monthly: [
+      { month: "Apr", value: 3200 },
+      { month: "May", value: 4180 },
+      { month: "Jun", value: 5100 },
     ],
   },
 } as const;
