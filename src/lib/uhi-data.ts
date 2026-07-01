@@ -1,5 +1,5 @@
 // Mock data for UHI Insights Dashboard
-export type ServiceKey = "PMJAY HEM" | "Blood Bank" | "Teleconsultation" | "Physical Consultation" | "Ambulance Discovery";
+export type ServiceKey = "PMJAY HEM" | "Blood Bank" | "Teleconsultation" | "Physical Consultation" | "Ambulance Discovery" | "Jan Aushadhi Kendra";
 
 export const SERVICES: ServiceKey[] = [
   "PMJAY HEM",
@@ -7,6 +7,7 @@ export const SERVICES: ServiceKey[] = [
   "Teleconsultation",
   "Physical Consultation",
   "Ambulance Discovery",
+  "Jan Aushadhi Kendra",
 ];
 
 export const serviceStatus: Record<ServiceKey, "live" | "paused"> = {
@@ -15,6 +16,7 @@ export const serviceStatus: Record<ServiceKey, "live" | "paused"> = {
   "Teleconsultation": "paused",
   "Physical Consultation": "live",
   "Ambulance Discovery": "live",
+  "Jan Aushadhi Kendra": "live",
 };
 
 export const serviceColor: Record<ServiceKey, string> = {
@@ -23,6 +25,7 @@ export const serviceColor: Record<ServiceKey, string> = {
   "Teleconsultation": "var(--color-chart-teal)",
   "Physical Consultation": "var(--color-chart-purple)",
   "Ambulance Discovery": "var(--color-chart-orange)",
+  "Jan Aushadhi Kendra": "var(--color-chart-green)",
 };
 
 export const liveServices = {
