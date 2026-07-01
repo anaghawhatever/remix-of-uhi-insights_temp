@@ -442,6 +442,7 @@ function IntegrationJourneyCard() {
 
 function GeographicCard() {
   const [serviceFilter, setServiceFilter] = useState("All Services");
+  const [selectedState, setSelectedState] = useState<string | null>(null);
 
   const data = useMemo(() => {
     const mult = serviceFilter === "All Services" ? 1 : 0.3;
@@ -450,6 +451,22 @@ function GeographicCard() {
 
   const sorted = useMemo(() => [...data].sort((a, b) => b.value - a.value), [data]);
   const max = Math.max(...data.map((d) => d.value));
+
+  // Per-state per-service breakdown (proportional synth from national totals)
+  const totalNational = states.reduce((a, s) => a + s.value, 0);
+  const stateRow = data.find((s) => s.name === selectedState);
+  const share = stateRow ? stateRow.value / totalNational : 0;
+
+  const discoveryServices: Array<{ name: string; searches: number }> = selectedState ? [
+    { name: "PMJAY HEM", searches: Math.round(92142 * share) },
+    { name: "Blood Bank", searches: Math.round(91728 * share) },
+    { name: "Ambulance Discovery", searches: Math.round(18240 * share) },
+    { name: "Jan Aushadhi Kendra", searches: Math.round(12480 * share) },
+  ] : [];
+  const fulfilmentServices: Array<{ name: string; searches: number; bookings: number; status: "live" | "paused" }> = selectedState ? [
+    { name: "Teleconsultation", searches: Math.round(92000 * share), bookings: Math.round(2050 * share), status: "paused" },
+    { name: "Physical Consultation", searches: Math.round(1200 * share), bookings: Math.round(184 * share), status: "live" },
+  ] : [];
 
   return (
     <ChartContainer label="WHERE THE ACTION IS" title="Geographic Performance"
@@ -463,28 +480,88 @@ function GeographicCard() {
     >
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
         <div className="lg:col-span-3">
-          <IndiaMap data={data} max={max} />
+          <IndiaMap data={data} max={max} onSelect={(n) => setSelectedState((cur) => cur === n ? null : n)} selected={selectedState} />
+          <div className="text-[11px] text-muted-foreground mt-2 italic">Tip: click a state to see its service-wise breakdown.</div>
         </div>
         <div className="lg:col-span-2">
-          <div className="text-[11px] tracking-wider text-[var(--color-navy)] font-semibold mb-2">TOP STATES · {serviceFilter.toUpperCase()}</div>
-          <div className="max-h-[520px] overflow-y-auto pr-2">
-            <table className="w-full text-sm">
-              <tbody>
-                {sorted.map((s, i) => (
-                  <tr key={s.name} className="border-b border-border/40">
-                    <td className="py-2 w-8 text-muted-foreground text-xs">{i + 1}</td>
-                    <td className="py-2">
-                      <div className="font-medium text-sm">{s.name}</div>
-                      <div className="h-1.5 rounded mt-1 bg-muted/40 overflow-hidden">
-                        <div className="h-full rounded" style={{ width: `${(s.value / max) * 100}%`, background: "var(--color-bar-coral)" }} />
-                      </div>
-                    </td>
-                    <td className="py-2 pl-3 text-right num-amber tabular-nums text-sm">{s.value.toLocaleString("en-IN")}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          {selectedState ? (
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <div className="text-[11px] tracking-wider text-muted-foreground font-semibold">SELECTED STATE / UT</div>
+                  <h4 className="text-lg font-semibold text-[var(--color-navy)]">{selectedState}</h4>
+                </div>
+                <button onClick={() => setSelectedState(null)} className="text-xs text-muted-foreground hover:text-foreground border border-border rounded px-2 py-1">Clear</button>
+              </div>
+
+              <div className="mb-4">
+                <div className="text-[11px] tracking-wider text-[var(--color-navy)] font-semibold mb-1.5">DISCOVERY SERVICES</div>
+                <table className="w-full text-sm border border-border rounded-md overflow-hidden">
+                  <thead className="bg-muted/50">
+                    <tr>
+                      <th className="text-left py-1.5 px-2 text-[11px] font-semibold text-muted-foreground">Service</th>
+                      <th className="text-right py-1.5 px-2 text-[11px] font-semibold text-muted-foreground">Searches</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {discoveryServices.map((r) => (
+                      <tr key={r.name} className="border-t border-border/40">
+                        <td className="py-1.5 px-2">{r.name}</td>
+                        <td className="py-1.5 px-2 text-right num-amber tabular-nums">{r.searches.toLocaleString("en-IN")}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <div>
+                <div className="text-[11px] tracking-wider text-[var(--color-navy)] font-semibold mb-1.5">FULFILMENT SERVICES</div>
+                <table className="w-full text-sm border border-border rounded-md overflow-hidden">
+                  <thead className="bg-muted/50">
+                    <tr>
+                      <th className="text-left py-1.5 px-2 text-[11px] font-semibold text-muted-foreground">Service</th>
+                      <th className="text-right py-1.5 px-2 text-[11px] font-semibold text-muted-foreground">Searches</th>
+                      <th className="text-right py-1.5 px-2 text-[11px] font-semibold text-muted-foreground">Bookings</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {fulfilmentServices.map((r) => (
+                      <tr key={r.name} className="border-t border-border/40">
+                        <td className="py-1.5 px-2">
+                          {r.name}
+                          {r.status === "paused" && <span className="ml-1.5 text-[10px] text-[var(--color-paused)] font-semibold">· paused</span>}
+                        </td>
+                        <td className="py-1.5 px-2 text-right num-amber tabular-nums">{r.searches.toLocaleString("en-IN")}</td>
+                        <td className="py-1.5 px-2 text-right num-amber tabular-nums">{r.bookings.toLocaleString("en-IN")}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="text-[11px] tracking-wider text-[var(--color-navy)] font-semibold mb-2">TOP STATES · {serviceFilter.toUpperCase()}</div>
+              <div className="max-h-[520px] overflow-y-auto pr-2">
+                <table className="w-full text-sm">
+                  <tbody>
+                    {sorted.map((s, i) => (
+                      <tr key={s.name} className="border-b border-border/40 cursor-pointer hover:bg-muted/40" onClick={() => setSelectedState(s.name)}>
+                        <td className="py-2 w-8 text-muted-foreground text-xs">{i + 1}</td>
+                        <td className="py-2">
+                          <div className="font-medium text-sm">{s.name}</div>
+                          <div className="h-1.5 rounded mt-1 bg-muted/40 overflow-hidden">
+                            <div className="h-full rounded" style={{ width: `${(s.value / max) * 100}%`, background: "var(--color-bar-coral)" }} />
+                          </div>
+                        </td>
+                        <td className="py-2 pl-3 text-right num-amber tabular-nums text-sm">{s.value.toLocaleString("en-IN")}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </ChartContainer>
