@@ -109,17 +109,13 @@ function Dashboard() {
         {/* DETAILED INDICATORS */}
         <Section title="Detailed Indicators" desc="only in private view" descItalic>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <KPICard title="Booking Conversion Rate" value={<>0.81%</>}
-              footnote={<span className="text-[var(--color-live)] font-medium">↗ +0.12pp vs last quarter</span>}
-              tooltip="Total completed bookings ÷ Total searches across all services."
-            />
             <KPICard title="Search Growth (QoQ)" value={<span className="text-[var(--color-live)]">+38% <ArrowUpRight className="inline size-6"/></span>}
               footnote="Quarter-on-quarter total searches"
               tooltip="(Current quarter searches − Previous quarter searches) ÷ Previous quarter searches × 100."
             />
-            <KPICard title="Daily Active Integrators" value={<CountUp value={11} />}
-              footnote="Avg integrators active per day"
-              tooltip="Distinct EUAs/HSPAs making at least one API call per day, averaged across the quarter."
+            <KPICard title="Booking Growth (QoQ)" value={<span className="text-[var(--color-live)]">+24% <ArrowUpRight className="inline size-6"/></span>}
+              footnote="Quarter-on-quarter completed bookings"
+              tooltip="(Current quarter bookings − Previous quarter bookings) ÷ Previous quarter bookings × 100. Covers Teleconsultation + Physical Consultation."
             />
           </div>
         </Section>
