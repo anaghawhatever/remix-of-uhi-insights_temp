@@ -4,7 +4,7 @@ import { stateNameMap } from "@/lib/uhi-data";
 
 type Datum = { name: string; value: number };
 
-export function IndiaMap({ data, max }: { data: Datum[]; max: number }) {
+export function IndiaMap({ data, max, onSelect, selected }: { data: Datum[]; max: number; onSelect?: (name: string) => void; selected?: string | null }) {
   const [geoData, setGeoData] = useState<unknown>(null);
   const [hover, setHover] = useState<{ name: string; value: number; x: number; y: number } | null>(null);
 
