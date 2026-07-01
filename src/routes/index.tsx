@@ -93,10 +93,11 @@ function Dashboard() {
         {/* UHI LIVE SERVICES */}
         <Section label="SERVICE-LEVEL PERFORMANCE" title="UHI Live Services">
           <div className="text-[11px] tracking-widest text-muted-foreground font-semibold mb-3">DISCOVERY SERVICES <span className="text-muted-foreground/70 normal-case tracking-normal">(PMJAY HEM, Blood Bank, Ambulance Discovery)</span></div>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-5 mb-8">
             <ServiceCard service="PMJAY HEM" kind="discovery" />
             <ServiceCard service="Blood Bank" kind="discovery" />
             <ServiceCard service="Ambulance Discovery" kind="discovery" />
+            <ServiceCard service="Jan Aushadhi Kendra" kind="discovery" />
           </div>
           <div className="text-[11px] tracking-widest text-muted-foreground font-semibold mb-3">BOOKING / FULFILMENT SERVICES <span className="text-muted-foreground/70 normal-case tracking-normal">(Teleconsultation, Physical Consultation)</span></div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
