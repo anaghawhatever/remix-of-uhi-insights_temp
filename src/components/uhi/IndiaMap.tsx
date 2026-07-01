@@ -41,18 +41,20 @@ export function IndiaMap({ data, max, onSelect, selected }: { data: Datum[]; max
               geographies.map((geo) => {
                 const name = geo.properties.st_nm;
                 const v = valueByState.get(name);
+                const isSelected = selected === name;
                 return (
                   <Geography
                     key={geo.rsmKey}
                     geography={geo}
+                    onClick={() => onSelect?.(name)}
                     onMouseEnter={(e: React.MouseEvent) => setHover({ name, value: v ?? 0, x: e.clientX, y: e.clientY })}
                     onMouseMove={(e: React.MouseEvent) => setHover((h) => h && { ...h, x: e.clientX, y: e.clientY })}
                     onMouseLeave={() => setHover(null)}
                     style={{
                       default: {
-                        fill: colorFor(v),
-                        stroke: "var(--color-navy)",
-                        strokeWidth: 0.4,
+                        fill: isSelected ? "var(--color-navy)" : colorFor(v),
+                        stroke: isSelected ? "var(--color-amber-num)" : "var(--color-navy)",
+                        strokeWidth: isSelected ? 1.4 : 0.4,
                         outline: "none",
                       },
                       hover: {
