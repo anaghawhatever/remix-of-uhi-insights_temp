@@ -478,15 +478,16 @@ function GeographicCard() {
   const share = stateRow ? stateRow.value / totalNational : 0;
 
   const discoveryServices: Array<{ name: string; searches: number }> = selectedState ? [
-    { name: "PMJAY Hospital Discovery", searches: Math.round(92142 * share) },
-    { name: "Blood Bank Discovery", searches: Math.round(91728 * share) },
-    { name: "Ambulance Discovery", searches: Math.round(18240 * share) },
-    { name: "Jan Aushadhi Kendra Discovery", searches: Math.round(12480 * share) },
+    { name: "PMJAY Hospital Discovery", searches: Math.round(354484 * share) },
+    { name: "Blood Bank Discovery", searches: Math.round(163185 * share) },
+    { name: "Ambulance Discovery", searches: Math.round(356 * share) },
+    { name: "Jan Aushadhi Kendra Discovery", searches: Math.round(1435 * share) },
   ] : [];
   const fulfilmentServices: Array<{ name: string; searches: number; bookings: number; status: "live" | "paused" }> = selectedState ? [
-    { name: "Teleconsultation", searches: Math.round(92000 * share), bookings: Math.round(2050 * share), status: "paused" },
-    { name: "Physical Consultation", searches: Math.round(1200 * share), bookings: Math.round(184 * share), status: "live" },
+    { name: "Physical Consultation", searches: Math.round(3554 * share), bookings: Math.round(184 * share), status: "live" },
+    { name: "Teleconsultation", searches: Math.round(92000 * share), bookings: Math.round(3816 * share), status: "paused" },
   ] : [];
+
 
   return (
     <ChartContainer label="WHERE THE ACTION IS" title="Geographic Performance"
