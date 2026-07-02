@@ -41,35 +41,28 @@ function Dashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <ServicePortfolioCard />
             <KPICard title="Total Searches"
-              value={<><CountUp value={275000} />+</>}
-              footnote={<span className="text-[var(--color-live)] font-medium">↗ +32% vs last quarter</span>}
-              tooltip={<><div className="font-semibold mb-1">Total Searches</div>Service-wise: PMJAY 354,484 · Blood Bank 163,185 · Teleconsult 92,000 · Ambulance 356 · Physical 3,554.</>}
+              value={<CountUp value={615001} />}
+              footnote={<span className="text-[var(--color-live)] font-medium">↗ +123.6% vs last quarter</span>}
+              tooltip={<><div className="font-semibold mb-1">Total Searches</div>Service-wise: PMJAY 354,484 · Blood Bank 163,185 · Physical 3,554 · Jan Aushadhi 1,435 · Ambulance 356 · Teleconsult 92,000.</>}
             />
-            <KPICard title="EUAs Integrated" value={<CountUp value={13} />}
+            <KPICard title="EUAs Integrated" value={<CountUp value={22} />}
               footnote="End User Apps live across all services"
-              tooltip="Count of EUAs that have reached Go Live status. PMJAY 5, Blood Bank 13, Teleconsult 5, Physical 3, Ambulance 2."
+              tooltip="Count of EUAs that have reached Go Live status across all live services."
             />
-            <KPICard title="HSPAs Integrated" value={<CountUp value={4} />}
-              footnote="Health Service Provider Apps"
-              tooltip="HSPA breakdown: Teleconsult 4, Physical 2, PMJAY 1, Blood Bank 1, Ambulance 1."
+            <KPICard title="HSPAs Integrated" value={<CountUp value={9} />}
+              footnote="Health Service Provider Apps live across all services"
+              tooltip="Count of HSPAs live across all services."
             />
-            <KPICard title="Total Ecosystem Partners" value={<CountUp value={19} />}
-              footnote="14 EUAs · 5 HSPAs integrated"
-              tooltip="Total count of live EUAs + live HSPAs across all services."
+            <KPICard title="Total Ecosystem Partners" value={<CountUp value={28} />}
+              footnote="Number of unique integrators who are either EUA or HSPA or both"
+              tooltip="Unique integrators counted once, whether they operate as an EUA, an HSPA, or both."
             />
-            <KPICard title="Number of Bookings" value={<CountUp value={2234} />}
+            <KPICard title="Number of Bookings" value={<CountUp value={4000} />}
               footnote="Teleconsultation · Physical Consultation"
               tooltip="Total completed bookings from Teleconsultation + Physical Consultation."
             />
-            <KPICard title="% ABHA Saturation in UHI" value={<>68.4%</>}
-              footnote="↗ +4.2pp vs last quarter"
-              tooltip={<>Number of requests with ABHA ID or ABHA address shared ÷ Total number of API endpoint hits.<div className="mt-1">Numerator: 1,88,100 · Denominator: 2,75,000</div></>}
-            />
-            <KPICard title="Daily Search Requests" value={<CountUp value={9420} />}
-              footnote="Avg searches/day · Peak: 14.2K (Mar 18)"
-              tooltip="Total searches ÷ Number of active days in the period."
-            />
           </div>
+
         </Section>
 
         {/* REGISTRIES */}
