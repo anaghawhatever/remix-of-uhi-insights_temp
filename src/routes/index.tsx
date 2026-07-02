@@ -28,7 +28,7 @@ export const Route = createFileRoute("/")({
 function Dashboard() {
   const [service, setService] = useState("All");
   const [partnerService, setPartnerService] = useState("All Services");
-  const [funnelService, setFunnelService] = useState("All Services");
+  const [funnelService, setFunnelService] = useState("All Fulfilment Services");
   const [showMetricsLogic, setShowMetricsLogic] = useState(false);
 
   return (
@@ -41,63 +41,64 @@ function Dashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <ServicePortfolioCard />
             <KPICard title="Total Searches"
-              value={<><CountUp value={275000} />+</>}
-              footnote={<span className="text-[var(--color-live)] font-medium">↗ +32% vs last quarter</span>}
-              tooltip={<><div className="font-semibold mb-1">Total Searches</div>Service-wise: PMJAY HEM 92,142 · Blood Bank 91,728 · Teleconsult 92,000 · Ambulance 18,240 · Physical 184.</>}
+              value={<CountUp value={615001} />}
+              footnote={<span className="text-[var(--color-live)] font-medium">↗ +123.6% vs last quarter</span>}
+              tooltip={<><div className="font-semibold mb-1">Total Searches</div>Service-wise: PMJAY 354,484 · Blood Bank 163,185 · Physical 3,554 · Jan Aushadhi 1,435 · Ambulance 356 · Teleconsult 92,000.</>}
             />
-            <KPICard title="EUAs Integrated" value={<CountUp value={13} />}
+            <KPICard title="EUAs Integrated" value={<CountUp value={22} />}
               footnote="End User Apps live across all services"
-              tooltip="Count of EUAs that have reached Go Live status. PMJAY 5, Blood Bank 13, Teleconsult 5, Physical 3, Ambulance 2."
+              tooltip="Count of EUAs that have reached Go Live status across all live services."
             />
-            <KPICard title="HSPAs Integrated" value={<CountUp value={4} />}
-              footnote="Health Service Provider Apps"
-              tooltip="HSPA breakdown: Teleconsult 4, Physical 2, PMJAY 1, Blood Bank 1, Ambulance 1."
+            <KPICard title="HSPAs Integrated" value={<CountUp value={9} />}
+              footnote="Health Service Provider Apps live across all services"
+              tooltip="Count of HSPAs live across all services."
             />
-            <KPICard title="Total Ecosystem Partners" value={<CountUp value={19} />}
-              footnote="14 EUAs · 5 HSPAs integrated"
-              tooltip="Total count of live EUAs + live HSPAs across all services."
+            <KPICard title="Total Ecosystem Partners" value={<CountUp value={28} />}
+              footnote="Number of unique integrators who are either EUA or HSPA or both"
+              tooltip="Unique integrators counted once, whether they operate as an EUA, an HSPA, or both."
             />
-            <KPICard title="Number of Bookings" value={<CountUp value={2234} />}
+            <KPICard title="Number of Bookings" value={<CountUp value={4000} />}
               footnote="Teleconsultation · Physical Consultation"
               tooltip="Total completed bookings from Teleconsultation + Physical Consultation."
             />
-            <KPICard title="% ABHA Saturation in UHI" value={<>68.4%</>}
-              footnote="↗ +4.2pp vs last quarter"
-              tooltip={<>Number of requests with ABHA ID or ABHA address shared ÷ Total number of API endpoint hits.<div className="mt-1">Numerator: 1,88,100 · Denominator: 2,75,000</div></>}
-            />
-            <KPICard title="Daily Search Requests" value={<CountUp value={9420} />}
-              footnote="Avg searches/day · Peak: 14.2K (Mar 18)"
-              tooltip="Total searches ÷ Number of active days in the period."
-            />
           </div>
+
         </Section>
 
         {/* REGISTRIES */}
-        <Section label="ECOSYSTEM SATURATION" title="Registries in UHI">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <KPICard title="ABHA Saturation" value={<>68.4%</>}
-              footnote="↗ +4.2pp QoQ"
-              tooltip="Number of requests with ABHA ID or ABHA address shared ÷ Total number of API endpoint hits."
-            />
-            <KPICard title="HFR Saturation" value={<>74.2%</>}
-              footnote="↗ +2.1pp QoQ"
-              tooltip="Number of providers in UHI linked to HFR ÷ Total number of providers in UHI."
-            />
-            <KPICard title="HPR Saturation" value={<>61.8%</>}
-              footnote="↗ +5.4pp QoQ"
-              tooltip="Number of doctors in UHI linked to HPR ÷ Total number of doctors in UHI."
-            />
+        <Section label="ECOSYSTEM SATURATION · PRIVATE VIEW ONLY" title="Registries in UHI" desc="only in private view" descItalic>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl">
+            <SmallStatCard title="ABHA Saturation" value="68.4%" foot="↗ +4.2pp QoQ" tip="Requests with ABHA ID or address ÷ Total API endpoint hits." />
+            <SmallStatCard title="HFR Saturation" value="74.2%" foot="↗ +2.1pp QoQ" tip="Providers in UHI linked to HFR ÷ Total providers in UHI." />
+            <SmallStatCard title="HPR Saturation" value="61.8%" foot="↗ +5.4pp QoQ" tip="Doctors in UHI linked to HPR ÷ Total doctors in UHI." />
           </div>
         </Section>
 
         {/* UHI LIVE SERVICES */}
         <Section label="SERVICE-LEVEL PERFORMANCE" title="UHI Live Services">
-          <div className="text-[11px] tracking-widest text-muted-foreground font-semibold mb-3">DISCOVERY SERVICES <span className="text-muted-foreground/70 normal-case tracking-normal">(PMJAY HEM, Blood Bank, Ambulance Discovery, Jan Aushadhi Kendra)</span></div>
+          <div className="text-[11px] tracking-widest text-muted-foreground font-semibold mb-3">DISCOVERY SERVICES <span className="text-muted-foreground/70 normal-case tracking-normal">(PMJAY Hospital Discovery, Blood Bank Discovery, Ambulance Discovery, Jan Aushadhi Kendra Discovery)</span></div>
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-5 mb-8">
-            <ServiceCard service="PMJAY HEM" kind="discovery" />
-            <ServiceCard service="Blood Bank" kind="discovery" />
+            <ServiceCard service="PMJAY Hospital Discovery" kind="discovery" />
+            <ServiceCard service="Blood Bank Discovery" kind="discovery" />
             <ServiceCard service="Ambulance Discovery" kind="discovery" />
-            <ServiceCard service="Jan Aushadhi Kendra" kind="discovery" />
+            <ServiceCard service="Jan Aushadhi Kendra Discovery" kind="discovery" />
+          </div>
+          <div className="text-[11px] tracking-widest text-muted-foreground font-semibold mb-3">BOOKING / FULFILMENT SERVICES <span className="text-muted-foreground/70 normal-case tracking-normal">(Physical Consultation, Teleconsultation)</span></div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            <ServiceCard service="Physical Consultation" kind="fulfilment" />
+            <ServiceCard service="Teleconsultation" kind="fulfilment" />
+          </div>
+        </Section>
+
+
+        {/* UHI LIVE SERVICES */}
+        <Section label="SERVICE-LEVEL PERFORMANCE" title="UHI Live Services">
+          <div className="text-[11px] tracking-widest text-muted-foreground font-semibold mb-3">DISCOVERY SERVICES <span className="text-muted-foreground/70 normal-case tracking-normal">(PMJAY Hospital Discovery, Blood Bank Discovery, Ambulance Discovery, Jan Aushadhi Kendra Discovery)</span></div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-5 mb-8">
+            <ServiceCard service="PMJAY Hospital Discovery" kind="discovery" />
+            <ServiceCard service="Blood Bank Discovery" kind="discovery" />
+            <ServiceCard service="Ambulance Discovery" kind="discovery" />
+            <ServiceCard service="Jan Aushadhi Kendra Discovery" kind="discovery" />
           </div>
           <div className="text-[11px] tracking-widest text-muted-foreground font-semibold mb-3">BOOKING / FULFILMENT SERVICES <span className="text-muted-foreground/70 normal-case tracking-normal">(Teleconsultation, Physical Consultation)</span></div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
@@ -136,34 +137,38 @@ function Dashboard() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             <PartnerTable
               title="List of EUAs"
-              columns={["Partner Name", "Service", "Searches", "Onboarded"]}
+              columns={["Partner Name", "Searches", "Onboarded"]}
               rows={euaPartners.filter((p) => partnerService === "All Services" || p.service.includes(partnerService.replace(" Discovery", "")))
-                .map((p) => [p.name, p.service, p.searches.toLocaleString("en-IN"), p.onboarded])}
-              numericCol={2}
+                .map((p) => [p.name, p.searches.toLocaleString("en-IN"), p.onboarded])}
+              numericCol={1}
               onDownload={() => downloadCSV("eua-partners.csv", euaPartners)}
             />
             <PartnerTable
               title="List of HSPAs"
-              columns={["Partner Name", "Service", "Bookings", "Onboarded"]}
+              columns={showBookingsForHspa(partnerService) ? ["Partner Name", "Bookings", "Onboarded"] : ["Partner Name", "Onboarded"]}
               rows={hspaPartners.filter((p) => partnerService === "All Services" || p.service.includes(partnerService.replace(" Discovery", "")))
-                .map((p) => [p.name, p.service, p.bookings.toLocaleString("en-IN"), p.onboarded])}
-              numericCol={2}
+                .map((p) => showBookingsForHspa(partnerService)
+                  ? [p.name, p.bookings.toLocaleString("en-IN"), p.onboarded]
+                  : [p.name, p.onboarded])}
+              numericCol={showBookingsForHspa(partnerService) ? 1 : -1}
               onDownload={() => downloadCSV("hspa-partners.csv", hspaPartners)}
             />
           </div>
         </Section>
 
-        {/* FUNNEL */}
+
+        {/* FUNNEL — only fulfilment services (Physical + Teleconsultation) */}
         <ChartContainer label="THE SYSTEMIC VIEW · PRIVATE VIEW ONLY" title="Cross-Service Adoption Funnel"
           right={
             <select value={funnelService} onChange={(e) => setFunnelService(e.target.value)}
               className="text-xs border border-white/30 bg-white/10 text-white rounded-md px-3 py-1.5 min-w-[160px]">
-              {["All Services", ...SERVICES].map((s) => <option key={s} className="text-foreground">{s}</option>)}
+              {["All Fulfilment Services", "Physical Consultation", "Teleconsultation"].map((s) => <option key={s} className="text-foreground">{s}</option>)}
             </select>
           }
         >
           <AdoptionFunnel service={funnelService} />
         </ChartContainer>
+
 
         {/* INTEGRATION + GEOGRAPHIC side by side */}
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
@@ -194,7 +199,9 @@ function Section({ label, title, desc, descItalic, children }: { label?: string;
 }
 
 function ServicePortfolioCard() {
-  const items = SERVICES.map((s) => ({ name: s, status: serviceStatus[s] }));
+  // Move Teleconsultation to the bottom (paused, not live)
+  const items = [...SERVICES].sort((a, b) => (a === "Teleconsultation" ? 1 : b === "Teleconsultation" ? -1 : 0))
+    .map((s) => ({ name: s, status: serviceStatus[s] }));
   return (
     <div className="card-cream p-5 flex flex-col gap-3">
       <div className="flex items-start justify-between">
@@ -202,12 +209,6 @@ function ServicePortfolioCard() {
         <Tooltip content="Traffic-light status per live service. Green = Live, Red = Paused.">
           <Info className="size-4" />
         </Tooltip>
-      </div>
-      <div className="flex gap-1 h-3 rounded overflow-hidden mt-1">
-        {items.map((i) => (
-          <div key={i.name} className="flex-1" title={`${i.name}: ${i.status}`}
-            style={{ background: i.status === "live" ? "var(--color-live)" : "var(--color-paused)" }} />
-        ))}
       </div>
       <ul className="space-y-1.5 mt-1">
         {items.map((i) => (
@@ -224,11 +225,30 @@ function ServicePortfolioCard() {
   );
 }
 
+function SmallStatCard({ title, value, foot, tip }: { title: string; value: string; foot: string; tip: string }) {
+  return (
+    <div className="card-cream p-4">
+      <div className="flex items-start justify-between">
+        <div className="section-label">{title}</div>
+        <Tooltip content={tip}><Info className="size-3.5" /></Tooltip>
+      </div>
+      <div className="num-amber text-2xl mt-1">{value}</div>
+      <div className="text-[11px] text-muted-foreground mt-1">{foot}</div>
+    </div>
+  );
+}
+
+
+
+function showBookingsForHspa(filter: string) {
+  return filter === "All Services" || filter === "Physical Consultation" || filter === "Teleconsultation";
+}
 
 function PartnerTable({ title, columns, rows, numericCol, onDownload }: {
   title: string; columns: string[]; rows: Array<Array<string | number>>; numericCol: number; onDownload: () => void;
 }) {
-  const [sortIdx, setSortIdx] = useState<number>(numericCol);
+  const initialSort = numericCol >= 0 ? numericCol : 0;
+  const [sortIdx, setSortIdx] = useState<number>(initialSort);
   const [dir, setDir] = useState<"asc" | "desc">("desc");
   const sorted = useMemo(() => {
     const cp = [...rows];
@@ -263,13 +283,11 @@ function PartnerTable({ title, columns, rows, numericCol, onDownload }: {
             {sorted.map((r, i) => (
               <tr key={i} className={i % 2 ? "bg-muted/40" : ""}>
                 <td className="py-2.5 pr-2 text-muted-foreground">{i + 1}</td>
-                <td className="py-2.5 px-2">
-                  <div className="font-medium">{r[0]}</div>
-                  <div className="text-xs text-muted-foreground">{r[1]}</div>
-                </td>
-                <td className="py-2.5 px-2 hidden">{r[1]}</td>
-                <td className="py-2.5 px-2 text-right num-amber">{r[2]}</td>
-                <td className="py-2.5 px-2 text-xs text-muted-foreground text-right">{r[3]}</td>
+                {r.map((cell, ci) => (
+                  <td key={ci} className={`py-2.5 px-2 ${ci === numericCol ? "text-right num-amber" : ci === 0 ? "font-medium" : "text-xs text-muted-foreground"}`}>
+                    {cell}
+                  </td>
+                ))}
               </tr>
             ))}
           </tbody>
@@ -279,16 +297,18 @@ function PartnerTable({ title, columns, rows, numericCol, onDownload }: {
   );
 }
 
+
 function AdoptionFunnel({ service }: { service: string }) {
-  const base = service === "All Services" ? 1 : 0.25;
+  const base = service === "All Fulfilment Services" ? 1 : 0.5;
   const stages = [
-    { label: "Service Discovery", value: Math.round(397500 * base), pct: "100% of cohort", color: "var(--color-navy)" },
-    { label: "Provider Selection", value: Math.round(48200 * base), pct: "12.1% of cohort", color: "oklch(0.4 0.1 250)" },
-    { label: "Booking Initiated", value: Math.round(14600 * base), pct: "3.7% of cohort", color: "var(--color-chart-blue)" },
-    { label: "Booking Completed", value: Math.round(3100 * base), pct: "0.79% of cohort", color: "var(--color-chart-teal)" },
-    { label: "Consultation Completed", value: Math.round(3050 * base), pct: "0.78% of cohort", color: "var(--color-bar-coral)" },
+    { label: "Service Discovery", value: Math.round(95554 * base), pct: "100% of cohort", color: "var(--color-navy)" },
+    { label: "Provider Selection", value: Math.round(24800 * base), pct: "26.0% of cohort", color: "oklch(0.4 0.1 250)" },
+    { label: "Booking Initiated", value: Math.round(9200 * base), pct: "9.6% of cohort", color: "var(--color-chart-blue)" },
+    { label: "Booking Completed", value: Math.round(4000 * base), pct: "4.2% of cohort", color: "var(--color-chart-teal)" },
+    { label: "Consultation Completed", value: Math.round(3860 * base), pct: "4.0% of cohort", color: "var(--color-bar-coral)" },
   ];
-  const convs = ["12.1% conv.", "30.3% conv.", "21.6% conv.", "98.4% conv."];
+  const convs = ["26.0% conv.", "37.1% conv.", "43.5% conv.", "96.5% conv."];
+
 
   return (
     <div>
@@ -458,15 +478,16 @@ function GeographicCard() {
   const share = stateRow ? stateRow.value / totalNational : 0;
 
   const discoveryServices: Array<{ name: string; searches: number }> = selectedState ? [
-    { name: "PMJAY HEM", searches: Math.round(92142 * share) },
-    { name: "Blood Bank", searches: Math.round(91728 * share) },
-    { name: "Ambulance Discovery", searches: Math.round(18240 * share) },
-    { name: "Jan Aushadhi Kendra", searches: Math.round(12480 * share) },
+    { name: "PMJAY Hospital Discovery", searches: Math.round(354484 * share) },
+    { name: "Blood Bank Discovery", searches: Math.round(163185 * share) },
+    { name: "Ambulance Discovery", searches: Math.round(356 * share) },
+    { name: "Jan Aushadhi Kendra Discovery", searches: Math.round(1435 * share) },
   ] : [];
   const fulfilmentServices: Array<{ name: string; searches: number; bookings: number; status: "live" | "paused" }> = selectedState ? [
-    { name: "Teleconsultation", searches: Math.round(92000 * share), bookings: Math.round(2050 * share), status: "paused" },
-    { name: "Physical Consultation", searches: Math.round(1200 * share), bookings: Math.round(184 * share), status: "live" },
+    { name: "Physical Consultation", searches: Math.round(3554 * share), bookings: Math.round(184 * share), status: "live" },
+    { name: "Teleconsultation", searches: Math.round(92000 * share), bookings: Math.round(3816 * share), status: "paused" },
   ] : [];
+
 
   return (
     <ChartContainer label="WHERE THE ACTION IS" title="Geographic Performance"
