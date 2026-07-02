@@ -157,17 +157,18 @@ function Dashboard() {
         </Section>
 
 
-        {/* FUNNEL */}
+        {/* FUNNEL — only fulfilment services (Physical + Teleconsultation) */}
         <ChartContainer label="THE SYSTEMIC VIEW · PRIVATE VIEW ONLY" title="Cross-Service Adoption Funnel"
           right={
             <select value={funnelService} onChange={(e) => setFunnelService(e.target.value)}
               className="text-xs border border-white/30 bg-white/10 text-white rounded-md px-3 py-1.5 min-w-[160px]">
-              {["All Services", ...SERVICES].map((s) => <option key={s} className="text-foreground">{s}</option>)}
+              {["All Fulfilment Services", "Physical Consultation", "Teleconsultation"].map((s) => <option key={s} className="text-foreground">{s}</option>)}
             </select>
           }
         >
           <AdoptionFunnel service={funnelService} />
         </ChartContainer>
+
 
         {/* INTEGRATION + GEOGRAPHIC side by side */}
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
