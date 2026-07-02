@@ -66,22 +66,30 @@ function Dashboard() {
         </Section>
 
         {/* REGISTRIES */}
-        <Section label="ECOSYSTEM SATURATION" title="Registries in UHI">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <KPICard title="ABHA Saturation" value={<>68.4%</>}
-              footnote="↗ +4.2pp QoQ"
-              tooltip="Number of requests with ABHA ID or ABHA address shared ÷ Total number of API endpoint hits."
-            />
-            <KPICard title="HFR Saturation" value={<>74.2%</>}
-              footnote="↗ +2.1pp QoQ"
-              tooltip="Number of providers in UHI linked to HFR ÷ Total number of providers in UHI."
-            />
-            <KPICard title="HPR Saturation" value={<>61.8%</>}
-              footnote="↗ +5.4pp QoQ"
-              tooltip="Number of doctors in UHI linked to HPR ÷ Total number of doctors in UHI."
-            />
+        <Section label="ECOSYSTEM SATURATION · PRIVATE VIEW ONLY" title="Registries in UHI" desc="only in private view" descItalic>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl">
+            <SmallStatCard title="ABHA Saturation" value="68.4%" foot="↗ +4.2pp QoQ" tip="Requests with ABHA ID or address ÷ Total API endpoint hits." />
+            <SmallStatCard title="HFR Saturation" value="74.2%" foot="↗ +2.1pp QoQ" tip="Providers in UHI linked to HFR ÷ Total providers in UHI." />
+            <SmallStatCard title="HPR Saturation" value="61.8%" foot="↗ +5.4pp QoQ" tip="Doctors in UHI linked to HPR ÷ Total doctors in UHI." />
           </div>
         </Section>
+
+        {/* UHI LIVE SERVICES */}
+        <Section label="SERVICE-LEVEL PERFORMANCE" title="UHI Live Services">
+          <div className="text-[11px] tracking-widest text-muted-foreground font-semibold mb-3">DISCOVERY SERVICES <span className="text-muted-foreground/70 normal-case tracking-normal">(PMJAY Hospital Discovery, Blood Bank Discovery, Ambulance Discovery, Jan Aushadhi Kendra Discovery)</span></div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-5 mb-8">
+            <ServiceCard service="PMJAY Hospital Discovery" kind="discovery" />
+            <ServiceCard service="Blood Bank Discovery" kind="discovery" />
+            <ServiceCard service="Ambulance Discovery" kind="discovery" />
+            <ServiceCard service="Jan Aushadhi Kendra Discovery" kind="discovery" />
+          </div>
+          <div className="text-[11px] tracking-widest text-muted-foreground font-semibold mb-3">BOOKING / FULFILMENT SERVICES <span className="text-muted-foreground/70 normal-case tracking-normal">(Physical Consultation, Teleconsultation)</span></div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            <ServiceCard service="Physical Consultation" kind="fulfilment" />
+            <ServiceCard service="Teleconsultation" kind="fulfilment" />
+          </div>
+        </Section>
+
 
         {/* UHI LIVE SERVICES */}
         <Section label="SERVICE-LEVEL PERFORMANCE" title="UHI Live Services">
