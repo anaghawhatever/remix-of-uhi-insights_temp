@@ -239,10 +239,15 @@ function SmallStatCard({ title, value, foot, tip }: { title: string; value: stri
 
 
 
+function showBookingsForHspa(filter: string) {
+  return filter === "All Services" || filter === "Physical Consultation" || filter === "Teleconsultation";
+}
+
 function PartnerTable({ title, columns, rows, numericCol, onDownload }: {
   title: string; columns: string[]; rows: Array<Array<string | number>>; numericCol: number; onDownload: () => void;
 }) {
-  const [sortIdx, setSortIdx] = useState<number>(numericCol);
+  const initialSort = numericCol >= 0 ? numericCol : 0;
+  const [sortIdx, setSortIdx] = useState<number>(initialSort);
   const [dir, setDir] = useState<"asc" | "desc">("desc");
   const sorted = useMemo(() => {
     const cp = [...rows];
@@ -277,13 +282,11 @@ function PartnerTable({ title, columns, rows, numericCol, onDownload }: {
             {sorted.map((r, i) => (
               <tr key={i} className={i % 2 ? "bg-muted/40" : ""}>
                 <td className="py-2.5 pr-2 text-muted-foreground">{i + 1}</td>
-                <td className="py-2.5 px-2">
-                  <div className="font-medium">{r[0]}</div>
-                  <div className="text-xs text-muted-foreground">{r[1]}</div>
-                </td>
-                <td className="py-2.5 px-2 hidden">{r[1]}</td>
-                <td className="py-2.5 px-2 text-right num-amber">{r[2]}</td>
-                <td className="py-2.5 px-2 text-xs text-muted-foreground text-right">{r[3]}</td>
+                {r.map((cell, ci) => (
+                  <td key={ci} className={`py-2.5 px-2 ${ci === numericCol ? "text-right num-amber" : ci === 0 ? "font-medium" : "text-xs text-muted-foreground"}`}>
+                    {cell}
+                  </td>
+                ))}
               </tr>
             ))}
           </tbody>
@@ -292,6 +295,7 @@ function PartnerTable({ title, columns, rows, numericCol, onDownload }: {
     </ChartContainer>
   );
 }
+
 
 function AdoptionFunnel({ service }: { service: string }) {
   const base = service === "All Services" ? 1 : 0.25;
