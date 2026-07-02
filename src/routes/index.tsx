@@ -137,22 +137,25 @@ function Dashboard() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             <PartnerTable
               title="List of EUAs"
-              columns={["Partner Name", "Service", "Searches", "Onboarded"]}
+              columns={["Partner Name", "Searches", "Onboarded"]}
               rows={euaPartners.filter((p) => partnerService === "All Services" || p.service.includes(partnerService.replace(" Discovery", "")))
-                .map((p) => [p.name, p.service, p.searches.toLocaleString("en-IN"), p.onboarded])}
-              numericCol={2}
+                .map((p) => [p.name, p.searches.toLocaleString("en-IN"), p.onboarded])}
+              numericCol={1}
               onDownload={() => downloadCSV("eua-partners.csv", euaPartners)}
             />
             <PartnerTable
               title="List of HSPAs"
-              columns={["Partner Name", "Service", "Bookings", "Onboarded"]}
+              columns={showBookingsForHspa(partnerService) ? ["Partner Name", "Bookings", "Onboarded"] : ["Partner Name", "Onboarded"]}
               rows={hspaPartners.filter((p) => partnerService === "All Services" || p.service.includes(partnerService.replace(" Discovery", "")))
-                .map((p) => [p.name, p.service, p.bookings.toLocaleString("en-IN"), p.onboarded])}
-              numericCol={2}
+                .map((p) => showBookingsForHspa(partnerService)
+                  ? [p.name, p.bookings.toLocaleString("en-IN"), p.onboarded]
+                  : [p.name, p.onboarded])}
+              numericCol={showBookingsForHspa(partnerService) ? 1 : -1}
               onDownload={() => downloadCSV("hspa-partners.csv", hspaPartners)}
             />
           </div>
         </Section>
+
 
         {/* FUNNEL */}
         <ChartContainer label="THE SYSTEMIC VIEW · PRIVATE VIEW ONLY" title="Cross-Service Adoption Funnel"
