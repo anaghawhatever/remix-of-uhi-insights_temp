@@ -1,35 +1,35 @@
 // Mock data for UHI Insights Dashboard
-export type ServiceKey = "PMJAY HEM" | "Blood Bank" | "Teleconsultation" | "Physical Consultation" | "Ambulance Discovery" | "Jan Aushadhi Kendra";
+export type ServiceKey = "PMJAY Hospital Discovery" | "Blood Bank Discovery" | "Teleconsultation" | "Physical Consultation" | "Ambulance Discovery" | "Jan Aushadhi Kendra Discovery";
 
 export const SERVICES: ServiceKey[] = [
-  "PMJAY HEM",
-  "Blood Bank",
+  "PMJAY Hospital Discovery",
+  "Blood Bank Discovery",
   "Teleconsultation",
   "Physical Consultation",
   "Ambulance Discovery",
-  "Jan Aushadhi Kendra",
+  "Jan Aushadhi Kendra Discovery",
 ];
 
 export const serviceStatus: Record<ServiceKey, "live" | "paused"> = {
-  "PMJAY HEM": "live",
-  "Blood Bank": "live",
+  "PMJAY Hospital Discovery": "live",
+  "Blood Bank Discovery": "live",
   "Teleconsultation": "paused",
   "Physical Consultation": "live",
   "Ambulance Discovery": "live",
-  "Jan Aushadhi Kendra": "live",
+  "Jan Aushadhi Kendra Discovery": "live",
 };
 
 export const serviceColor: Record<ServiceKey, string> = {
-  "PMJAY HEM": "var(--color-chart-blue)",
-  "Blood Bank": "var(--color-bar-coral)",
+  "PMJAY Hospital Discovery": "var(--color-chart-blue)",
+  "Blood Bank Discovery": "var(--color-bar-coral)",
   "Teleconsultation": "var(--color-chart-teal)",
   "Physical Consultation": "var(--color-chart-purple)",
   "Ambulance Discovery": "var(--color-chart-orange)",
-  "Jan Aushadhi Kendra": "var(--color-chart-green)",
+  "Jan Aushadhi Kendra Discovery": "var(--color-chart-green)",
 };
 
 export const liveServices = {
-  "PMJAY HEM": {
+  "PMJAY Hospital Discovery": {
     totalSearches: 92142,
     euas: 5,
     hspas: 1,
@@ -44,7 +44,7 @@ export const liveServices = {
       { month: "Mar", value: 35400 },
     ],
   },
-  "Blood Bank": {
+  "Blood Bank Discovery": {
     totalSearches: 91728,
     euas: 13,
     hspas: 1,
@@ -108,7 +108,7 @@ export const liveServices = {
       { month: "Mar", value: 22 },
     ],
   },
-  "Jan Aushadhi Kendra": {
+  "Jan Aushadhi Kendra Discovery": {
     totalSearches: 12480,
     euas: 2,
     hspas: 1,
@@ -144,13 +144,13 @@ export const combinedGrowth = (() => {
 })();
 
 export const euaPartners = [
-  { name: "Secure", service: "PMJAY HEM", searches: 32420, onboarded: "Oct 2025" },
-  { name: "Anahat Solutions Pvt Ltd", service: "Blood Bank · PMJAY HEM", searches: 27809, onboarded: "Jul 2025" },
-  { name: "Ublood Private Limited", service: "Blood Bank", searches: 14907, onboarded: "Aug 2025" },
+  { name: "Secure", service: "PMJAY Hospital Discovery", searches: 32420, onboarded: "Oct 2025" },
+  { name: "Anahat Solutions Pvt Ltd", service: "Blood Bank Discovery · PMJAY Hospital Discovery", searches: 27809, onboarded: "Jul 2025" },
+  { name: "Ublood Private Limited", service: "Blood Bank Discovery", searches: 14907, onboarded: "Aug 2025" },
   { name: "Pristyn Care", service: "Teleconsultation · Physical Consultation", searches: 4533, onboarded: "Feb 2024" },
-  { name: "MyHealthRecords", service: "Blood Bank", searches: 2480, onboarded: "Sep 2025" },
+  { name: "MyHealthRecords", service: "Blood Bank Discovery", searches: 2480, onboarded: "Sep 2025" },
   { name: "DocsApp", service: "Teleconsultation", searches: 8200, onboarded: "Jan 2024" },
-  { name: "PMJAY Connect", service: "PMJAY HEM", searches: 12420, onboarded: "Dec 2025" },
+  { name: "PMJAY Connect", service: "PMJAY Hospital Discovery", searches: 12420, onboarded: "Dec 2025" },
   { name: "AmbuFleet", service: "Ambulance Discovery", searches: 9140, onboarded: "May 2026" },
 ];
 
@@ -159,8 +159,8 @@ export const hspaPartners = [
   { name: "eSanjeevani", service: "Teleconsultation", bookings: 1100, onboarded: "Jul 2023" },
   { name: "Apollo 24/7", service: "Teleconsultation · Physical Consultation", bookings: 184, onboarded: "Mar 2026" },
   { name: "Ziqitza HealthCare", service: "Ambulance Discovery", bookings: 0, onboarded: "May 2026" },
-  { name: "Pmjay", service: "PMJAY HEM", bookings: 0, onboarded: "Nov 2025" },
-  { name: "Anahat Networks", service: "Blood Bank", bookings: 0, onboarded: "Aug 2025" },
+  { name: "Pmjay", service: "PMJAY Hospital Discovery", bookings: 0, onboarded: "Nov 2025" },
+  { name: "Anahat Networks", service: "Blood Bank Discovery", bookings: 0, onboarded: "Aug 2025" },
 ];
 
 export const states = [
@@ -187,10 +187,10 @@ export const states = [
 ];
 
 export const integrationJourney = [
-  { service: "Blood Bank", days: 268, integrators: 6, from: "Sept 24", to: "Jun 25", color: "var(--color-bar-coral)" },
+  { service: "Blood Bank Discovery", days: 268, integrators: 6, from: "Sept 24", to: "Jun 25", color: "var(--color-bar-coral)" },
   { service: "Physical Consultation", days: 199, integrators: 3, from: "Sept 25", to: "Mar 26", color: "var(--color-chart-purple)" },
   { service: "Ambulance Discovery", days: 160, integrators: 2, from: "Nov 25", to: "May 26", color: "var(--color-chart-orange)" },
-  { service: "PMJAY HEM", days: 157, integrators: 4, from: "May 25", to: "Nov 25", color: "var(--color-chart-blue)" },
+  { service: "PMJAY Hospital Discovery", days: 157, integrators: 4, from: "May 25", to: "Nov 25", color: "var(--color-chart-blue)" },
   { service: "Teleconsultation", days: 148, integrators: 5, from: "Jan 23", to: "Jun 23", color: "var(--color-chart-teal)" },
 ];
 
@@ -216,15 +216,15 @@ export type Integrator = {
 };
 
 export const integrators: Integrator[] = [
-  { name: "e-Raktkosh", role: "HSPA", service: "Blood Bank", onboardDate: "2024-09-15", goLiveDate: "2025-06-29" },
-  { name: "Driefcase Healthtech Pvt Ltd", role: "EUA", service: "Blood Bank", onboardDate: "2024-12-02", goLiveDate: "2025-08-30" },
-  { name: "Skearth Private Limited", role: "EUA", service: "Blood Bank", onboardDate: "2025-02-04", goLiveDate: "2025-10-29" },
-  { name: "Jdeanz Healthtech Pvt Ltd", role: "EUA", service: "Blood Bank", onboardDate: "2025-02-18", goLiveDate: "2025-11-08" },
-  { name: "Ublood Private Limited", role: "EUA", service: "Blood Bank", onboardDate: "2025-03-12", goLiveDate: "2025-11-30" },
-  { name: "Anahat Solutions Pvt Ltd", role: "EUA", service: "Blood Bank", onboardDate: "2024-11-20", goLiveDate: "2025-07-30" },
-  { name: "Secure", role: "EUA", service: "PMJAY HEM", onboardDate: "2025-05-10", goLiveDate: "2025-10-15" },
-  { name: "PMJAY Connect", role: "EUA", service: "PMJAY HEM", onboardDate: "2025-06-22", goLiveDate: "2025-12-01" },
-  { name: "Pmjay", role: "HSPA", service: "PMJAY HEM", onboardDate: "2025-05-01", goLiveDate: "2025-11-04" },
+  { name: "e-Raktkosh", role: "HSPA", service: "Blood Bank Discovery", onboardDate: "2024-09-15", goLiveDate: "2025-06-29" },
+  { name: "Driefcase Healthtech Pvt Ltd", role: "EUA", service: "Blood Bank Discovery", onboardDate: "2024-12-02", goLiveDate: "2025-08-30" },
+  { name: "Skearth Private Limited", role: "EUA", service: "Blood Bank Discovery", onboardDate: "2025-02-04", goLiveDate: "2025-10-29" },
+  { name: "Jdeanz Healthtech Pvt Ltd", role: "EUA", service: "Blood Bank Discovery", onboardDate: "2025-02-18", goLiveDate: "2025-11-08" },
+  { name: "Ublood Private Limited", role: "EUA", service: "Blood Bank Discovery", onboardDate: "2025-03-12", goLiveDate: "2025-11-30" },
+  { name: "Anahat Solutions Pvt Ltd", role: "EUA", service: "Blood Bank Discovery", onboardDate: "2024-11-20", goLiveDate: "2025-07-30" },
+  { name: "Secure", role: "EUA", service: "PMJAY Hospital Discovery", onboardDate: "2025-05-10", goLiveDate: "2025-10-15" },
+  { name: "PMJAY Connect", role: "EUA", service: "PMJAY Hospital Discovery", onboardDate: "2025-06-22", goLiveDate: "2025-12-01" },
+  { name: "Pmjay", role: "HSPA", service: "PMJAY Hospital Discovery", onboardDate: "2025-05-01", goLiveDate: "2025-11-04" },
   { name: "Apollo 24/7", role: "HSPA", service: "Physical Consultation", onboardDate: "2025-09-08", goLiveDate: "2026-03-26" },
   { name: "Pristyn Care", role: "EUA", service: "Physical Consultation", onboardDate: "2025-10-04", goLiveDate: "2026-03-20" },
   { name: "DocsApp", role: "EUA", service: "Teleconsultation", onboardDate: "2023-01-15", goLiveDate: "2023-06-12" },

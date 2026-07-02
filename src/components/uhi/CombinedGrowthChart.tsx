@@ -8,8 +8,8 @@ type ViewType = "cumulative" | "incremental";
 type Range = "ALL" | "1Y" | "6M";
 
 const SERIES: Array<{ key: string; name: string; color: string; paused?: boolean }> = [
-  { key: "PMJAY", name: "PMJAY HEM", color: "var(--color-chart-blue)" },
-  { key: "Blood", name: "Blood Bank", color: "var(--color-bar-coral)" },
+  { key: "PMJAY", name: "PMJAY Hospital Discovery", color: "var(--color-chart-blue)" },
+  { key: "Blood", name: "Blood Bank Discovery", color: "var(--color-bar-coral)" },
   { key: "Tele", name: "Teleconsult", color: "var(--color-chart-teal)", paused: true },
   { key: "Phys", name: "Physical Consult", color: "var(--color-chart-purple)" },
   { key: "Amb", name: "Ambulance", color: "var(--color-chart-orange)" },

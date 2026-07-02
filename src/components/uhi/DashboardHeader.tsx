@@ -7,7 +7,7 @@ const TABS = [
   "HIECM", "ABHA Transaction Visibility", "Scan & Pay", "CDSS", "Partner Reporting", "NMC",
 ];
 
-const SERVICES = ["All", "PMJAY HEM", "Blood Bank", "Teleconsultation", "Physical Consultation", "Ambulance Discovery"];
+const SERVICES = ["All", "PMJAY Hospital Discovery", "Blood Bank Discovery", "Teleconsultation", "Physical Consultation", "Ambulance Discovery"];
 
 export function DashboardHeader({
   service, onServiceChange,

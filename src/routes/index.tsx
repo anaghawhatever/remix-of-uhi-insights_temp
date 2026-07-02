@@ -43,7 +43,7 @@ function Dashboard() {
             <KPICard title="Total Searches"
               value={<><CountUp value={275000} />+</>}
               footnote={<span className="text-[var(--color-live)] font-medium">↗ +32% vs last quarter</span>}
-              tooltip={<><div className="font-semibold mb-1">Total Searches</div>Service-wise: PMJAY HEM 92,142 · Blood Bank 91,728 · Teleconsult 92,000 · Ambulance 18,240 · Physical 184.</>}
+              tooltip={<><div className="font-semibold mb-1">Total Searches</div>Service-wise: PMJAY 354,484 · Blood Bank 163,185 · Teleconsult 92,000 · Ambulance 356 · Physical 3,554.</>}
             />
             <KPICard title="EUAs Integrated" value={<CountUp value={13} />}
               footnote="End User Apps live across all services"
@@ -92,12 +92,12 @@ function Dashboard() {
 
         {/* UHI LIVE SERVICES */}
         <Section label="SERVICE-LEVEL PERFORMANCE" title="UHI Live Services">
-          <div className="text-[11px] tracking-widest text-muted-foreground font-semibold mb-3">DISCOVERY SERVICES <span className="text-muted-foreground/70 normal-case tracking-normal">(PMJAY HEM, Blood Bank, Ambulance Discovery, Jan Aushadhi Kendra)</span></div>
+          <div className="text-[11px] tracking-widest text-muted-foreground font-semibold mb-3">DISCOVERY SERVICES <span className="text-muted-foreground/70 normal-case tracking-normal">(PMJAY Hospital Discovery, Blood Bank Discovery, Ambulance Discovery, Jan Aushadhi Kendra Discovery)</span></div>
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-5 mb-8">
-            <ServiceCard service="PMJAY HEM" kind="discovery" />
-            <ServiceCard service="Blood Bank" kind="discovery" />
+            <ServiceCard service="PMJAY Hospital Discovery" kind="discovery" />
+            <ServiceCard service="Blood Bank Discovery" kind="discovery" />
             <ServiceCard service="Ambulance Discovery" kind="discovery" />
-            <ServiceCard service="Jan Aushadhi Kendra" kind="discovery" />
+            <ServiceCard service="Jan Aushadhi Kendra Discovery" kind="discovery" />
           </div>
           <div className="text-[11px] tracking-widest text-muted-foreground font-semibold mb-3">BOOKING / FULFILMENT SERVICES <span className="text-muted-foreground/70 normal-case tracking-normal">(Teleconsultation, Physical Consultation)</span></div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
@@ -458,10 +458,10 @@ function GeographicCard() {
   const share = stateRow ? stateRow.value / totalNational : 0;
 
   const discoveryServices: Array<{ name: string; searches: number }> = selectedState ? [
-    { name: "PMJAY HEM", searches: Math.round(92142 * share) },
-    { name: "Blood Bank", searches: Math.round(91728 * share) },
+    { name: "PMJAY Hospital Discovery", searches: Math.round(92142 * share) },
+    { name: "Blood Bank Discovery", searches: Math.round(91728 * share) },
     { name: "Ambulance Discovery", searches: Math.round(18240 * share) },
-    { name: "Jan Aushadhi Kendra", searches: Math.round(12480 * share) },
+    { name: "Jan Aushadhi Kendra Discovery", searches: Math.round(12480 * share) },
   ] : [];
   const fulfilmentServices: Array<{ name: string; searches: number; bookings: number; status: "live" | "paused" }> = selectedState ? [
     { name: "Teleconsultation", searches: Math.round(92000 * share), bookings: Math.round(2050 * share), status: "paused" },

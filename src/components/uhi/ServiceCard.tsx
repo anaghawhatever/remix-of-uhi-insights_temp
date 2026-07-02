@@ -16,12 +16,12 @@ export function ServiceCard({ service, kind }: Props) {
   const initial = service.charAt(0);
   const accent = isDiscovery ? "var(--color-bar-coral)" : "var(--color-chart-teal)";
   const iconBg = {
-    "PMJAY HEM": "var(--color-chart-blue)",
-    "Blood Bank": "var(--color-bar-coral)",
+    "PMJAY Hospital Discovery": "var(--color-chart-blue)",
+    "Blood Bank Discovery": "var(--color-bar-coral)",
     "Ambulance Discovery": "var(--color-chart-orange)",
     "Teleconsultation": "var(--color-chart-teal)",
     "Physical Consultation": "var(--color-chart-purple)",
-    "Jan Aushadhi Kendra": "var(--color-chart-green)",
+    "Jan Aushadhi Kendra Discovery": "var(--color-chart-green)",
   }[service];
 
   return (
