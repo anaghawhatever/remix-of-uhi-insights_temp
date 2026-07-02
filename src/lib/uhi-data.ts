@@ -67,7 +67,7 @@ export const liveServices = {
     ],
   },
   "Ambulance Discovery": {
-    totalSearches: 18240,
+    totalSearches: 356,
     euas: 2,
     hspas: 1,
     liveSince: "May 2026",
