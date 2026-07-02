@@ -109,7 +109,7 @@ export const liveServices = {
     ],
   },
   "Jan Aushadhi Kendra Discovery": {
-    totalSearches: 12480,
+    totalSearches: 1435,
     euas: 2,
     hspas: 1,
     liveSince: "Apr 2026",
