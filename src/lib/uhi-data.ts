@@ -30,7 +30,7 @@ export const serviceColor: Record<ServiceKey, string> = {
 
 export const liveServices = {
   "PMJAY Hospital Discovery": {
-    totalSearches: 92142,
+    totalSearches: 354484,
     euas: 5,
     hspas: 1,
     liveSince: "Nov 2025",
