@@ -79,7 +79,7 @@ export const liveServices = {
     ],
   },
   "Teleconsultation": {
-    totalBookings: 2050,
+    totalBookings: 3816,
     euas: 5,
     hspas: 4,
     liveSince: "Jun 2023",
