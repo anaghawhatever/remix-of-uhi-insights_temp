@@ -45,7 +45,7 @@ export const liveServices = {
     ],
   },
   "Blood Bank Discovery": {
-    totalSearches: 91728,
+    totalSearches: 163185,
     euas: 13,
     hspas: 1,
     liveSince: "Aug 2025",
