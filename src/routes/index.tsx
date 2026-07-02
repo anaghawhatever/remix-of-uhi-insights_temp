@@ -299,15 +299,16 @@ function PartnerTable({ title, columns, rows, numericCol, onDownload }: {
 
 
 function AdoptionFunnel({ service }: { service: string }) {
-  const base = service === "All Services" ? 1 : 0.25;
+  const base = service === "All Fulfilment Services" ? 1 : 0.5;
   const stages = [
-    { label: "Service Discovery", value: Math.round(397500 * base), pct: "100% of cohort", color: "var(--color-navy)" },
-    { label: "Provider Selection", value: Math.round(48200 * base), pct: "12.1% of cohort", color: "oklch(0.4 0.1 250)" },
-    { label: "Booking Initiated", value: Math.round(14600 * base), pct: "3.7% of cohort", color: "var(--color-chart-blue)" },
-    { label: "Booking Completed", value: Math.round(3100 * base), pct: "0.79% of cohort", color: "var(--color-chart-teal)" },
-    { label: "Consultation Completed", value: Math.round(3050 * base), pct: "0.78% of cohort", color: "var(--color-bar-coral)" },
+    { label: "Service Discovery", value: Math.round(95554 * base), pct: "100% of cohort", color: "var(--color-navy)" },
+    { label: "Provider Selection", value: Math.round(24800 * base), pct: "26.0% of cohort", color: "oklch(0.4 0.1 250)" },
+    { label: "Booking Initiated", value: Math.round(9200 * base), pct: "9.6% of cohort", color: "var(--color-chart-blue)" },
+    { label: "Booking Completed", value: Math.round(4000 * base), pct: "4.2% of cohort", color: "var(--color-chart-teal)" },
+    { label: "Consultation Completed", value: Math.round(3860 * base), pct: "4.0% of cohort", color: "var(--color-bar-coral)" },
   ];
-  const convs = ["12.1% conv.", "30.3% conv.", "21.6% conv.", "98.4% conv."];
+  const convs = ["26.0% conv.", "37.1% conv.", "43.5% conv.", "96.5% conv."];
+
 
   return (
     <div>
