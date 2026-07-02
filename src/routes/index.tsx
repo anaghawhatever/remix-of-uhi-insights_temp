@@ -28,7 +28,7 @@ export const Route = createFileRoute("/")({
 function Dashboard() {
   const [service, setService] = useState("All");
   const [partnerService, setPartnerService] = useState("All Services");
-  const [funnelService, setFunnelService] = useState("All Services");
+  const [funnelService, setFunnelService] = useState("All Fulfilment Services");
   const [showMetricsLogic, setShowMetricsLogic] = useState(false);
 
   return (
