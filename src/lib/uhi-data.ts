@@ -96,6 +96,7 @@ export const liveServices = {
   },
   "Physical Consultation": {
     totalBookings: 184,
+    totalSearches: 3554,
     euas: 3,
     hspas: 2,
     liveSince: "Mar 2026",
