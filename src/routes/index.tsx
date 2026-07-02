@@ -195,7 +195,9 @@ function Section({ label, title, desc, descItalic, children }: { label?: string;
 }
 
 function ServicePortfolioCard() {
-  const items = SERVICES.map((s) => ({ name: s, status: serviceStatus[s] }));
+  // Move Teleconsultation to the bottom (paused, not live)
+  const items = [...SERVICES].sort((a, b) => (a === "Teleconsultation" ? 1 : b === "Teleconsultation" ? -1 : 0))
+    .map((s) => ({ name: s, status: serviceStatus[s] }));
   return (
     <div className="card-cream p-5 flex flex-col gap-3">
       <div className="flex items-start justify-between">
@@ -203,12 +205,6 @@ function ServicePortfolioCard() {
         <Tooltip content="Traffic-light status per live service. Green = Live, Red = Paused.">
           <Info className="size-4" />
         </Tooltip>
-      </div>
-      <div className="flex gap-1 h-3 rounded overflow-hidden mt-1">
-        {items.map((i) => (
-          <div key={i.name} className="flex-1" title={`${i.name}: ${i.status}`}
-            style={{ background: i.status === "live" ? "var(--color-live)" : "var(--color-paused)" }} />
-        ))}
       </div>
       <ul className="space-y-1.5 mt-1">
         {items.map((i) => (
@@ -224,6 +220,20 @@ function ServicePortfolioCard() {
     </div>
   );
 }
+
+function SmallStatCard({ title, value, foot, tip }: { title: string; value: string; foot: string; tip: string }) {
+  return (
+    <div className="card-cream p-4">
+      <div className="flex items-start justify-between">
+        <div className="section-label">{title}</div>
+        <Tooltip content={tip}><Info className="size-3.5" /></Tooltip>
+      </div>
+      <div className="num-amber text-2xl mt-1">{value}</div>
+      <div className="text-[11px] text-muted-foreground mt-1">{foot}</div>
+    </div>
+  );
+}
+
 
 
 function PartnerTable({ title, columns, rows, numericCol, onDownload }: {
