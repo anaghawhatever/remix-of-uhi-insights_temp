@@ -91,21 +91,6 @@ function Dashboard() {
         </Section>
 
 
-        {/* UHI LIVE SERVICES */}
-        <Section label="SERVICE-LEVEL PERFORMANCE" title="UHI Live Services">
-          <div className="text-[11px] tracking-widest text-muted-foreground font-semibold mb-3">DISCOVERY SERVICES <span className="text-muted-foreground/70 normal-case tracking-normal">(PMJAY Hospital Discovery, Blood Bank Discovery, Ambulance Discovery, Jan Aushadhi Kendra Discovery)</span></div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-5 mb-8">
-            <ServiceCard service="PMJAY Hospital Discovery" kind="discovery" />
-            <ServiceCard service="Blood Bank Discovery" kind="discovery" />
-            <ServiceCard service="Ambulance Discovery" kind="discovery" />
-            <ServiceCard service="Jan Aushadhi Kendra Discovery" kind="discovery" />
-          </div>
-          <div className="text-[11px] tracking-widest text-muted-foreground font-semibold mb-3">BOOKING / FULFILMENT SERVICES <span className="text-muted-foreground/70 normal-case tracking-normal">(Teleconsultation, Physical Consultation)</span></div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-            <ServiceCard service="Teleconsultation" kind="fulfilment" />
-            <ServiceCard service="Physical Consultation" kind="fulfilment" />
-          </div>
-        </Section>
 
         {/* DETAILED INDICATORS */}
         <Section title="Detailed Indicators" desc="only in private view" descItalic>
