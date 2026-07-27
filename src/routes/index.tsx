@@ -1,12 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip as RTooltip, Cell, LineChart, Line } from "recharts";
 import { ArrowUpRight, ArrowRight, Search, X } from "lucide-react";
 import { DashboardHeader } from "@/components/uhi/DashboardHeader";
 import { ServiceCard } from "@/components/uhi/ServiceCard";
 import { CombinedGrowthChart } from "@/components/uhi/CombinedGrowthChart";
-import { KPICard, CountUp, ChartContainer, StatusBadge, downloadCSV, Tooltip } from "@/components/uhi/primitives";
-import { euaPartners, hspaPartners, integrationJourney, integrators, metricsLogic, serviceStatus, states, SERVICES } from "@/lib/uhi-data";
+import { KPICard, CountUp, ChartContainer, StatusBadge, downloadCSV, Tooltip, ServiceTag } from "@/components/uhi/primitives";
+import { euaPartners, hspaPartners, integrationJourney, metricsLogic, serviceStatus, states, SERVICES, ADDITIONAL_LIVE_SERVICES } from "@/lib/uhi-data";
 import { Info } from "lucide-react";
 import { IndiaMap } from "@/components/uhi/IndiaMap";
 import { AuditSaturationSection } from "@/components/uhi/AuditSaturationSection";
