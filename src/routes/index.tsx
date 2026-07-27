@@ -27,73 +27,60 @@ export const Route = createFileRoute("/")({
 function Dashboard() {
   const [service, setService] = useState("All");
   const [partnerService, setPartnerService] = useState("All Services");
-  const [funnelService, setFunnelService] = useState("All Fulfilment Services");
   const [showMetricsLogic, setShowMetricsLogic] = useState(false);
 
   return (
     <div className="min-h-screen">
       <DashboardHeader service={service} onServiceChange={setService} />
 
-      <main className="px-6 py-8 mx-auto max-w-[1600px] space-y-10">
+      <main className="px-6 py-6 mx-auto max-w-[1600px] space-y-8">
         {/* GATEWAY AT A GLANCE */}
         <Section label="DASHBOARD OVERVIEW" title="Gateway at a Glance">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
             <ServicePortfolioCard />
             <KPICard title="Total Searches"
               value={<CountUp value={615001} />}
               footnote={<span className="text-[var(--color-live)] font-medium">↗ +123.6% vs last quarter</span>}
-              tooltip={<><div className="font-semibold mb-1">Total Searches</div>Service-wise: PMJAY 354,484 · Blood Bank 163,185 · Physical 3,554 · Jan Aushadhi 1,435 · Ambulance 356 · Teleconsult 92,000.</>}
+              tooltip="Aggregate searches across all live services."
             />
-            <KPICard title="EUAs Integrated" value={<CountUp value={22} />}
-              footnote="End User Apps live across all services"
-              tooltip="Count of EUAs that have reached Go Live status across all live services."
+            <KPICard title="Total Network Partners" value={<CountUp value={28} />}
+              footnote="Unique integrators (EUA, HSPA or both)"
+              tooltip="Number of unique integrators counted once, whether they operate as a Patient App (EUA), a Provider App (HSPA), or both."
             />
-            <KPICard title="HSPAs Integrated" value={<CountUp value={9} />}
-              footnote="Health Service Provider Apps live across all services"
-              tooltip="Count of HSPAs live across all services."
-            />
-            <KPICard title="Total Ecosystem Partners" value={<CountUp value={28} />}
-              footnote="Number of unique integrators who are either EUA or HSPA or both"
-              tooltip="Unique integrators counted once, whether they operate as an EUA, an HSPA, or both."
-            />
-            <KPICard title="Number of Bookings" value={<CountUp value={4000} />}
+            <KPICard title="Total Bookings" value={<CountUp value={4000} />}
               footnote="Teleconsultation · Physical Consultation"
               tooltip="Total completed bookings from Teleconsultation + Physical Consultation."
             />
-          </div>
-
-        </Section>
-
-        {/* REGISTRIES */}
-        <Section label="ECOSYSTEM SATURATION · PRIVATE VIEW ONLY" title="Registries in UHI" desc="only in private view" descItalic>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl">
-            <SmallStatCard title="ABHA Saturation" value="68.4%" foot="↗ +4.2pp QoQ" tip="Requests with ABHA ID or address ÷ Total API endpoint hits." />
-            <SmallStatCard title="HFR Saturation" value="74.2%" foot="↗ +2.1pp QoQ" tip="Providers in UHI linked to HFR ÷ Total providers in UHI." />
-            <SmallStatCard title="HPR Saturation" value="61.8%" foot="↗ +5.4pp QoQ" tip="Doctors in UHI linked to HPR ÷ Total doctors in UHI." />
+            <KPICard title="Patient Applications (EUAs) Integrated" value={<CountUp value={22} />}
+              footnote="Live across all services"
+              tooltip="Count of Patient Applications (EUAs) that have reached Go Live status across all live services."
+            />
+            <KPICard title="Provider Applications (HSPAs) Integrated" value={<CountUp value={9} />}
+              footnote="Live across all services"
+              tooltip="Count of Provider Applications (HSPAs) live across all services."
+            />
           </div>
         </Section>
 
         {/* UHI LIVE SERVICES */}
         <Section label="SERVICE-LEVEL PERFORMANCE" title="UHI Live Services">
-          <div className="text-[11px] tracking-widest text-muted-foreground font-semibold mb-3">DISCOVERY SERVICES <span className="text-muted-foreground/70 normal-case tracking-normal">(PMJAY Hospital Discovery, Blood Bank Discovery, Ambulance Discovery, Jan Aushadhi Kendra Discovery)</span></div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-5 mb-8">
+          <div className="text-[11px] tracking-widest text-muted-foreground font-semibold mb-2">DISCOVERY SERVICES</div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
             <ServiceCard service="PMJAY Hospital Discovery" kind="discovery" />
             <ServiceCard service="Blood Bank Discovery" kind="discovery" />
             <ServiceCard service="Ambulance Discovery" kind="discovery" />
             <ServiceCard service="Jan Aushadhi Kendra Discovery" kind="discovery" />
           </div>
-          <div className="text-[11px] tracking-widest text-muted-foreground font-semibold mb-3">BOOKING / FULFILMENT SERVICES <span className="text-muted-foreground/70 normal-case tracking-normal">(Physical Consultation, Teleconsultation)</span></div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <div className="text-[11px] tracking-widest text-muted-foreground font-semibold mb-2">BOOKING / FULFILMENT SERVICES</div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <ServiceCard service="Physical Consultation" kind="fulfilment" />
             <ServiceCard service="Teleconsultation" kind="fulfilment" />
           </div>
         </Section>
 
-
-
         {/* DETAILED INDICATORS */}
         <Section title="Detailed Indicators" desc="only in private view" descItalic>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             <KPICard title="Search Growth (QoQ)" value={<span className="text-[var(--color-live)]">+38% <ArrowUpRight className="inline size-6"/></span>}
               footnote="Quarter-on-quarter total searches"
               tooltip="(Current quarter searches − Previous quarter searches) ÷ Previous quarter searches × 100."
@@ -105,62 +92,65 @@ function Dashboard() {
           </div>
         </Section>
 
-
         {/* COMBINED GROWTH */}
         <CombinedGrowthChart />
 
         {/* PARTNER REGISTRY */}
-        <Section label="ECOSYSTEM PARTNERS" title="EUA & HSPA Registry">
-          <div className="flex items-center gap-3 mb-4">
+        <Section label="NETWORK PARTNERS" title="Patient & Provider Applications Registry">
+          <div className="flex items-center gap-3 mb-3">
             <span className="text-[11px] tracking-wider text-muted-foreground font-semibold">FILTER BY SERVICE</span>
             <select value={partnerService} onChange={(e) => setPartnerService(e.target.value)}
               className="text-xs border border-border rounded-md px-3 py-1.5 bg-white min-w-[180px]">
               {["All Services", ...SERVICES].map((s) => <option key={s}>{s}</option>)}
             </select>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <PartnerTable
-              title="List of EUAs"
-              columns={["Partner Name", "Searches", "Onboarded"]}
+              title="List of Patient Applications (EUAs)"
               rows={euaPartners.filter((p) => partnerService === "All Services" || p.service.includes(partnerService.replace(" Discovery", "")))
-                .map((p) => [p.name, p.searches.toLocaleString("en-IN"), p.onboarded])}
-              numericCol={1}
+                .map((p) => ({
+                  name: p.name,
+                  services: splitServices(p.service),
+                  searches: p.searches,
+                  bookings: Math.round(p.searches * 0.04),
+                  onboarded: p.onboarded,
+                }))}
               onDownload={() => downloadCSV("eua-partners.csv", euaPartners)}
             />
             <PartnerTable
-              title="List of HSPAs"
-              columns={showBookingsForHspa(partnerService) ? ["Partner Name", "Bookings", "Onboarded"] : ["Partner Name", "Onboarded"]}
+              title="List of Provider Applications (HSPAs)"
               rows={hspaPartners.filter((p) => partnerService === "All Services" || p.service.includes(partnerService.replace(" Discovery", "")))
-                .map((p) => showBookingsForHspa(partnerService)
-                  ? [p.name, p.bookings.toLocaleString("en-IN"), p.onboarded]
-                  : [p.name, p.onboarded])}
-              numericCol={showBookingsForHspa(partnerService) ? 1 : -1}
+                .map((p) => ({
+                  name: p.name,
+                  services: splitServices(p.service),
+                  searches: Math.max(0, p.bookings * 25),
+                  bookings: p.bookings,
+                  onboarded: p.onboarded,
+                }))}
               onDownload={() => downloadCSV("hspa-partners.csv", hspaPartners)}
             />
           </div>
         </Section>
 
-
-        {/* FUNNEL — only fulfilment services (Physical + Teleconsultation) */}
-        <ChartContainer label="THE SYSTEMIC VIEW · PRIVATE VIEW ONLY" title="Cross-Service Adoption Funnel"
-          right={
-            <select value={funnelService} onChange={(e) => setFunnelService(e.target.value)}
-              className="text-xs border border-white/30 bg-white/10 text-white rounded-md px-3 py-1.5 min-w-[160px]">
-              {["All Fulfilment Services", "Physical Consultation", "Teleconsultation"].map((s) => <option key={s} className="text-foreground">{s}</option>)}
-            </select>
-          }
-        >
-          <AdoptionFunnel service={funnelService} />
-        </ChartContainer>
-
-
-        {/* INTEGRATION + GEOGRAPHIC side by side */}
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
-          <IntegrationJourneyCard />
-          <GeographicCard />
-        </div>
+        {/* GEOGRAPHIC first, then INTEGRATION JOURNEY (public-only) */}
+        <GeographicCard />
+        <IntegrationJourneyCard />
 
         <AuditSaturationSection />
+
+        {/* REGISTRIES — moved to the bottom */}
+        <Section
+          label="ECOSYSTEM SATURATION · PRIVATE VIEW ONLY"
+          title="Registries in UHI"
+          desc="Only applicable for Booking Services: Physical Consultation, Ambulance Booking, etc."
+          descItalic
+        >
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 max-w-4xl">
+            <SmallStatCard title="ABHA Saturation" value="68.4%" foot="↗ +4.2pp QoQ" tip="Requests with ABHA ID or address ÷ Total API endpoint hits." />
+            <SmallStatCard title="HFR Saturation" value="74.2%" foot="↗ +2.1pp QoQ" tip="Providers in UHI linked to HFR ÷ Total providers in UHI." />
+            <SmallStatCard title="HPR Saturation" value="61.8%" foot="↗ +5.4pp QoQ" tip="Doctors in UHI linked to HPR ÷ Total doctors in UHI." />
+          </div>
+        </Section>
 
         <Footer onOpenMetrics={() => setShowMetricsLogic(true)} />
       </main>
@@ -169,6 +159,11 @@ function Dashboard() {
     </div>
   );
 }
+
+function splitServices(s: string): string[] {
+  return s.split("·").map((x) => x.trim()).filter(Boolean);
+}
+
 
 function Section({ label, title, desc, descItalic, children }: { label?: string; title: string; desc?: string; descItalic?: boolean; children: React.ReactNode }) {
   return (
