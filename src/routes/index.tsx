@@ -178,24 +178,22 @@ function Section({ label, title, desc, descItalic, children }: { label?: string;
 }
 
 function ServicePortfolioCard() {
-  // Move Teleconsultation to the bottom (paused, not live)
-  const items = [...SERVICES].sort((a, b) => (a === "Teleconsultation" ? 1 : b === "Teleconsultation" ? -1 : 0))
+  const primary = [...SERVICES]
+    .sort((a, b) => (a === "Teleconsultation" ? 1 : b === "Teleconsultation" ? -1 : 0))
     .map((s) => ({ name: s, status: serviceStatus[s] }));
+  const items = [...primary, ...ADDITIONAL_LIVE_SERVICES];
   return (
-    <div className="card-cream p-5 flex flex-col gap-3">
+    <div className="card-cream p-4 flex flex-col gap-2 xl:col-span-1">
       <div className="flex items-start justify-between">
-        <div className="section-label">Service Portfolio Status</div>
-        <Tooltip content="Traffic-light status per live service. Green = Live, Red = Paused.">
+        <div className="section-label">Live Services</div>
+        <Tooltip content="Live UHI services. Green dot = Live, Red = Paused.">
           <Info className="size-4" />
         </Tooltip>
       </div>
-      <ul className="space-y-1.5 mt-1">
+      <ul className="space-y-1 mt-0.5">
         {items.map((i) => (
-          <li key={i.name} className="flex items-center justify-between text-sm">
-            <span className="flex items-center gap-2">
-              <span className="size-2 rounded-full" style={{ background: i.status === "live" ? "var(--color-live)" : "var(--color-paused)" }} />
-              {i.name}
-            </span>
+          <li key={i.name} className="flex items-center justify-between gap-2">
+            <ServiceTag name={i.name} />
             <StatusBadge status={i.status} />
           </li>
         ))}
