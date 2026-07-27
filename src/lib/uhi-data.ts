@@ -19,14 +19,24 @@ export const serviceStatus: Record<ServiceKey, "live" | "paused"> = {
   "Jan Aushadhi Kendra Discovery": "live",
 };
 
-export const serviceColor: Record<ServiceKey, string> = {
+export const serviceColor: Record<string, string> = {
   "PMJAY Hospital Discovery": "var(--color-chart-blue)",
   "Blood Bank Discovery": "var(--color-bar-coral)",
   "Teleconsultation": "var(--color-chart-teal)",
   "Physical Consultation": "var(--color-chart-purple)",
   "Ambulance Discovery": "var(--color-chart-orange)",
   "Jan Aushadhi Kendra Discovery": "var(--color-chart-green)",
+  "Jan Aushadhi Medicine Discovery": "oklch(0.6 0.15 140)",
+  "AMRIT": "oklch(0.55 0.16 20)",
+  "NOTTO": "oklch(0.5 0.18 280)",
 };
+
+// Additional live services that appear in the Service Portfolio list only
+export const ADDITIONAL_LIVE_SERVICES: Array<{ name: string; status: "live" | "paused" }> = [
+  { name: "AMRIT", status: "live" },
+  { name: "NOTTO", status: "live" },
+  { name: "Jan Aushadhi Medicine Discovery", status: "live" },
+];
 
 export const liveServices = {
   "PMJAY Hospital Discovery": {

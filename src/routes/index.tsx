@@ -1,12 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip as RTooltip, Cell, LineChart, Line } from "recharts";
 import { ArrowUpRight, ArrowRight, Search, X } from "lucide-react";
 import { DashboardHeader } from "@/components/uhi/DashboardHeader";
 import { ServiceCard } from "@/components/uhi/ServiceCard";
 import { CombinedGrowthChart } from "@/components/uhi/CombinedGrowthChart";
-import { KPICard, CountUp, ChartContainer, StatusBadge, downloadCSV, Tooltip } from "@/components/uhi/primitives";
-import { euaPartners, hspaPartners, integrationJourney, integrators, metricsLogic, serviceStatus, states, SERVICES } from "@/lib/uhi-data";
+import { KPICard, CountUp, ChartContainer, StatusBadge, downloadCSV, Tooltip, ServiceTag } from "@/components/uhi/primitives";
+import { euaPartners, hspaPartners, integrationJourney, metricsLogic, serviceStatus, states, SERVICES, ADDITIONAL_LIVE_SERVICES } from "@/lib/uhi-data";
 import { Info } from "lucide-react";
 import { IndiaMap } from "@/components/uhi/IndiaMap";
 import { AuditSaturationSection } from "@/components/uhi/AuditSaturationSection";
@@ -28,73 +27,60 @@ export const Route = createFileRoute("/")({
 function Dashboard() {
   const [service, setService] = useState("All");
   const [partnerService, setPartnerService] = useState("All Services");
-  const [funnelService, setFunnelService] = useState("All Fulfilment Services");
   const [showMetricsLogic, setShowMetricsLogic] = useState(false);
 
   return (
     <div className="min-h-screen">
       <DashboardHeader service={service} onServiceChange={setService} />
 
-      <main className="px-6 py-8 mx-auto max-w-[1600px] space-y-10">
+      <main className="px-6 py-6 mx-auto max-w-[1600px] space-y-8">
         {/* GATEWAY AT A GLANCE */}
         <Section label="DASHBOARD OVERVIEW" title="Gateway at a Glance">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
             <ServicePortfolioCard />
             <KPICard title="Total Searches"
               value={<CountUp value={615001} />}
               footnote={<span className="text-[var(--color-live)] font-medium">↗ +123.6% vs last quarter</span>}
-              tooltip={<><div className="font-semibold mb-1">Total Searches</div>Service-wise: PMJAY 354,484 · Blood Bank 163,185 · Physical 3,554 · Jan Aushadhi 1,435 · Ambulance 356 · Teleconsult 92,000.</>}
+              tooltip="Aggregate searches across all live services."
             />
-            <KPICard title="EUAs Integrated" value={<CountUp value={22} />}
-              footnote="End User Apps live across all services"
-              tooltip="Count of EUAs that have reached Go Live status across all live services."
+            <KPICard title="Total Network Partners" value={<CountUp value={28} />}
+              footnote="Unique integrators (EUA, HSPA or both)"
+              tooltip="Number of unique integrators counted once, whether they operate as a Patient App (EUA), a Provider App (HSPA), or both."
             />
-            <KPICard title="HSPAs Integrated" value={<CountUp value={9} />}
-              footnote="Health Service Provider Apps live across all services"
-              tooltip="Count of HSPAs live across all services."
-            />
-            <KPICard title="Total Ecosystem Partners" value={<CountUp value={28} />}
-              footnote="Number of unique integrators who are either EUA or HSPA or both"
-              tooltip="Unique integrators counted once, whether they operate as an EUA, an HSPA, or both."
-            />
-            <KPICard title="Number of Bookings" value={<CountUp value={4000} />}
+            <KPICard title="Total Bookings" value={<CountUp value={4000} />}
               footnote="Teleconsultation · Physical Consultation"
               tooltip="Total completed bookings from Teleconsultation + Physical Consultation."
             />
-          </div>
-
-        </Section>
-
-        {/* REGISTRIES */}
-        <Section label="ECOSYSTEM SATURATION · PRIVATE VIEW ONLY" title="Registries in UHI" desc="only in private view" descItalic>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl">
-            <SmallStatCard title="ABHA Saturation" value="68.4%" foot="↗ +4.2pp QoQ" tip="Requests with ABHA ID or address ÷ Total API endpoint hits." />
-            <SmallStatCard title="HFR Saturation" value="74.2%" foot="↗ +2.1pp QoQ" tip="Providers in UHI linked to HFR ÷ Total providers in UHI." />
-            <SmallStatCard title="HPR Saturation" value="61.8%" foot="↗ +5.4pp QoQ" tip="Doctors in UHI linked to HPR ÷ Total doctors in UHI." />
+            <KPICard title="Patient Applications (EUAs) Integrated" value={<CountUp value={22} />}
+              footnote="Live across all services"
+              tooltip="Count of Patient Applications (EUAs) that have reached Go Live status across all live services."
+            />
+            <KPICard title="Provider Applications (HSPAs) Integrated" value={<CountUp value={9} />}
+              footnote="Live across all services"
+              tooltip="Count of Provider Applications (HSPAs) live across all services."
+            />
           </div>
         </Section>
 
         {/* UHI LIVE SERVICES */}
         <Section label="SERVICE-LEVEL PERFORMANCE" title="UHI Live Services">
-          <div className="text-[11px] tracking-widest text-muted-foreground font-semibold mb-3">DISCOVERY SERVICES <span className="text-muted-foreground/70 normal-case tracking-normal">(PMJAY Hospital Discovery, Blood Bank Discovery, Ambulance Discovery, Jan Aushadhi Kendra Discovery)</span></div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-5 mb-8">
+          <div className="text-[11px] tracking-widest text-muted-foreground font-semibold mb-2">DISCOVERY SERVICES</div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
             <ServiceCard service="PMJAY Hospital Discovery" kind="discovery" />
             <ServiceCard service="Blood Bank Discovery" kind="discovery" />
             <ServiceCard service="Ambulance Discovery" kind="discovery" />
             <ServiceCard service="Jan Aushadhi Kendra Discovery" kind="discovery" />
           </div>
-          <div className="text-[11px] tracking-widest text-muted-foreground font-semibold mb-3">BOOKING / FULFILMENT SERVICES <span className="text-muted-foreground/70 normal-case tracking-normal">(Physical Consultation, Teleconsultation)</span></div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <div className="text-[11px] tracking-widest text-muted-foreground font-semibold mb-2">BOOKING / FULFILMENT SERVICES</div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <ServiceCard service="Physical Consultation" kind="fulfilment" />
             <ServiceCard service="Teleconsultation" kind="fulfilment" />
           </div>
         </Section>
 
-
-
         {/* DETAILED INDICATORS */}
         <Section title="Detailed Indicators" desc="only in private view" descItalic>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             <KPICard title="Search Growth (QoQ)" value={<span className="text-[var(--color-live)]">+38% <ArrowUpRight className="inline size-6"/></span>}
               footnote="Quarter-on-quarter total searches"
               tooltip="(Current quarter searches − Previous quarter searches) ÷ Previous quarter searches × 100."
@@ -106,62 +92,65 @@ function Dashboard() {
           </div>
         </Section>
 
-
         {/* COMBINED GROWTH */}
         <CombinedGrowthChart />
 
         {/* PARTNER REGISTRY */}
-        <Section label="ECOSYSTEM PARTNERS" title="EUA & HSPA Registry">
-          <div className="flex items-center gap-3 mb-4">
+        <Section label="NETWORK PARTNERS" title="Patient & Provider Applications Registry">
+          <div className="flex items-center gap-3 mb-3">
             <span className="text-[11px] tracking-wider text-muted-foreground font-semibold">FILTER BY SERVICE</span>
             <select value={partnerService} onChange={(e) => setPartnerService(e.target.value)}
               className="text-xs border border-border rounded-md px-3 py-1.5 bg-white min-w-[180px]">
               {["All Services", ...SERVICES].map((s) => <option key={s}>{s}</option>)}
             </select>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <PartnerTable
-              title="List of EUAs"
-              columns={["Partner Name", "Searches", "Onboarded"]}
+              title="List of Patient Applications (EUAs)"
               rows={euaPartners.filter((p) => partnerService === "All Services" || p.service.includes(partnerService.replace(" Discovery", "")))
-                .map((p) => [p.name, p.searches.toLocaleString("en-IN"), p.onboarded])}
-              numericCol={1}
+                .map((p) => ({
+                  name: p.name,
+                  services: splitServices(p.service),
+                  searches: p.searches,
+                  bookings: Math.round(p.searches * 0.04),
+                  onboarded: p.onboarded,
+                }))}
               onDownload={() => downloadCSV("eua-partners.csv", euaPartners)}
             />
             <PartnerTable
-              title="List of HSPAs"
-              columns={showBookingsForHspa(partnerService) ? ["Partner Name", "Bookings", "Onboarded"] : ["Partner Name", "Onboarded"]}
+              title="List of Provider Applications (HSPAs)"
               rows={hspaPartners.filter((p) => partnerService === "All Services" || p.service.includes(partnerService.replace(" Discovery", "")))
-                .map((p) => showBookingsForHspa(partnerService)
-                  ? [p.name, p.bookings.toLocaleString("en-IN"), p.onboarded]
-                  : [p.name, p.onboarded])}
-              numericCol={showBookingsForHspa(partnerService) ? 1 : -1}
+                .map((p) => ({
+                  name: p.name,
+                  services: splitServices(p.service),
+                  searches: Math.max(0, p.bookings * 25),
+                  bookings: p.bookings,
+                  onboarded: p.onboarded,
+                }))}
               onDownload={() => downloadCSV("hspa-partners.csv", hspaPartners)}
             />
           </div>
         </Section>
 
-
-        {/* FUNNEL — only fulfilment services (Physical + Teleconsultation) */}
-        <ChartContainer label="THE SYSTEMIC VIEW · PRIVATE VIEW ONLY" title="Cross-Service Adoption Funnel"
-          right={
-            <select value={funnelService} onChange={(e) => setFunnelService(e.target.value)}
-              className="text-xs border border-white/30 bg-white/10 text-white rounded-md px-3 py-1.5 min-w-[160px]">
-              {["All Fulfilment Services", "Physical Consultation", "Teleconsultation"].map((s) => <option key={s} className="text-foreground">{s}</option>)}
-            </select>
-          }
-        >
-          <AdoptionFunnel service={funnelService} />
-        </ChartContainer>
-
-
-        {/* INTEGRATION + GEOGRAPHIC side by side */}
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
-          <IntegrationJourneyCard />
-          <GeographicCard />
-        </div>
+        {/* GEOGRAPHIC first, then INTEGRATION JOURNEY (public-only) */}
+        <GeographicCard />
+        <IntegrationJourneyCard />
 
         <AuditSaturationSection />
+
+        {/* REGISTRIES — moved to the bottom */}
+        <Section
+          label="ECOSYSTEM SATURATION · PRIVATE VIEW ONLY"
+          title="Registries in UHI"
+          desc="Only applicable for Booking Services: Physical Consultation, Ambulance Booking, etc."
+          descItalic
+        >
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 max-w-4xl">
+            <SmallStatCard title="ABHA Saturation" value="68.4%" foot="↗ +4.2pp QoQ" tip="Requests with ABHA ID or address ÷ Total API endpoint hits." />
+            <SmallStatCard title="HFR Saturation" value="74.2%" foot="↗ +2.1pp QoQ" tip="Providers in UHI linked to HFR ÷ Total providers in UHI." />
+            <SmallStatCard title="HPR Saturation" value="61.8%" foot="↗ +5.4pp QoQ" tip="Doctors in UHI linked to HPR ÷ Total doctors in UHI." />
+          </div>
+        </Section>
 
         <Footer onOpenMetrics={() => setShowMetricsLogic(true)} />
       </main>
@@ -170,6 +159,11 @@ function Dashboard() {
     </div>
   );
 }
+
+function splitServices(s: string): string[] {
+  return s.split("·").map((x) => x.trim()).filter(Boolean);
+}
+
 
 function Section({ label, title, desc, descItalic, children }: { label?: string; title: string; desc?: string; descItalic?: boolean; children: React.ReactNode }) {
   return (
@@ -184,24 +178,22 @@ function Section({ label, title, desc, descItalic, children }: { label?: string;
 }
 
 function ServicePortfolioCard() {
-  // Move Teleconsultation to the bottom (paused, not live)
-  const items = [...SERVICES].sort((a, b) => (a === "Teleconsultation" ? 1 : b === "Teleconsultation" ? -1 : 0))
+  const primary = [...SERVICES]
+    .sort((a, b) => (a === "Teleconsultation" ? 1 : b === "Teleconsultation" ? -1 : 0))
     .map((s) => ({ name: s, status: serviceStatus[s] }));
+  const items = [...primary, ...ADDITIONAL_LIVE_SERVICES];
   return (
-    <div className="card-cream p-5 flex flex-col gap-3">
+    <div className="card-cream p-4 flex flex-col gap-2 xl:col-span-1">
       <div className="flex items-start justify-between">
-        <div className="section-label">Service Portfolio Status</div>
-        <Tooltip content="Traffic-light status per live service. Green = Live, Red = Paused.">
+        <div className="section-label">Live Services</div>
+        <Tooltip content="Live UHI services. Green dot = Live, Red = Paused.">
           <Info className="size-4" />
         </Tooltip>
       </div>
-      <ul className="space-y-1.5 mt-1">
+      <ul className="space-y-1 mt-0.5">
         {items.map((i) => (
-          <li key={i.name} className="flex items-center justify-between text-sm">
-            <span className="flex items-center gap-2">
-              <span className="size-2 rounded-full" style={{ background: i.status === "live" ? "var(--color-live)" : "var(--color-paused)" }} />
-              {i.name}
-            </span>
+          <li key={i.name} className="flex items-center justify-between gap-2">
+            <ServiceTag name={i.name} />
             <StatusBadge status={i.status} />
           </li>
         ))}
@@ -225,54 +217,67 @@ function SmallStatCard({ title, value, foot, tip }: { title: string; value: stri
 
 
 
-function showBookingsForHspa(filter: string) {
-  return filter === "All Services" || filter === "Physical Consultation" || filter === "Teleconsultation";
-}
+type PartnerRow = {
+  name: string;
+  services: string[];
+  searches: number;
+  bookings: number;
+  onboarded: string;
+};
 
-function PartnerTable({ title, columns, rows, numericCol, onDownload }: {
-  title: string; columns: string[]; rows: Array<Array<string | number>>; numericCol: number; onDownload: () => void;
+function PartnerTable({ title, rows, onDownload }: {
+  title: string; rows: PartnerRow[]; onDownload: () => void;
 }) {
-  const initialSort = numericCol >= 0 ? numericCol : 0;
-  const [sortIdx, setSortIdx] = useState<number>(initialSort);
+  type SortKey = "name" | "searches" | "bookings" | "onboarded";
+  const [sortKey, setSortKey] = useState<SortKey>("searches");
   const [dir, setDir] = useState<"asc" | "desc">("desc");
   const sorted = useMemo(() => {
     const cp = [...rows];
     cp.sort((a, b) => {
-      const av = a[sortIdx], bv = b[sortIdx];
-      if (sortIdx === numericCol) {
-        const an = Number(String(av).replace(/[^\d.-]/g, ""));
-        const bn = Number(String(bv).replace(/[^\d.-]/g, ""));
-        return dir === "asc" ? an - bn : bn - an;
+      if (sortKey === "searches" || sortKey === "bookings") {
+        return dir === "asc" ? a[sortKey] - b[sortKey] : b[sortKey] - a[sortKey];
       }
-      return dir === "asc" ? String(av).localeCompare(String(bv)) : String(bv).localeCompare(String(av));
+      return dir === "asc" ? a[sortKey].localeCompare(b[sortKey]) : b[sortKey].localeCompare(a[sortKey]);
     });
     return cp;
-  }, [rows, sortIdx, dir, numericCol]);
+  }, [rows, sortKey, dir]);
+
+  const th = (label: string, key: SortKey, align: "left" | "right" = "left") => (
+    <th
+      className={`py-1.5 px-2 text-[10px] tracking-wider text-[var(--color-navy)] font-semibold cursor-pointer select-none ${align === "right" ? "text-right" : ""}`}
+      onClick={() => { if (sortKey === key) setDir((d) => d === "asc" ? "desc" : "asc"); else { setSortKey(key); setDir("desc"); } }}
+    >
+      {label.toUpperCase()} {sortKey === key ? (dir === "asc" ? "↑" : "↓") : ""}
+    </th>
+  );
 
   return (
-    <ChartContainer label="PARTNER REGISTRY" title={title} onDownload={onDownload}>
-      <div className="max-h-[260px] overflow-y-auto">
-        <table className="w-full text-sm">
+    <ChartContainer label="NETWORK PARTNERS" title={title} onDownload={onDownload}>
+      <div className="max-h-[300px] overflow-y-auto">
+        <table className="w-full text-xs">
           <thead className="sticky top-0 bg-white">
             <tr className="border-b border-border text-left">
-              <th className="py-2 pr-2 text-[11px] tracking-wider text-muted-foreground font-semibold w-8">#</th>
-              {columns.map((c, i) => (
-                <th key={c} className={`py-2 px-2 text-[11px] tracking-wider text-[var(--color-navy)] font-semibold cursor-pointer select-none ${i === numericCol ? "text-right" : ""}`}
-                  onClick={() => { if (sortIdx === i) setDir(d => d === "asc" ? "desc" : "asc"); else { setSortIdx(i); setDir("desc"); } }}>
-                  {c.toUpperCase()} {sortIdx === i ? (dir === "asc" ? "↑" : "↓") : ""}
-                </th>
-              ))}
+              <th className="py-1.5 pr-2 text-[10px] tracking-wider text-muted-foreground font-semibold w-6">#</th>
+              {th("Partner", "name")}
+              <th className="py-1.5 px-2 text-[10px] tracking-wider text-[var(--color-navy)] font-semibold">INTEGRATED SERVICES</th>
+              {th("Searches", "searches", "right")}
+              {th("Bookings", "bookings", "right")}
+              {th("Onboarded", "onboarded", "right")}
             </tr>
           </thead>
           <tbody>
             {sorted.map((r, i) => (
-              <tr key={i} className={i % 2 ? "bg-muted/40" : ""}>
-                <td className="py-2.5 pr-2 text-muted-foreground">{i + 1}</td>
-                {r.map((cell, ci) => (
-                  <td key={ci} className={`py-2.5 px-2 ${ci === numericCol ? "text-right num-amber" : ci === 0 ? "font-medium" : "text-xs text-muted-foreground"}`}>
-                    {cell}
-                  </td>
-                ))}
+              <tr key={r.name} className={i % 2 ? "bg-muted/40" : ""}>
+                <td className="py-1.5 pr-2 text-muted-foreground">{i + 1}</td>
+                <td className="py-1.5 px-2 font-medium">{r.name}</td>
+                <td className="py-1.5 px-2">
+                  <div className="flex flex-wrap gap-1">
+                    {r.services.map((s) => <ServiceTag key={s} name={s} />)}
+                  </div>
+                </td>
+                <td className="py-1.5 px-2 text-right tabular-nums">{r.searches.toLocaleString("en-IN")}</td>
+                <td className="py-1.5 px-2 text-right num-amber tabular-nums">{r.bookings.toLocaleString("en-IN")}</td>
+                <td className="py-1.5 px-2 text-right text-muted-foreground">{r.onboarded}</td>
               </tr>
             ))}
           </tbody>
@@ -282,52 +287,8 @@ function PartnerTable({ title, columns, rows, numericCol, onDownload }: {
   );
 }
 
-
-function AdoptionFunnel({ service }: { service: string }) {
-  const base = service === "All Fulfilment Services" ? 1 : 0.5;
-  const stages = [
-    { label: "Service Discovery", value: Math.round(95554 * base), pct: "100% of cohort", color: "var(--color-navy)" },
-    { label: "Provider Selection", value: Math.round(24800 * base), pct: "26.0% of cohort", color: "oklch(0.4 0.1 250)" },
-    { label: "Booking Initiated", value: Math.round(9200 * base), pct: "9.6% of cohort", color: "var(--color-chart-blue)" },
-    { label: "Booking Completed", value: Math.round(4000 * base), pct: "4.2% of cohort", color: "var(--color-chart-teal)" },
-    { label: "Consultation Completed", value: Math.round(3860 * base), pct: "4.0% of cohort", color: "var(--color-bar-coral)" },
-  ];
-  const convs = ["26.0% conv.", "37.1% conv.", "43.5% conv.", "96.5% conv."];
-
-
-  return (
-    <div>
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
-        {stages.map((s, i) => (
-          <div key={s.label}>
-            <div className="flex items-center justify-between mb-1.5">
-              <span className="text-[11px] tracking-wider text-muted-foreground font-semibold">STAGE {i+1}</span>
-              {i > 0 && <span className="text-[11px] text-[var(--color-bar-coral)] font-medium">{convs[i-1]}</span>}
-            </div>
-            <div className="rounded-lg p-4 text-white" style={{ background: s.color }}>
-              <div className="text-sm font-medium opacity-90">{s.label}</div>
-              <div className="text-3xl font-bold mt-1">{s.value >= 1000 ? `${(s.value/1000).toFixed(s.value < 10000 ? 1 : 0)}K` : s.value}</div>
-              <div className="text-xs opacity-75 mt-1">{s.pct}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
-        <div className="bg-muted/60 rounded-md p-3"><div className="text-sm font-semibold">Biggest drop-off</div><div className="text-xs text-muted-foreground mt-0.5">Discovery → Selection · 87.9% leakage</div></div>
-        <div className="bg-muted/60 rounded-md p-3"><div className="text-sm font-semibold">Selection → Booking</div><div className="text-xs text-muted-foreground mt-0.5">30.3% reach booking</div></div>
-        <div className="bg-muted/60 rounded-md p-3"><div className="text-sm font-semibold">End-to-end conversion</div><div className="text-xs text-muted-foreground mt-0.5">0.78% of discoveries reach completion</div></div>
-      </div>
-      <div className="text-xs italic text-muted-foreground mt-3">only in private view</div>
-    </div>
-  );
-}
-
 function IntegrationJourneyCard() {
-  const [view, setView] = useState<"public" | "private">("public");
   const [sortDesc, setSortDesc] = useState(true);
-  const [serviceFilter, setServiceFilter] = useState("All Services");
-
-  // PUBLIC: service-wise averages
   const publicMax = Math.max(...integrationJourney.map((d) => d.days));
   const publicRows = useMemo(() => {
     const cp = [...integrationJourney];
@@ -335,115 +296,38 @@ function IntegrationJourneyCard() {
     return cp;
   }, [sortDesc]);
 
-  // PRIVATE: integrator-wise timelines
-  const privateRows = useMemo(() => {
-    const filtered = integrators.filter((i) => serviceFilter === "All Services" || i.service === serviceFilter);
-    const withDays = filtered.map((i) => {
-      const o = new Date(i.onboardDate).getTime();
-      const g = new Date(i.goLiveDate).getTime();
-      return { ...i, days: Math.round((g - o) / (1000 * 60 * 60 * 24)), oMs: o, gMs: g };
-    });
-    withDays.sort((a, b) => sortDesc ? b.days - a.days : a.days - b.days);
-    return withDays;
-  }, [serviceFilter, sortDesc]);
-
-  const tMin = privateRows.length ? Math.min(...privateRows.map((r) => r.oMs)) : 0;
-  const tMax = privateRows.length ? Math.max(...privateRows.map((r) => r.gMs)) : 1;
-  const tRange = tMax - tMin || 1;
-  const fmtMonth = (ms: number) => new Date(ms).toLocaleDateString("en-IN", { month: "short", year: "2-digit" });
-
-  // 4 evenly spaced timeline ticks
-  const ticks = [0, 0.33, 0.66, 1].map((p) => tMin + p * tRange);
-
   return (
     <ChartContainer
-      label={view === "private" ? "ONBOARDING · INTEGRATOR-WISE (PRIVATE VIEW ONLY)" : "ONBOARDING · SERVICE-WISE AVERAGE"}
+      label="ONBOARDING · SERVICE-WISE AVERAGE"
       title="Integration Journey"
       right={
-        <div className="flex items-center gap-2 flex-wrap">
-          <div className="flex bg-white/10 rounded-md p-0.5">
-            <button onClick={() => setView("public")} className={`px-2.5 py-1 rounded text-xs font-medium ${view === "public" ? "bg-white text-[var(--color-navy)]" : "text-white"}`}>Public View</button>
-            <button onClick={() => setView("private")} className={`px-2.5 py-1 rounded text-xs font-medium ${view === "private" ? "bg-white text-[var(--color-navy)]" : "text-white"}`}>Private View</button>
-          </div>
-          {view === "private" && (
-            <select value={serviceFilter} onChange={(e) => setServiceFilter(e.target.value)}
-              className="text-xs border border-white/30 bg-white/10 text-white rounded px-2 py-1">
-              {["All Services", ...SERVICES].map((s) => <option key={s} className="text-foreground">{s}</option>)}
-            </select>
-          )}
-          <button onClick={() => setSortDesc((s) => !s)} className="text-xs opacity-80 hover:opacity-100">↕ Sort</button>
-        </div>
+        <button onClick={() => setSortDesc((s) => !s)} className="text-xs opacity-80 hover:opacity-100">↕ Sort</button>
       }
-      onDownload={() => downloadCSV(view === "public" ? "integration-journey.csv" : "integration-journey-integrators.csv", view === "public" ? integrationJourney : privateRows)}
+      onDownload={() => downloadCSV("integration-journey.csv", integrationJourney)}
     >
-      {view === "public" ? (
-        <div className="space-y-4">
-          {publicRows.map((r) => (
-            <div key={r.service} className="grid grid-cols-12 items-center gap-3">
-              <div className="col-span-3">
-                <div className="font-semibold text-sm">{r.service}</div>
-                <div className="text-xs text-muted-foreground">{r.integrators} integrators</div>
-              </div>
-              <div className="col-span-7">
-                <div className="h-7 rounded relative bg-muted/40">
-                  <div className="h-full rounded flex items-center px-2 text-xs font-semibold text-white"
-                    style={{ width: `${(r.days / publicMax) * 100}%`, background: r.color }}>
-                    {r.days} days
-                  </div>
+      <div className="space-y-3">
+        {publicRows.map((r) => (
+          <div key={r.service} className="grid grid-cols-12 items-center gap-3">
+            <div className="col-span-3">
+              <div className="font-semibold text-sm">{r.service}</div>
+              <div className="text-xs text-muted-foreground">{r.integrators} integrators</div>
+            </div>
+            <div className="col-span-7">
+              <div className="h-6 rounded relative bg-muted/40">
+                <div className="h-full rounded flex items-center px-2 text-xs font-semibold text-white"
+                  style={{ width: `${(r.days / publicMax) * 100}%`, background: r.color }}>
+                  {r.days} days
                 </div>
               </div>
-              <div className="col-span-2 text-xs text-muted-foreground text-right">{r.from} → {r.to}</div>
             </div>
-          ))}
-        </div>
-      ) : (
-        <div>
-          {/* Timeline header */}
-          <div className="grid grid-cols-12 items-center gap-3 mb-2 pb-2 border-b border-border">
-            <div className="col-span-3"></div>
-            <div className="col-span-8 relative h-4">
-              {ticks.map((t, i) => (
-                <div key={i} className="absolute -top-0.5 text-[11px] text-muted-foreground" style={{ left: `${(i / (ticks.length - 1)) * 100}%`, transform: i === ticks.length - 1 ? "translateX(-100%)" : "translateX(-50%)" }}>
-                  {fmtMonth(t)}
-                </div>
-              ))}
-            </div>
-            <div className="col-span-1 text-right text-[11px] tracking-wider text-muted-foreground font-semibold">DAYS</div>
+            <div className="col-span-2 text-xs text-muted-foreground text-right">{r.from} → {r.to}</div>
           </div>
-
-          <div className="space-y-3">
-            {privateRows.map((r) => {
-              const left = ((r.oMs - tMin) / tRange) * 100;
-              const width = ((r.gMs - r.oMs) / tRange) * 100;
-              return (
-                <div key={r.name} className="grid grid-cols-12 items-center gap-3">
-                  <div className="col-span-3">
-                    <div className="font-semibold text-sm truncate" title={r.name}>{r.name}</div>
-                    <div className="text-[11px] text-muted-foreground">{r.role} · {r.service}</div>
-                  </div>
-                  <div className="col-span-8">
-                    <div className="relative h-6 bg-muted/30 rounded">
-                      <div className="absolute top-1/2 -translate-y-1/2 h-1.5 rounded-full bg-[var(--color-bar-coral)]/70" style={{ left: `${left}%`, width: `${width}%` }} />
-                      <div className="absolute top-1/2 -translate-y-1/2 size-2.5 rounded-full bg-[var(--color-chart-blue)] border-2 border-white" style={{ left: `calc(${left}% - 5px)` }} title={`Onboarded ${fmtMonth(r.oMs)}`} />
-                      <div className="absolute top-1/2 -translate-y-1/2 size-2.5 rounded-full bg-[var(--color-live)] border-2 border-white" style={{ left: `calc(${left + width}% - 5px)` }} title={`Go Live ${fmtMonth(r.gMs)}`} />
-                    </div>
-                  </div>
-                  <div className="col-span-1 text-sm font-semibold text-right num-amber">{r.days}</div>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="flex items-center gap-4 mt-5 text-xs text-muted-foreground">
-            <span className="inline-flex items-center gap-1.5"><span className="size-2.5 rounded-full bg-[var(--color-chart-blue)]" /> Date of Onboarding</span>
-            <span className="inline-flex items-center gap-1.5"><span className="size-2.5 rounded-full bg-[var(--color-live)]" /> Date of Go Live</span>
-          </div>
-          <div className="text-xs italic text-muted-foreground mt-2">only in private view</div>
-        </div>
-      )}
+        ))}
+      </div>
     </ChartContainer>
   );
 }
+
 
 function GeographicCard() {
   const [serviceFilter, setServiceFilter] = useState("All Services");
