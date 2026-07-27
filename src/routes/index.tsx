@@ -219,54 +219,67 @@ function SmallStatCard({ title, value, foot, tip }: { title: string; value: stri
 
 
 
-function showBookingsForHspa(filter: string) {
-  return filter === "All Services" || filter === "Physical Consultation" || filter === "Teleconsultation";
-}
+type PartnerRow = {
+  name: string;
+  services: string[];
+  searches: number;
+  bookings: number;
+  onboarded: string;
+};
 
-function PartnerTable({ title, columns, rows, numericCol, onDownload }: {
-  title: string; columns: string[]; rows: Array<Array<string | number>>; numericCol: number; onDownload: () => void;
+function PartnerTable({ title, rows, onDownload }: {
+  title: string; rows: PartnerRow[]; onDownload: () => void;
 }) {
-  const initialSort = numericCol >= 0 ? numericCol : 0;
-  const [sortIdx, setSortIdx] = useState<number>(initialSort);
+  type SortKey = "name" | "searches" | "bookings" | "onboarded";
+  const [sortKey, setSortKey] = useState<SortKey>("searches");
   const [dir, setDir] = useState<"asc" | "desc">("desc");
   const sorted = useMemo(() => {
     const cp = [...rows];
     cp.sort((a, b) => {
-      const av = a[sortIdx], bv = b[sortIdx];
-      if (sortIdx === numericCol) {
-        const an = Number(String(av).replace(/[^\d.-]/g, ""));
-        const bn = Number(String(bv).replace(/[^\d.-]/g, ""));
-        return dir === "asc" ? an - bn : bn - an;
+      if (sortKey === "searches" || sortKey === "bookings") {
+        return dir === "asc" ? a[sortKey] - b[sortKey] : b[sortKey] - a[sortKey];
       }
-      return dir === "asc" ? String(av).localeCompare(String(bv)) : String(bv).localeCompare(String(av));
+      return dir === "asc" ? a[sortKey].localeCompare(b[sortKey]) : b[sortKey].localeCompare(a[sortKey]);
     });
     return cp;
-  }, [rows, sortIdx, dir, numericCol]);
+  }, [rows, sortKey, dir]);
+
+  const th = (label: string, key: SortKey, align: "left" | "right" = "left") => (
+    <th
+      className={`py-1.5 px-2 text-[10px] tracking-wider text-[var(--color-navy)] font-semibold cursor-pointer select-none ${align === "right" ? "text-right" : ""}`}
+      onClick={() => { if (sortKey === key) setDir((d) => d === "asc" ? "desc" : "asc"); else { setSortKey(key); setDir("desc"); } }}
+    >
+      {label.toUpperCase()} {sortKey === key ? (dir === "asc" ? "↑" : "↓") : ""}
+    </th>
+  );
 
   return (
-    <ChartContainer label="PARTNER REGISTRY" title={title} onDownload={onDownload}>
-      <div className="max-h-[260px] overflow-y-auto">
-        <table className="w-full text-sm">
+    <ChartContainer label="NETWORK PARTNERS" title={title} onDownload={onDownload}>
+      <div className="max-h-[300px] overflow-y-auto">
+        <table className="w-full text-xs">
           <thead className="sticky top-0 bg-white">
             <tr className="border-b border-border text-left">
-              <th className="py-2 pr-2 text-[11px] tracking-wider text-muted-foreground font-semibold w-8">#</th>
-              {columns.map((c, i) => (
-                <th key={c} className={`py-2 px-2 text-[11px] tracking-wider text-[var(--color-navy)] font-semibold cursor-pointer select-none ${i === numericCol ? "text-right" : ""}`}
-                  onClick={() => { if (sortIdx === i) setDir(d => d === "asc" ? "desc" : "asc"); else { setSortIdx(i); setDir("desc"); } }}>
-                  {c.toUpperCase()} {sortIdx === i ? (dir === "asc" ? "↑" : "↓") : ""}
-                </th>
-              ))}
+              <th className="py-1.5 pr-2 text-[10px] tracking-wider text-muted-foreground font-semibold w-6">#</th>
+              {th("Partner", "name")}
+              <th className="py-1.5 px-2 text-[10px] tracking-wider text-[var(--color-navy)] font-semibold">INTEGRATED SERVICES</th>
+              {th("Searches", "searches", "right")}
+              {th("Bookings", "bookings", "right")}
+              {th("Onboarded", "onboarded", "right")}
             </tr>
           </thead>
           <tbody>
             {sorted.map((r, i) => (
-              <tr key={i} className={i % 2 ? "bg-muted/40" : ""}>
-                <td className="py-2.5 pr-2 text-muted-foreground">{i + 1}</td>
-                {r.map((cell, ci) => (
-                  <td key={ci} className={`py-2.5 px-2 ${ci === numericCol ? "text-right num-amber" : ci === 0 ? "font-medium" : "text-xs text-muted-foreground"}`}>
-                    {cell}
-                  </td>
-                ))}
+              <tr key={r.name} className={i % 2 ? "bg-muted/40" : ""}>
+                <td className="py-1.5 pr-2 text-muted-foreground">{i + 1}</td>
+                <td className="py-1.5 px-2 font-medium">{r.name}</td>
+                <td className="py-1.5 px-2">
+                  <div className="flex flex-wrap gap-1">
+                    {r.services.map((s) => <ServiceTag key={s} name={s} />)}
+                  </div>
+                </td>
+                <td className="py-1.5 px-2 text-right tabular-nums">{r.searches.toLocaleString("en-IN")}</td>
+                <td className="py-1.5 px-2 text-right num-amber tabular-nums">{r.bookings.toLocaleString("en-IN")}</td>
+                <td className="py-1.5 px-2 text-right text-muted-foreground">{r.onboarded}</td>
               </tr>
             ))}
           </tbody>
@@ -276,52 +289,8 @@ function PartnerTable({ title, columns, rows, numericCol, onDownload }: {
   );
 }
 
-
-function AdoptionFunnel({ service }: { service: string }) {
-  const base = service === "All Fulfilment Services" ? 1 : 0.5;
-  const stages = [
-    { label: "Service Discovery", value: Math.round(95554 * base), pct: "100% of cohort", color: "var(--color-navy)" },
-    { label: "Provider Selection", value: Math.round(24800 * base), pct: "26.0% of cohort", color: "oklch(0.4 0.1 250)" },
-    { label: "Booking Initiated", value: Math.round(9200 * base), pct: "9.6% of cohort", color: "var(--color-chart-blue)" },
-    { label: "Booking Completed", value: Math.round(4000 * base), pct: "4.2% of cohort", color: "var(--color-chart-teal)" },
-    { label: "Consultation Completed", value: Math.round(3860 * base), pct: "4.0% of cohort", color: "var(--color-bar-coral)" },
-  ];
-  const convs = ["26.0% conv.", "37.1% conv.", "43.5% conv.", "96.5% conv."];
-
-
-  return (
-    <div>
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
-        {stages.map((s, i) => (
-          <div key={s.label}>
-            <div className="flex items-center justify-between mb-1.5">
-              <span className="text-[11px] tracking-wider text-muted-foreground font-semibold">STAGE {i+1}</span>
-              {i > 0 && <span className="text-[11px] text-[var(--color-bar-coral)] font-medium">{convs[i-1]}</span>}
-            </div>
-            <div className="rounded-lg p-4 text-white" style={{ background: s.color }}>
-              <div className="text-sm font-medium opacity-90">{s.label}</div>
-              <div className="text-3xl font-bold mt-1">{s.value >= 1000 ? `${(s.value/1000).toFixed(s.value < 10000 ? 1 : 0)}K` : s.value}</div>
-              <div className="text-xs opacity-75 mt-1">{s.pct}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
-        <div className="bg-muted/60 rounded-md p-3"><div className="text-sm font-semibold">Biggest drop-off</div><div className="text-xs text-muted-foreground mt-0.5">Discovery → Selection · 87.9% leakage</div></div>
-        <div className="bg-muted/60 rounded-md p-3"><div className="text-sm font-semibold">Selection → Booking</div><div className="text-xs text-muted-foreground mt-0.5">30.3% reach booking</div></div>
-        <div className="bg-muted/60 rounded-md p-3"><div className="text-sm font-semibold">End-to-end conversion</div><div className="text-xs text-muted-foreground mt-0.5">0.78% of discoveries reach completion</div></div>
-      </div>
-      <div className="text-xs italic text-muted-foreground mt-3">only in private view</div>
-    </div>
-  );
-}
-
 function IntegrationJourneyCard() {
-  const [view, setView] = useState<"public" | "private">("public");
   const [sortDesc, setSortDesc] = useState(true);
-  const [serviceFilter, setServiceFilter] = useState("All Services");
-
-  // PUBLIC: service-wise averages
   const publicMax = Math.max(...integrationJourney.map((d) => d.days));
   const publicRows = useMemo(() => {
     const cp = [...integrationJourney];
@@ -329,115 +298,38 @@ function IntegrationJourneyCard() {
     return cp;
   }, [sortDesc]);
 
-  // PRIVATE: integrator-wise timelines
-  const privateRows = useMemo(() => {
-    const filtered = integrators.filter((i) => serviceFilter === "All Services" || i.service === serviceFilter);
-    const withDays = filtered.map((i) => {
-      const o = new Date(i.onboardDate).getTime();
-      const g = new Date(i.goLiveDate).getTime();
-      return { ...i, days: Math.round((g - o) / (1000 * 60 * 60 * 24)), oMs: o, gMs: g };
-    });
-    withDays.sort((a, b) => sortDesc ? b.days - a.days : a.days - b.days);
-    return withDays;
-  }, [serviceFilter, sortDesc]);
-
-  const tMin = privateRows.length ? Math.min(...privateRows.map((r) => r.oMs)) : 0;
-  const tMax = privateRows.length ? Math.max(...privateRows.map((r) => r.gMs)) : 1;
-  const tRange = tMax - tMin || 1;
-  const fmtMonth = (ms: number) => new Date(ms).toLocaleDateString("en-IN", { month: "short", year: "2-digit" });
-
-  // 4 evenly spaced timeline ticks
-  const ticks = [0, 0.33, 0.66, 1].map((p) => tMin + p * tRange);
-
   return (
     <ChartContainer
-      label={view === "private" ? "ONBOARDING · INTEGRATOR-WISE (PRIVATE VIEW ONLY)" : "ONBOARDING · SERVICE-WISE AVERAGE"}
+      label="ONBOARDING · SERVICE-WISE AVERAGE"
       title="Integration Journey"
       right={
-        <div className="flex items-center gap-2 flex-wrap">
-          <div className="flex bg-white/10 rounded-md p-0.5">
-            <button onClick={() => setView("public")} className={`px-2.5 py-1 rounded text-xs font-medium ${view === "public" ? "bg-white text-[var(--color-navy)]" : "text-white"}`}>Public View</button>
-            <button onClick={() => setView("private")} className={`px-2.5 py-1 rounded text-xs font-medium ${view === "private" ? "bg-white text-[var(--color-navy)]" : "text-white"}`}>Private View</button>
-          </div>
-          {view === "private" && (
-            <select value={serviceFilter} onChange={(e) => setServiceFilter(e.target.value)}
-              className="text-xs border border-white/30 bg-white/10 text-white rounded px-2 py-1">
-              {["All Services", ...SERVICES].map((s) => <option key={s} className="text-foreground">{s}</option>)}
-            </select>
-          )}
-          <button onClick={() => setSortDesc((s) => !s)} className="text-xs opacity-80 hover:opacity-100">↕ Sort</button>
-        </div>
+        <button onClick={() => setSortDesc((s) => !s)} className="text-xs opacity-80 hover:opacity-100">↕ Sort</button>
       }
-      onDownload={() => downloadCSV(view === "public" ? "integration-journey.csv" : "integration-journey-integrators.csv", view === "public" ? integrationJourney : privateRows)}
+      onDownload={() => downloadCSV("integration-journey.csv", integrationJourney)}
     >
-      {view === "public" ? (
-        <div className="space-y-4">
-          {publicRows.map((r) => (
-            <div key={r.service} className="grid grid-cols-12 items-center gap-3">
-              <div className="col-span-3">
-                <div className="font-semibold text-sm">{r.service}</div>
-                <div className="text-xs text-muted-foreground">{r.integrators} integrators</div>
-              </div>
-              <div className="col-span-7">
-                <div className="h-7 rounded relative bg-muted/40">
-                  <div className="h-full rounded flex items-center px-2 text-xs font-semibold text-white"
-                    style={{ width: `${(r.days / publicMax) * 100}%`, background: r.color }}>
-                    {r.days} days
-                  </div>
+      <div className="space-y-3">
+        {publicRows.map((r) => (
+          <div key={r.service} className="grid grid-cols-12 items-center gap-3">
+            <div className="col-span-3">
+              <div className="font-semibold text-sm">{r.service}</div>
+              <div className="text-xs text-muted-foreground">{r.integrators} integrators</div>
+            </div>
+            <div className="col-span-7">
+              <div className="h-6 rounded relative bg-muted/40">
+                <div className="h-full rounded flex items-center px-2 text-xs font-semibold text-white"
+                  style={{ width: `${(r.days / publicMax) * 100}%`, background: r.color }}>
+                  {r.days} days
                 </div>
               </div>
-              <div className="col-span-2 text-xs text-muted-foreground text-right">{r.from} → {r.to}</div>
             </div>
-          ))}
-        </div>
-      ) : (
-        <div>
-          {/* Timeline header */}
-          <div className="grid grid-cols-12 items-center gap-3 mb-2 pb-2 border-b border-border">
-            <div className="col-span-3"></div>
-            <div className="col-span-8 relative h-4">
-              {ticks.map((t, i) => (
-                <div key={i} className="absolute -top-0.5 text-[11px] text-muted-foreground" style={{ left: `${(i / (ticks.length - 1)) * 100}%`, transform: i === ticks.length - 1 ? "translateX(-100%)" : "translateX(-50%)" }}>
-                  {fmtMonth(t)}
-                </div>
-              ))}
-            </div>
-            <div className="col-span-1 text-right text-[11px] tracking-wider text-muted-foreground font-semibold">DAYS</div>
+            <div className="col-span-2 text-xs text-muted-foreground text-right">{r.from} → {r.to}</div>
           </div>
-
-          <div className="space-y-3">
-            {privateRows.map((r) => {
-              const left = ((r.oMs - tMin) / tRange) * 100;
-              const width = ((r.gMs - r.oMs) / tRange) * 100;
-              return (
-                <div key={r.name} className="grid grid-cols-12 items-center gap-3">
-                  <div className="col-span-3">
-                    <div className="font-semibold text-sm truncate" title={r.name}>{r.name}</div>
-                    <div className="text-[11px] text-muted-foreground">{r.role} · {r.service}</div>
-                  </div>
-                  <div className="col-span-8">
-                    <div className="relative h-6 bg-muted/30 rounded">
-                      <div className="absolute top-1/2 -translate-y-1/2 h-1.5 rounded-full bg-[var(--color-bar-coral)]/70" style={{ left: `${left}%`, width: `${width}%` }} />
-                      <div className="absolute top-1/2 -translate-y-1/2 size-2.5 rounded-full bg-[var(--color-chart-blue)] border-2 border-white" style={{ left: `calc(${left}% - 5px)` }} title={`Onboarded ${fmtMonth(r.oMs)}`} />
-                      <div className="absolute top-1/2 -translate-y-1/2 size-2.5 rounded-full bg-[var(--color-live)] border-2 border-white" style={{ left: `calc(${left + width}% - 5px)` }} title={`Go Live ${fmtMonth(r.gMs)}`} />
-                    </div>
-                  </div>
-                  <div className="col-span-1 text-sm font-semibold text-right num-amber">{r.days}</div>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="flex items-center gap-4 mt-5 text-xs text-muted-foreground">
-            <span className="inline-flex items-center gap-1.5"><span className="size-2.5 rounded-full bg-[var(--color-chart-blue)]" /> Date of Onboarding</span>
-            <span className="inline-flex items-center gap-1.5"><span className="size-2.5 rounded-full bg-[var(--color-live)]" /> Date of Go Live</span>
-          </div>
-          <div className="text-xs italic text-muted-foreground mt-2">only in private view</div>
-        </div>
-      )}
+        ))}
+      </div>
     </ChartContainer>
   );
 }
+
 
 function GeographicCard() {
   const [serviceFilter, setServiceFilter] = useState("All Services");
