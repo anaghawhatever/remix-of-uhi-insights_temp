@@ -1,17 +1,19 @@
 import { LogOut } from "lucide-react";
-import { useState } from "react";
 
-const TABS = [
-  "ABDM Insight", "UHI", "Scan & Share", "Incentive Scheme", "Adoption",
+const TABS_BEFORE = ["ABDM Insight"] as const;
+const TABS_AFTER = [
+  "Scan & Share", "Incentive Scheme", "Adoption",
   "Microsite", "NHPR", "Trends", "Model ABDM Facilities", "Reporting Solutions",
   "HIECM", "ABHA Transaction Visibility", "Scan & Pay", "CDSS", "Partner Reporting", "NMC",
-];
+] as const;
 
 const SERVICES = ["All", "PMJAY Hospital Discovery", "Blood Bank Discovery", "Teleconsultation", "Physical Consultation", "Ambulance Discovery", "Jan Aushadhi Kendra Discovery"];
 
+export type DashboardView = "public" | "private";
+
 export function DashboardHeader({
-  service, onServiceChange,
-}: { service: string; onServiceChange: (s: string) => void }) {
+  service, onServiceChange, view, onViewChange,
+}: { service: string; onServiceChange: (s: string) => void; view: DashboardView; onViewChange: (v: DashboardView) => void }) {
   const [active] = useState("UHI");
   return (
     <header className="sticky top-0 z-40 bg-background shadow-sm">
