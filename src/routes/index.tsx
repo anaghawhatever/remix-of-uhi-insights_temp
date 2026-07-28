@@ -173,10 +173,10 @@ function splitServices(s: string): string[] {
 function Section({ label, title, desc, descItalic, children }: { label?: string; title: string; desc?: string; descItalic?: boolean; children: React.ReactNode }) {
   return (
     <section>
-      {label && <div className="section-label mb-1">{label}</div>}
-      <h2 className="text-2xl font-semibold tracking-tight">{title}</h2>
-      {desc && <p className={`text-sm mt-1 mb-5 ${descItalic ? "italic text-muted-foreground" : "text-muted-foreground"}`}>{desc}</p>}
-      {!desc && <div className="mb-5" />}
+      {label && <div className="section-label mb-0.5">{label}</div>}
+      <h2 className="text-xl font-semibold tracking-tight">{title}</h2>
+      {desc && <p className={`text-xs mt-0.5 mb-3 ${descItalic ? "italic text-muted-foreground" : "text-muted-foreground"}`}>{desc}</p>}
+      {!desc && <div className="mb-3" />}
       {children}
     </section>
   );
