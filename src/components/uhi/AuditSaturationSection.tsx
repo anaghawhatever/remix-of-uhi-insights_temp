@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
-import { ChartContainer, downloadCSV } from "./primitives";
+import { ChartContainer, downloadCSV, Tooltip } from "./primitives";
+import { Info } from "lucide-react";
 
 const AUDIT_SERVICES = ["All Services", "Physical Consultation", "Teleconsultation"] as const;
 const RANGES = ["1W", "1M", "6M", "1Y", "Custom"] as const;
