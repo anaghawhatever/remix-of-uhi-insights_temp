@@ -103,32 +103,36 @@ export function AuditSaturationSection() {
         <table className="w-full text-xs">
           <thead>
             <tr className="border-b border-border text-left">
-              <th className="py-1.5 px-2 text-[10px] tracking-wider text-[var(--color-navy)] font-semibold">AUDIT ENDPOINT</th>
-              <th className="py-1.5 px-2 text-[10px] tracking-wider text-[var(--color-navy)] font-semibold text-right">GATEWAY CALLS</th>
-              <th className="py-1.5 px-2 text-[10px] tracking-wider text-[var(--color-navy)] font-semibold text-right">AUDIT HITS</th>
-              <th className="py-1.5 px-2 text-[10px] tracking-wider text-[var(--color-navy)] font-semibold w-[240px]">SATURATION %</th>
+              <th className="py-1 px-2 text-[10px] tracking-wider text-[var(--color-navy)] font-semibold">
+                <span className="inline-flex items-center gap-1">
+                  AUDIT ENDPOINT
+                  <Tooltip content={<><div className="font-semibold mb-1">Saturation calculation</div><div>Audit hits ÷ corresponding gateway calls per endpoint. Overall row uses aggregated totals.</div></>}>
+                    <Info className="size-3" />
+                  </Tooltip>
+                </span>
+              </th>
+              <th className="py-1 px-2 text-[10px] tracking-wider text-[var(--color-navy)] font-semibold text-right">GATEWAY CALLS</th>
+              <th className="py-1 px-2 text-[10px] tracking-wider text-[var(--color-navy)] font-semibold text-right">AUDIT HITS</th>
+              <th className="py-1 px-2 text-[10px] tracking-wider text-[var(--color-navy)] font-semibold w-[200px]">SATURATION %</th>
             </tr>
           </thead>
           <tbody>
             {endpointRows.map((r, i) => (
               <tr key={r.endpoint} className={i % 2 ? "bg-muted/40" : ""}>
-                <td className="py-1.5 px-2 font-medium font-mono text-[12px]">{r.endpoint}</td>
-                <td className="py-1.5 px-2 text-right tabular-nums">{r.called.toLocaleString("en-IN")}</td>
-                <td className="py-1.5 px-2 text-right tabular-nums">{r.audited.toLocaleString("en-IN")}</td>
-                <td className="py-1.5 px-2"><SatCell pct={r.sat} /></td>
+                <td className="py-1 px-2 font-medium font-mono text-[11px]">{r.endpoint}</td>
+                <td className="py-1 px-2 text-right tabular-nums text-[11px]">{r.called.toLocaleString("en-IN")}</td>
+                <td className="py-1 px-2 text-right tabular-nums text-[11px]">{r.audited.toLocaleString("en-IN")}</td>
+                <td className="py-1 px-2"><SatCell pct={r.sat} /></td>
               </tr>
             ))}
             <tr className="border-t-2 border-[var(--color-navy)] bg-[var(--color-navy)]/5">
-              <td className="py-2 px-2 font-semibold text-[var(--color-navy)]">Overall Audit API Saturation</td>
-              <td className="py-2 px-2 text-right tabular-nums font-semibold">{overallCalled.toLocaleString("en-IN")}</td>
-              <td className="py-2 px-2 text-right tabular-nums font-semibold">{overallAudited.toLocaleString("en-IN")}</td>
-              <td className="py-2 px-2"><SatCell pct={overallSat} /></td>
+              <td className="py-1.5 px-2 font-semibold text-[var(--color-navy)] text-[11px]">Overall Audit API Saturation</td>
+              <td className="py-1.5 px-2 text-right tabular-nums font-semibold text-[11px]">{overallCalled.toLocaleString("en-IN")}</td>
+              <td className="py-1.5 px-2 text-right tabular-nums font-semibold text-[11px]">{overallAudited.toLocaleString("en-IN")}</td>
+              <td className="py-1.5 px-2"><SatCell pct={overallSat} /></td>
             </tr>
           </tbody>
         </table>
-        <div className="text-[11px] text-muted-foreground mt-2">
-          Calc: audit hits ÷ corresponding gateway calls per endpoint. Overall row uses aggregated totals.
-        </div>
       </ChartContainer>
     </section>
   );
