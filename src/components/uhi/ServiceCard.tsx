@@ -117,31 +117,3 @@ function MiniMetric({ label, value }: { label: string; value: string | number })
   );
 }
 
-function IntegratorTable({ title, rows }: { title: string; rows: Array<{ name: string; searches: number; bookings: number }> }) {
-  if (rows.length === 0) return null;
-  return (
-    <div>
-      <div className="text-[10px] tracking-wider text-[var(--color-navy)] font-semibold mb-1">{title.toUpperCase()}</div>
-      <div className="border border-border rounded-md overflow-hidden">
-        <table className="w-full text-xs">
-          <thead className="bg-muted/40">
-            <tr>
-              <th className="text-left py-1 px-2 text-[10px] font-semibold text-muted-foreground">Partner</th>
-              <th className="text-right py-1 px-2 text-[10px] font-semibold text-muted-foreground">Searches</th>
-              <th className="text-right py-1 px-2 text-[10px] font-semibold text-muted-foreground">Bookings</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((r) => (
-              <tr key={r.name} className="border-t border-border/40">
-                <td className="py-1 px-2 truncate max-w-[130px]" title={r.name}>{r.name}</td>
-                <td className="py-1 px-2 text-right tabular-nums">{r.searches.toLocaleString("en-IN")}</td>
-                <td className="py-1 px-2 text-right tabular-nums num-amber">{r.bookings.toLocaleString("en-IN")}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-}
