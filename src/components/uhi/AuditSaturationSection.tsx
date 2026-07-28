@@ -88,8 +88,8 @@ export function AuditSaturationSection() {
   return (
     <section>
       <div className="section-label mb-1">PRIVATE VIEW ONLY</div>
-      <h2 className="text-2xl font-semibold tracking-tight">Audit API Saturation</h2>
-      <p className="text-sm italic text-muted-foreground mt-1 mb-4">
+      <h2 className="text-xl font-semibold tracking-tight">Audit API Saturation</h2>
+      <p className="text-xs italic text-muted-foreground mt-0.5 mb-3">
         Share of fulfilment callbacks where the corresponding audit endpoint was also invoked.
       </p>
 
