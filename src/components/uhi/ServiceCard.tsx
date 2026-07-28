@@ -17,25 +17,6 @@ export function ServiceCard({ service, kind }: Props) {
   const accent = isDiscovery ? "var(--color-bar-coral)" : "var(--color-chart-teal)";
   const iconBg = serviceColor[service];
 
-  // Per-service integrator tables (fulfilment cards)
-  const euaRows = !isDiscovery
-    ? euaPartners
-        .filter((p) => p.service.includes(service.replace(" Discovery", "")))
-        .map((p) => ({
-          name: p.name,
-          searches: p.searches,
-          bookings: Math.max(0, Math.round(p.searches * (totalSearches > 0 ? totalBookings / totalSearches : 0.04))),
-        }))
-    : [];
-  const hspaRows = !isDiscovery
-    ? hspaPartners
-        .filter((p) => p.service.includes(service.replace(" Discovery", "")))
-        .map((p) => ({
-          name: p.name,
-          searches: Math.max(0, Math.round(p.bookings * (totalBookings > 0 ? totalSearches / Math.max(totalBookings, 1) : 25))),
-          bookings: p.bookings,
-        }))
-    : [];
 
   const handleDownload = () => {
     const rows = [
