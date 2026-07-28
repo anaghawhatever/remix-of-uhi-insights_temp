@@ -28,12 +28,14 @@ function Dashboard() {
   const [service, setService] = useState("All");
   const [partnerService, setPartnerService] = useState("All Services");
   const [showMetricsLogic, setShowMetricsLogic] = useState(false);
+  const [view, setView] = useState<"public" | "private">("private");
+  const isPrivate = view === "private";
 
   return (
     <div className="min-h-screen">
-      <DashboardHeader service={service} onServiceChange={setService} />
+      <DashboardHeader service={service} onServiceChange={setService} view={view} onViewChange={setView} />
 
-      <main className="px-6 py-6 mx-auto max-w-[1600px] space-y-8">
+      <main className="px-6 py-5 mx-auto max-w-[1600px] space-y-5">
         {/* GATEWAY AT A GLANCE */}
         <Section label="DASHBOARD OVERVIEW" title="Gateway at a Glance">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
