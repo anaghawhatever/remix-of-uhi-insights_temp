@@ -80,19 +80,36 @@ function Dashboard() {
           </div>
         </Section>
 
-        {/* DETAILED INDICATORS */}
-        <Section title="Detailed Indicators" desc="only in private view" descItalic>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            <KPICard title="Search Growth (QoQ)" value={<span className="text-[var(--color-live)]">+38% <ArrowUpRight className="inline size-6"/></span>}
-              footnote="Quarter-on-quarter total searches"
-              tooltip="(Current quarter searches − Previous quarter searches) ÷ Previous quarter searches × 100."
-            />
-            <KPICard title="Booking Growth (QoQ)" value={<span className="text-[var(--color-live)]">+24% <ArrowUpRight className="inline size-6"/></span>}
-              footnote="Quarter-on-quarter completed bookings"
-              tooltip="(Current quarter bookings − Previous quarter bookings) ÷ Previous quarter bookings × 100. Covers Teleconsultation + Physical Consultation."
-            />
-          </div>
-        </Section>
+        {/* DETAILED INDICATORS + REGISTRIES — private only, side-by-side */}
+        {isPrivate && (
+          <section>
+            <div className="section-label mb-1">PRIVATE VIEW ONLY</div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div>
+                <h2 className="text-xl font-semibold tracking-tight mb-3">Detailed Indicators</h2>
+                <div className="grid grid-cols-2 gap-3">
+                  <KPICard title="Search Growth (QoQ)" value={<span className="text-[var(--color-live)]">+38% <ArrowUpRight className="inline size-6"/></span>}
+                    footnote="Quarter-on-quarter total searches"
+                    tooltip="(Current quarter searches − Previous quarter searches) ÷ Previous quarter searches × 100."
+                  />
+                  <KPICard title="Booking Growth (QoQ)" value={<span className="text-[var(--color-live)]">+24% <ArrowUpRight className="inline size-6"/></span>}
+                    footnote="Quarter-on-quarter completed bookings"
+                    tooltip="(Current quarter bookings − Previous quarter bookings) ÷ Previous quarter bookings × 100. Covers Teleconsultation + Physical Consultation."
+                  />
+                </div>
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold tracking-tight mb-1">Registries in UHI</h2>
+                <p className="text-xs italic text-muted-foreground mb-3">Only applicable for Booking Services: Physical Consultation, Ambulance Booking, etc.</p>
+                <div className="grid grid-cols-3 gap-3">
+                  <SmallStatCard title="ABHA Saturation" value="68.4%" foot="↗ +4.2pp QoQ" tip="Requests with ABHA ID or address ÷ Total API endpoint hits." />
+                  <SmallStatCard title="HFR Saturation" value="74.2%" foot="↗ +2.1pp QoQ" tip="Providers in UHI linked to HFR ÷ Total providers in UHI." />
+                  <SmallStatCard title="HPR Saturation" value="61.8%" foot="↗ +5.4pp QoQ" tip="Doctors in UHI linked to HPR ÷ Total doctors in UHI." />
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* COMBINED GROWTH */}
         <CombinedGrowthChart />
