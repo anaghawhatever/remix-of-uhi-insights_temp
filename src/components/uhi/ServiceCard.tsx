@@ -73,13 +73,6 @@ export function ServiceCard({ service, kind }: Props) {
         <MiniMetric label={d.extraLabel.toUpperCase()} value={d.extraValue} />
       </div>
 
-      {/* Fulfilment inner tables */}
-      {!isDiscovery && (
-        <div className="space-y-3">
-          <IntegratorTable title="Patient Applications (EUAs)" rows={euaRows} />
-          <IntegratorTable title="Provider Applications (HSPAs)" rows={hspaRows} />
-        </div>
-      )}
 
       <div className="mt-1">
         <div className="flex items-center justify-between">
