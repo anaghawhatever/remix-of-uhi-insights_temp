@@ -72,21 +72,10 @@ export function DashboardHeader({
       <div className="bg-white border-b border-border">
         <div className="px-6 py-3 flex items-center gap-2 overflow-x-auto">
           <div className="flex items-center gap-2 flex-1">
-            {TABS.map((t) => {
-              const isActive = t === active;
-              return (
-                <button
-                  key={t}
-                  className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap border transition ${
-                    isActive
-                      ? "bg-[var(--color-navy)] text-white border-[var(--color-navy)]"
-                      : "bg-white text-foreground border-border hover:border-[var(--color-navy)]"
-                  }`}
-                >
-                  {t}
-                </button>
-              );
-            })}
+            {TABS_BEFORE.map((t) => renderTab(t))}
+            {renderTab("UHI (Public)", { active: view === "public", onClick: () => onViewChange("public") })}
+            {renderTab("UHI (Private)", { active: view === "private", onClick: () => onViewChange("private") })}
+            {TABS_AFTER.map((t) => renderTab(t))}
           </div>
           <div className="flex items-center gap-2 pl-3 border-l border-border">
             <span className="text-[11px] tracking-wider text-muted-foreground font-semibold">SERVICE</span>
