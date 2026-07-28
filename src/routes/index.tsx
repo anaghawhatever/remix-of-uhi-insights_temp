@@ -28,12 +28,14 @@ function Dashboard() {
   const [service, setService] = useState("All");
   const [partnerService, setPartnerService] = useState("All Services");
   const [showMetricsLogic, setShowMetricsLogic] = useState(false);
+  const [view, setView] = useState<"public" | "private">("private");
+  const isPrivate = view === "private";
 
   return (
     <div className="min-h-screen">
-      <DashboardHeader service={service} onServiceChange={setService} />
+      <DashboardHeader service={service} onServiceChange={setService} view={view} onViewChange={setView} />
 
-      <main className="px-6 py-6 mx-auto max-w-[1600px] space-y-8">
+      <main className="px-6 py-5 mx-auto max-w-[1600px] space-y-5">
         {/* GATEWAY AT A GLANCE */}
         <Section label="DASHBOARD OVERVIEW" title="Gateway at a Glance">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
@@ -78,19 +80,36 @@ function Dashboard() {
           </div>
         </Section>
 
-        {/* DETAILED INDICATORS */}
-        <Section title="Detailed Indicators" desc="only in private view" descItalic>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            <KPICard title="Search Growth (QoQ)" value={<span className="text-[var(--color-live)]">+38% <ArrowUpRight className="inline size-6"/></span>}
-              footnote="Quarter-on-quarter total searches"
-              tooltip="(Current quarter searches − Previous quarter searches) ÷ Previous quarter searches × 100."
-            />
-            <KPICard title="Booking Growth (QoQ)" value={<span className="text-[var(--color-live)]">+24% <ArrowUpRight className="inline size-6"/></span>}
-              footnote="Quarter-on-quarter completed bookings"
-              tooltip="(Current quarter bookings − Previous quarter bookings) ÷ Previous quarter bookings × 100. Covers Teleconsultation + Physical Consultation."
-            />
-          </div>
-        </Section>
+        {/* DETAILED INDICATORS + REGISTRIES — private only, side-by-side */}
+        {isPrivate && (
+          <section>
+            <div className="section-label mb-1">PRIVATE VIEW ONLY</div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div>
+                <h2 className="text-xl font-semibold tracking-tight mb-3">Detailed Indicators</h2>
+                <div className="grid grid-cols-2 gap-3">
+                  <KPICard title="Search Growth (QoQ)" value={<span className="text-[var(--color-live)]">+38% <ArrowUpRight className="inline size-6"/></span>}
+                    footnote="Quarter-on-quarter total searches"
+                    tooltip="(Current quarter searches − Previous quarter searches) ÷ Previous quarter searches × 100."
+                  />
+                  <KPICard title="Booking Growth (QoQ)" value={<span className="text-[var(--color-live)]">+24% <ArrowUpRight className="inline size-6"/></span>}
+                    footnote="Quarter-on-quarter completed bookings"
+                    tooltip="(Current quarter bookings − Previous quarter bookings) ÷ Previous quarter bookings × 100. Covers Teleconsultation + Physical Consultation."
+                  />
+                </div>
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold tracking-tight mb-1">Registries in UHI</h2>
+                <p className="text-xs italic text-muted-foreground mb-3">Only applicable for Booking Services: Physical Consultation, Ambulance Booking, etc.</p>
+                <div className="grid grid-cols-3 gap-3">
+                  <SmallStatCard title="ABHA Saturation" value="68.4%" foot="↗ +4.2pp QoQ" tip="Requests with ABHA ID or address ÷ Total API endpoint hits." />
+                  <SmallStatCard title="HFR Saturation" value="74.2%" foot="↗ +2.1pp QoQ" tip="Providers in UHI linked to HFR ÷ Total providers in UHI." />
+                  <SmallStatCard title="HPR Saturation" value="61.8%" foot="↗ +5.4pp QoQ" tip="Doctors in UHI linked to HPR ÷ Total doctors in UHI." />
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* COMBINED GROWTH */}
         <CombinedGrowthChart />
@@ -132,25 +151,11 @@ function Dashboard() {
           </div>
         </Section>
 
-        {/* GEOGRAPHIC first, then INTEGRATION JOURNEY (public-only) */}
+        {/* GEOGRAPHIC + INTEGRATION JOURNEY */}
         <GeographicCard />
         <IntegrationJourneyCard />
 
-        <AuditSaturationSection />
-
-        {/* REGISTRIES — moved to the bottom */}
-        <Section
-          label="ECOSYSTEM SATURATION · PRIVATE VIEW ONLY"
-          title="Registries in UHI"
-          desc="Only applicable for Booking Services: Physical Consultation, Ambulance Booking, etc."
-          descItalic
-        >
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 max-w-4xl">
-            <SmallStatCard title="ABHA Saturation" value="68.4%" foot="↗ +4.2pp QoQ" tip="Requests with ABHA ID or address ÷ Total API endpoint hits." />
-            <SmallStatCard title="HFR Saturation" value="74.2%" foot="↗ +2.1pp QoQ" tip="Providers in UHI linked to HFR ÷ Total providers in UHI." />
-            <SmallStatCard title="HPR Saturation" value="61.8%" foot="↗ +5.4pp QoQ" tip="Doctors in UHI linked to HPR ÷ Total doctors in UHI." />
-          </div>
-        </Section>
+        {isPrivate && <AuditSaturationSection />}
 
         <Footer onOpenMetrics={() => setShowMetricsLogic(true)} />
       </main>
@@ -168,10 +173,10 @@ function splitServices(s: string): string[] {
 function Section({ label, title, desc, descItalic, children }: { label?: string; title: string; desc?: string; descItalic?: boolean; children: React.ReactNode }) {
   return (
     <section>
-      {label && <div className="section-label mb-1">{label}</div>}
-      <h2 className="text-2xl font-semibold tracking-tight">{title}</h2>
-      {desc && <p className={`text-sm mt-1 mb-5 ${descItalic ? "italic text-muted-foreground" : "text-muted-foreground"}`}>{desc}</p>}
-      {!desc && <div className="mb-5" />}
+      {label && <div className="section-label mb-0.5">{label}</div>}
+      <h2 className="text-xl font-semibold tracking-tight">{title}</h2>
+      {desc && <p className={`text-xs mt-0.5 mb-3 ${descItalic ? "italic text-muted-foreground" : "text-muted-foreground"}`}>{desc}</p>}
+      {!desc && <div className="mb-3" />}
       {children}
     </section>
   );

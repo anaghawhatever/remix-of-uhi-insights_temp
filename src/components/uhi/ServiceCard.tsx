@@ -1,6 +1,6 @@
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip as RTooltip, Label } from "recharts";
-import { liveServices, serviceStatus, serviceColor, euaPartners, hspaPartners, type ServiceKey } from "@/lib/uhi-data";
-import { StatusBadge, CountUp, Tooltip, ServiceTag, downloadCSV } from "./primitives";
+import { liveServices, serviceStatus, serviceColor, type ServiceKey } from "@/lib/uhi-data";
+import { StatusBadge, CountUp, Tooltip, downloadCSV } from "./primitives";
 import { Info, ArrowRight, Download } from "lucide-react";
 
 type Props = { service: ServiceKey; kind: "discovery" | "fulfilment" };
@@ -17,25 +17,6 @@ export function ServiceCard({ service, kind }: Props) {
   const accent = isDiscovery ? "var(--color-bar-coral)" : "var(--color-chart-teal)";
   const iconBg = serviceColor[service];
 
-  // Per-service integrator tables (fulfilment cards)
-  const euaRows = !isDiscovery
-    ? euaPartners
-        .filter((p) => p.service.includes(service.replace(" Discovery", "")))
-        .map((p) => ({
-          name: p.name,
-          searches: p.searches,
-          bookings: Math.max(0, Math.round(p.searches * (totalSearches > 0 ? totalBookings / totalSearches : 0.04))),
-        }))
-    : [];
-  const hspaRows = !isDiscovery
-    ? hspaPartners
-        .filter((p) => p.service.includes(service.replace(" Discovery", "")))
-        .map((p) => ({
-          name: p.name,
-          searches: Math.max(0, Math.round(p.bookings * (totalBookings > 0 ? totalSearches / Math.max(totalBookings, 1) : 25))),
-          bookings: p.bookings,
-        }))
-    : [];
 
   const handleDownload = () => {
     const rows = [
@@ -92,13 +73,6 @@ export function ServiceCard({ service, kind }: Props) {
         <MiniMetric label={d.extraLabel.toUpperCase()} value={d.extraValue} />
       </div>
 
-      {/* Fulfilment inner tables */}
-      {!isDiscovery && (
-        <div className="space-y-3">
-          <IntegratorTable title="Patient Applications (EUAs)" rows={euaRows} />
-          <IntegratorTable title="Provider Applications (HSPAs)" rows={hspaRows} />
-        </div>
-      )}
 
       <div className="mt-1">
         <div className="flex items-center justify-between">
@@ -143,31 +117,3 @@ function MiniMetric({ label, value }: { label: string; value: string | number })
   );
 }
 
-function IntegratorTable({ title, rows }: { title: string; rows: Array<{ name: string; searches: number; bookings: number }> }) {
-  if (rows.length === 0) return null;
-  return (
-    <div>
-      <div className="text-[10px] tracking-wider text-[var(--color-navy)] font-semibold mb-1">{title.toUpperCase()}</div>
-      <div className="border border-border rounded-md overflow-hidden">
-        <table className="w-full text-xs">
-          <thead className="bg-muted/40">
-            <tr>
-              <th className="text-left py-1 px-2 text-[10px] font-semibold text-muted-foreground">Partner</th>
-              <th className="text-right py-1 px-2 text-[10px] font-semibold text-muted-foreground">Searches</th>
-              <th className="text-right py-1 px-2 text-[10px] font-semibold text-muted-foreground">Bookings</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((r) => (
-              <tr key={r.name} className="border-t border-border/40">
-                <td className="py-1 px-2 truncate max-w-[130px]" title={r.name}>{r.name}</td>
-                <td className="py-1 px-2 text-right tabular-nums">{r.searches.toLocaleString("en-IN")}</td>
-                <td className="py-1 px-2 text-right tabular-nums num-amber">{r.bookings.toLocaleString("en-IN")}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-}

@@ -1,18 +1,35 @@
 import { LogOut } from "lucide-react";
-import { useState } from "react";
 
-const TABS = [
-  "ABDM Insight", "UHI", "Scan & Share", "Incentive Scheme", "Adoption",
+const TABS_BEFORE = ["ABDM Insight"] as const;
+const TABS_AFTER = [
+  "Scan & Share", "Incentive Scheme", "Adoption",
   "Microsite", "NHPR", "Trends", "Model ABDM Facilities", "Reporting Solutions",
   "HIECM", "ABHA Transaction Visibility", "Scan & Pay", "CDSS", "Partner Reporting", "NMC",
-];
+] as const;
 
 const SERVICES = ["All", "PMJAY Hospital Discovery", "Blood Bank Discovery", "Teleconsultation", "Physical Consultation", "Ambulance Discovery", "Jan Aushadhi Kendra Discovery"];
 
+export type DashboardView = "public" | "private";
+
 export function DashboardHeader({
-  service, onServiceChange,
-}: { service: string; onServiceChange: (s: string) => void }) {
-  const [active] = useState("UHI");
+  service, onServiceChange, view, onViewChange,
+}: { service: string; onServiceChange: (s: string) => void; view: DashboardView; onViewChange: (v: DashboardView) => void }) {
+  const renderTab = (t: string, opts?: { active?: boolean; onClick?: () => void }) => {
+    const isActive = opts?.active ?? false;
+    return (
+      <button
+        key={t}
+        onClick={opts?.onClick}
+        className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap border transition ${
+          isActive
+            ? "bg-[var(--color-navy)] text-white border-[var(--color-navy)]"
+            : "bg-white text-foreground border-border hover:border-[var(--color-navy)]"
+        }`}
+      >
+        {t}
+      </button>
+    );
+  };
   return (
     <header className="sticky top-0 z-40 bg-background shadow-sm">
       {/* Row 1 */}
@@ -55,21 +72,10 @@ export function DashboardHeader({
       <div className="bg-white border-b border-border">
         <div className="px-6 py-3 flex items-center gap-2 overflow-x-auto">
           <div className="flex items-center gap-2 flex-1">
-            {TABS.map((t) => {
-              const isActive = t === active;
-              return (
-                <button
-                  key={t}
-                  className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap border transition ${
-                    isActive
-                      ? "bg-[var(--color-navy)] text-white border-[var(--color-navy)]"
-                      : "bg-white text-foreground border-border hover:border-[var(--color-navy)]"
-                  }`}
-                >
-                  {t}
-                </button>
-              );
-            })}
+            {TABS_BEFORE.map((t) => renderTab(t))}
+            {renderTab("UHI (Public)", { active: view === "public", onClick: () => onViewChange("public") })}
+            {renderTab("UHI (Private)", { active: view === "private", onClick: () => onViewChange("private") })}
+            {TABS_AFTER.map((t) => renderTab(t))}
           </div>
           <div className="flex items-center gap-2 pl-3 border-l border-border">
             <span className="text-[11px] tracking-wider text-muted-foreground font-semibold">SERVICE</span>
