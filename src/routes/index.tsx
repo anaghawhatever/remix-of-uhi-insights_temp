@@ -151,25 +151,11 @@ function Dashboard() {
           </div>
         </Section>
 
-        {/* GEOGRAPHIC first, then INTEGRATION JOURNEY (public-only) */}
+        {/* GEOGRAPHIC + INTEGRATION JOURNEY */}
         <GeographicCard />
         <IntegrationJourneyCard />
 
-        <AuditSaturationSection />
-
-        {/* REGISTRIES — moved to the bottom */}
-        <Section
-          label="ECOSYSTEM SATURATION · PRIVATE VIEW ONLY"
-          title="Registries in UHI"
-          desc="Only applicable for Booking Services: Physical Consultation, Ambulance Booking, etc."
-          descItalic
-        >
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 max-w-4xl">
-            <SmallStatCard title="ABHA Saturation" value="68.4%" foot="↗ +4.2pp QoQ" tip="Requests with ABHA ID or address ÷ Total API endpoint hits." />
-            <SmallStatCard title="HFR Saturation" value="74.2%" foot="↗ +2.1pp QoQ" tip="Providers in UHI linked to HFR ÷ Total providers in UHI." />
-            <SmallStatCard title="HPR Saturation" value="61.8%" foot="↗ +5.4pp QoQ" tip="Doctors in UHI linked to HPR ÷ Total doctors in UHI." />
-          </div>
-        </Section>
+        {isPrivate && <AuditSaturationSection />}
 
         <Footer onOpenMetrics={() => setShowMetricsLogic(true)} />
       </main>
