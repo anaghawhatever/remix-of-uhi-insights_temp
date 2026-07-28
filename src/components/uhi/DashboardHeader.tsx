@@ -14,7 +14,22 @@ export type DashboardView = "public" | "private";
 export function DashboardHeader({
   service, onServiceChange, view, onViewChange,
 }: { service: string; onServiceChange: (s: string) => void; view: DashboardView; onViewChange: (v: DashboardView) => void }) {
-  const [active] = useState("UHI");
+  const renderTab = (t: string, opts?: { active?: boolean; onClick?: () => void }) => {
+    const isActive = opts?.active ?? false;
+    return (
+      <button
+        key={t}
+        onClick={opts?.onClick}
+        className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap border transition ${
+          isActive
+            ? "bg-[var(--color-navy)] text-white border-[var(--color-navy)]"
+            : "bg-white text-foreground border-border hover:border-[var(--color-navy)]"
+        }`}
+      >
+        {t}
+      </button>
+    );
+  };
   return (
     <header className="sticky top-0 z-40 bg-background shadow-sm">
       {/* Row 1 */}
