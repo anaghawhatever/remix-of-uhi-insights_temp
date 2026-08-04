@@ -6,14 +6,16 @@ export function ServiceTag({ name }: { name: string }) {
   const color = serviceColor[name] ?? "var(--color-muted-foreground)";
   return (
     <span
-      className="inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-semibold whitespace-nowrap"
+      title={name}
+      className="inline-flex min-w-0 max-w-full items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-semibold leading-tight"
       style={{ background: `color-mix(in oklab, ${color} 14%, white)`, color, border: `1px solid color-mix(in oklab, ${color} 40%, white)` }}
     >
-      <span className="size-1.5 rounded-full" style={{ background: color }} />
-      {name}
+      <span className="size-1.5 shrink-0 rounded-full" style={{ background: color }} />
+      <span className="truncate">{name}</span>
     </span>
   );
 }
+
 
 
 export function StatusBadge({ status }: { status: "live" | "paused" | "caution" }) {
@@ -77,31 +79,32 @@ export function KPICard({
   title, value, footnote, tooltip,
 }: { title: string; value: ReactNode; footnote?: ReactNode; tooltip?: ReactNode }) {
   return (
-    <div className="card-cream p-5 flex flex-col gap-2 min-h-[160px]">
-      <div className="flex items-start justify-between gap-2">
-        <div className="section-label">{title}</div>
+    <div className="card-cream p-3 sm:p-4 flex flex-col gap-1.5 min-w-0 min-h-[130px]">
+      <div className="flex items-start justify-between gap-2 min-w-0">
+        <div className="section-label min-w-0 break-words">{title}</div>
         {tooltip && (
-          <Tooltip content={tooltip}><Info className="size-4" /></Tooltip>
+          <Tooltip content={tooltip}><Info className="size-4 shrink-0" /></Tooltip>
         )}
       </div>
-      <div className="num-amber text-4xl leading-none mt-1">{value}</div>
-      {footnote && <div className="text-xs text-muted-foreground mt-auto">{footnote}</div>}
+      <div className="num-amber text-[clamp(1.5rem,2.4vw,2.25rem)] leading-none mt-1 break-words">{value}</div>
+      {footnote && <div className="text-[11px] text-muted-foreground mt-auto break-words">{footnote}</div>}
     </div>
   );
 }
+
 
 export function ChartContainer({
   label, title, right, children, onDownload, defaultCollapsed = false,
 }: { label?: string; title: string; right?: ReactNode; children: ReactNode; onDownload?: () => void; defaultCollapsed?: boolean }) {
   const [collapsed, setCollapsed] = useState(defaultCollapsed);
   return (
-    <div className="bg-white rounded-lg border border-border overflow-hidden">
-      <div className="chart-header px-5 py-4 flex items-center justify-between gap-4">
-        <div>
+    <div className="bg-white rounded-lg border border-border overflow-hidden min-w-0">
+      <div className="chart-header px-3 sm:px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+        <div className="min-w-0">
           {label && <div className="text-[10px] tracking-widest opacity-80 font-semibold">{label}</div>}
-          <h3 className="text-lg font-semibold">{title}</h3>
+          <h3 className="text-base sm:text-lg font-semibold break-words">{title}</h3>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 shrink-0">
           {right}
           {onDownload && (
             <button onClick={onDownload} aria-label="Download" className="opacity-80 hover:opacity-100">
@@ -113,8 +116,9 @@ export function ChartContainer({
           </button>
         </div>
       </div>
-      {!collapsed && <div className="p-5">{children}</div>}
+      {!collapsed && <div className="p-3 sm:p-4 min-w-0 overflow-x-auto">{children}</div>}
     </div>
+
   );
 }
 

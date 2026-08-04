@@ -5,7 +5,7 @@ import { DashboardHeader } from "@/components/uhi/DashboardHeader";
 import { ServiceCard } from "@/components/uhi/ServiceCard";
 import { CombinedGrowthChart } from "@/components/uhi/CombinedGrowthChart";
 import { KPICard, CountUp, ChartContainer, StatusBadge, downloadCSV, Tooltip, ServiceTag } from "@/components/uhi/primitives";
-import { euaPartners, hspaPartners, integrationJourney, metricsLogic, serviceStatus, states, SERVICES, ADDITIONAL_LIVE_SERVICES } from "@/lib/uhi-data";
+import { euaPartners, hspaPartners, integrationJourney, metricsLogic, serviceStatus, states, SERVICES, hasBooking } from "@/lib/uhi-data";
 import { Info } from "lucide-react";
 import { IndiaMap } from "@/components/uhi/IndiaMap";
 import { AuditSaturationSection } from "@/components/uhi/AuditSaturationSection";
@@ -35,10 +35,11 @@ function Dashboard() {
     <div className="min-h-screen">
       <DashboardHeader service={service} onServiceChange={setService} view={view} onViewChange={setView} />
 
-      <main className="px-6 py-5 mx-auto max-w-[1600px] space-y-5">
+      <main className="px-3 sm:px-5 py-4 mx-auto max-w-[1600px] space-y-5">
         {/* GATEWAY AT A GLANCE */}
         <Section label="DASHBOARD OVERVIEW" title="Gateway at a Glance">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 items-stretch">
+
             <ServicePortfolioCard />
             <KPICard title="Total Searches"
               value={<CountUp value={615001} />}
@@ -67,18 +68,22 @@ function Dashboard() {
         {/* UHI LIVE SERVICES */}
         <Section label="SERVICE-LEVEL PERFORMANCE" title="UHI Live Services">
           <div className="text-[11px] tracking-widest text-muted-foreground font-semibold mb-2">DISCOVERY SERVICES</div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 mb-5">
             <ServiceCard service="PMJAY Hospital Discovery" kind="discovery" />
             <ServiceCard service="Blood Bank Discovery" kind="discovery" />
             <ServiceCard service="Ambulance Discovery" kind="discovery" />
             <ServiceCard service="Jan Aushadhi Kendra Discovery" kind="discovery" />
+            <ServiceCard service="Jan Aushadhi Medicine Discovery" kind="discovery" />
+            <ServiceCard service="NOTTO Service Discovery" kind="discovery" />
+            <ServiceCard service="AMRIT Pharmacy Discovery" kind="discovery" />
           </div>
           <div className="text-[11px] tracking-widest text-muted-foreground font-semibold mb-2">BOOKING / FULFILMENT SERVICES</div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
             <ServiceCard service="Physical Consultation" kind="fulfilment" />
             <ServiceCard service="Teleconsultation" kind="fulfilment" />
           </div>
         </Section>
+
 
         {/* DETAILED INDICATORS + REGISTRIES — private only, side-by-side */}
         {isPrivate && (
@@ -131,7 +136,7 @@ function Dashboard() {
                   name: p.name,
                   services: splitServices(p.service),
                   searches: p.searches,
-                  bookings: Math.round(p.searches * 0.04),
+                  bookings: hasBooking(p.service) ? Math.round(p.searches * 0.04) : null,
                   onboarded: p.onboarded,
                 }))}
               onDownload={() => downloadCSV("eua-partners.csv", euaPartners)}
@@ -143,12 +148,13 @@ function Dashboard() {
                   name: p.name,
                   services: splitServices(p.service),
                   searches: Math.max(0, p.bookings * 25),
-                  bookings: p.bookings,
+                  bookings: hasBooking(p.service) ? p.bookings : null,
                   onboarded: p.onboarded,
                 }))}
               onDownload={() => downloadCSV("hspa-partners.csv", hspaPartners)}
             />
           </div>
+
         </Section>
 
         {/* GEOGRAPHIC + INTEGRATION JOURNEY */}
@@ -183,21 +189,20 @@ function Section({ label, title, desc, descItalic, children }: { label?: string;
 }
 
 function ServicePortfolioCard() {
-  const primary = [...SERVICES]
+  const items = [...SERVICES]
     .sort((a, b) => (a === "Teleconsultation" ? 1 : b === "Teleconsultation" ? -1 : 0))
     .map((s) => ({ name: s, status: serviceStatus[s] }));
-  const items = [...primary, ...ADDITIONAL_LIVE_SERVICES];
   return (
-    <div className="card-cream p-4 flex flex-col gap-2 xl:col-span-1">
-      <div className="flex items-start justify-between">
-        <div className="section-label">Live Services</div>
+    <div className="card-cream p-3 sm:p-4 flex flex-col gap-2 min-w-0">
+      <div className="flex items-start justify-between gap-2">
+        <div className="section-label min-w-0">Live Services</div>
         <Tooltip content="Live UHI services. Green dot = Live, Red = Paused.">
-          <Info className="size-4" />
+          <Info className="size-4 shrink-0" />
         </Tooltip>
       </div>
-      <ul className="space-y-1 mt-0.5">
+      <ul className="space-y-1 mt-0.5 min-w-0">
         {items.map((i) => (
-          <li key={i.name} className="flex items-center justify-between gap-2">
+          <li key={i.name} className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 min-w-0">
             <ServiceTag name={i.name} />
             <StatusBadge status={i.status} />
           </li>
@@ -206,6 +211,7 @@ function ServicePortfolioCard() {
     </div>
   );
 }
+
 
 function SmallStatCard({ title, value, foot, tip }: { title: string; value: string; foot: string; tip: string }) {
   return (
@@ -226,7 +232,8 @@ type PartnerRow = {
   name: string;
   services: string[];
   searches: number;
-  bookings: number;
+  bookings: number | null;
+
   onboarded: string;
 };
 
@@ -240,7 +247,9 @@ function PartnerTable({ title, rows, onDownload }: {
     const cp = [...rows];
     cp.sort((a, b) => {
       if (sortKey === "searches" || sortKey === "bookings") {
-        return dir === "asc" ? a[sortKey] - b[sortKey] : b[sortKey] - a[sortKey];
+        const av = a[sortKey] ?? -1, bv = b[sortKey] ?? -1;
+        return dir === "asc" ? av - bv : bv - av;
+
       }
       return dir === "asc" ? a[sortKey].localeCompare(b[sortKey]) : b[sortKey].localeCompare(a[sortKey]);
     });
@@ -281,7 +290,8 @@ function PartnerTable({ title, rows, onDownload }: {
                   </div>
                 </td>
                 <td className="py-1.5 px-2 text-right tabular-nums">{r.searches.toLocaleString("en-IN")}</td>
-                <td className="py-1.5 px-2 text-right num-amber tabular-nums">{r.bookings.toLocaleString("en-IN")}</td>
+                <td className="py-1.5 px-2 text-right num-amber tabular-nums">{r.bookings === null ? <span className="text-muted-foreground">—</span> : r.bookings.toLocaleString("en-IN")}</td>
+
                 <td className="py-1.5 px-2 text-right text-muted-foreground">{r.onboarded}</td>
               </tr>
             ))}
@@ -356,7 +366,11 @@ function GeographicCard() {
     { name: "Blood Bank Discovery", searches: Math.round(163185 * share) },
     { name: "Ambulance Discovery", searches: Math.round(356 * share) },
     { name: "Jan Aushadhi Kendra Discovery", searches: Math.round(1435 * share) },
+    { name: "Jan Aushadhi Medicine Discovery", searches: Math.round(986 * share) },
+    { name: "NOTTO Service Discovery", searches: Math.round(742 * share) },
+    { name: "AMRIT Pharmacy Discovery", searches: Math.round(1180 * share) },
   ] : [];
+
   const fulfilmentServices: Array<{ name: string; searches: number; bookings: number; status: "live" | "paused" }> = selectedState ? [
     { name: "Physical Consultation", searches: Math.round(3554 * share), bookings: Math.round(184 * share), status: "live" },
     { name: "Teleconsultation", searches: Math.round(92000 * share), bookings: Math.round(3816 * share), status: "paused" },

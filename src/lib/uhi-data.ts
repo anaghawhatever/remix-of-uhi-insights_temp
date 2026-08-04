@@ -1,14 +1,36 @@
 // Mock data for UHI Insights Dashboard
-export type ServiceKey = "PMJAY Hospital Discovery" | "Blood Bank Discovery" | "Teleconsultation" | "Physical Consultation" | "Ambulance Discovery" | "Jan Aushadhi Kendra Discovery";
+export type ServiceKey =
+  | "PMJAY Hospital Discovery"
+  | "Blood Bank Discovery"
+  | "Physical Consultation"
+  | "Teleconsultation"
+  | "Ambulance Discovery"
+  | "Jan Aushadhi Kendra Discovery"
+  | "Jan Aushadhi Medicine Discovery"
+  | "NOTTO Service Discovery"
+  | "AMRIT Pharmacy Discovery";
 
 export const SERVICES: ServiceKey[] = [
   "PMJAY Hospital Discovery",
   "Blood Bank Discovery",
+  "Physical Consultation",
+  "Teleconsultation",
+  "Ambulance Discovery",
+  "Jan Aushadhi Kendra Discovery",
+  "Jan Aushadhi Medicine Discovery",
+  "NOTTO Service Discovery",
+  "AMRIT Pharmacy Discovery",
+];
+
+// Services where a booking is part of the flow
+export const BOOKING_SERVICES: ServiceKey[] = [
   "Teleconsultation",
   "Physical Consultation",
   "Ambulance Discovery",
-  "Jan Aushadhi Kendra Discovery",
 ];
+
+export const hasBooking = (name: string) =>
+  (BOOKING_SERVICES as string[]).some((s) => name.includes(s));
 
 export const serviceStatus: Record<ServiceKey, "live" | "paused"> = {
   "PMJAY Hospital Discovery": "live",
@@ -17,6 +39,9 @@ export const serviceStatus: Record<ServiceKey, "live" | "paused"> = {
   "Physical Consultation": "live",
   "Ambulance Discovery": "live",
   "Jan Aushadhi Kendra Discovery": "live",
+  "Jan Aushadhi Medicine Discovery": "live",
+  "NOTTO Service Discovery": "live",
+  "AMRIT Pharmacy Discovery": "live",
 };
 
 export const serviceColor: Record<string, string> = {
@@ -27,16 +52,10 @@ export const serviceColor: Record<string, string> = {
   "Ambulance Discovery": "var(--color-chart-orange)",
   "Jan Aushadhi Kendra Discovery": "var(--color-chart-green)",
   "Jan Aushadhi Medicine Discovery": "oklch(0.6 0.15 140)",
-  "AMRIT": "oklch(0.55 0.16 20)",
-  "NOTTO": "oklch(0.5 0.18 280)",
+  "AMRIT Pharmacy Discovery": "oklch(0.55 0.16 20)",
+  "NOTTO Service Discovery": "oklch(0.5 0.18 280)",
 };
 
-// Additional live services that appear in the Service Portfolio list only
-export const ADDITIONAL_LIVE_SERVICES: Array<{ name: string; status: "live" | "paused" }> = [
-  { name: "AMRIT", status: "live" },
-  { name: "NOTTO", status: "live" },
-  { name: "Jan Aushadhi Medicine Discovery", status: "live" },
-];
 
 export const liveServices = {
   "PMJAY Hospital Discovery": {
@@ -132,6 +151,44 @@ export const liveServices = {
       { month: "Jun", value: 5100 },
     ],
   },
+  "Jan Aushadhi Medicine Discovery": {
+    totalSearches: 986,
+    euas: 2,
+    hspas: 1,
+    liveSince: "Apr 2026",
+    extraLabel: "Medicines Listed",
+    extraValue: "2,000+",
+    monthly: [
+      { month: "Apr", value: 210 },
+      { month: "May", value: 320 },
+      { month: "Jun", value: 456 },
+    ],
+  },
+  "NOTTO Service Discovery": {
+    totalSearches: 742,
+    euas: 1,
+    hspas: 1,
+    liveSince: "May 2026",
+    extraLabel: "Centres Listed",
+    extraValue: "650+",
+    monthly: [
+      { month: "May", value: 280 },
+      { month: "Jun", value: 462 },
+    ],
+  },
+  "AMRIT Pharmacy Discovery": {
+    totalSearches: 1180,
+    euas: 2,
+    hspas: 1,
+    liveSince: "Apr 2026",
+    extraLabel: "Pharmacies Listed",
+    extraValue: "220+",
+    monthly: [
+      { month: "Apr", value: 240 },
+      { month: "May", value: 400 },
+      { month: "Jun", value: 540 },
+    ],
+  },
 } as const;
 
 export const combinedGrowth = (() => {
@@ -143,6 +200,10 @@ export const combinedGrowth = (() => {
   const tele = [89000,90000,90800,91500,91900,92000,92000,92000,92000,92000];
   const phys = [0,0,0,0,0,8,25,90,140,184];
   const amb = [0,0,0,0,0,0,0,0,4200,18240];
+  const jak = [0,0,0,0,0,0,0,3200,7380,12480];
+  const jam = [0,0,0,0,0,0,0,210,530,986];
+  const notto = [0,0,0,0,0,0,0,0,280,742];
+  const amrit = [0,0,0,0,0,0,0,240,640,1180];
   return months.map((m, i) => ({
     month: m,
     PMJAY: pmjay[i],
@@ -150,9 +211,14 @@ export const combinedGrowth = (() => {
     Tele: tele[i],
     Phys: phys[i],
     Amb: amb[i],
-    Overall: Math.round((pmjay[i] + blood[i] + tele[i] + phys[i] + amb[i]) / 5),
+    JAK: jak[i],
+    JAM: jam[i],
+    NOTTO: notto[i],
+    AMRIT: amrit[i],
+    Overall: Math.round((pmjay[i] + blood[i] + tele[i] + phys[i] + amb[i] + jak[i] + jam[i] + notto[i] + amrit[i]) / 9),
   }));
 })();
+
 
 export const euaPartners = [
   { name: "Secure", service: "PMJAY Hospital Discovery", searches: 32420, onboarded: "Oct 2025" },

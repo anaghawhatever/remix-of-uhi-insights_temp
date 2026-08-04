@@ -10,10 +10,15 @@ type Range = "ALL" | "1Y" | "6M";
 const SERIES: Array<{ key: string; name: string; color: string; paused?: boolean }> = [
   { key: "PMJAY", name: "PMJAY Hospital Discovery", color: "var(--color-chart-blue)" },
   { key: "Blood", name: "Blood Bank Discovery", color: "var(--color-bar-coral)" },
-  { key: "Tele", name: "Teleconsult", color: "var(--color-chart-teal)", paused: true },
-  { key: "Phys", name: "Physical Consult", color: "var(--color-chart-purple)" },
-  { key: "Amb", name: "Ambulance", color: "var(--color-chart-orange)" },
+  { key: "Tele", name: "Teleconsultation", color: "var(--color-chart-teal)", paused: true },
+  { key: "Phys", name: "Physical Consultation", color: "var(--color-chart-purple)" },
+  { key: "Amb", name: "Ambulance Discovery", color: "var(--color-chart-orange)" },
+  { key: "JAK", name: "Jan Aushadhi Kendra Discovery", color: "var(--color-chart-green)" },
+  { key: "JAM", name: "Jan Aushadhi Medicine Discovery", color: "oklch(0.6 0.15 140)" },
+  { key: "NOTTO", name: "NOTTO Service Discovery", color: "oklch(0.5 0.18 280)" },
+  { key: "AMRIT", name: "AMRIT Pharmacy Discovery", color: "oklch(0.55 0.16 20)" },
 ];
+
 
 export function CombinedGrowthChart() {
   const [chart, setChart] = useState<ChartType>("area");
@@ -27,19 +32,16 @@ export function CombinedGrowthChart() {
       return sliced.map((d, i, all) => {
         if (i === 0) return d;
         const prev = all[i - 1];
-        return {
-          month: d.month,
-          PMJAY: Math.max(0, d.PMJAY - prev.PMJAY),
-          Blood: Math.max(0, d.Blood - prev.Blood),
-          Tele: Math.max(0, d.Tele - prev.Tele),
-          Phys: Math.max(0, d.Phys - prev.Phys),
-          Amb: Math.max(0, d.Amb - prev.Amb),
-          Overall: Math.max(0, d.Overall - prev.Overall),
-        };
+        const out: Record<string, number | string> = { month: d.month };
+        for (const k of ["PMJAY", "Blood", "Tele", "Phys", "Amb", "JAK", "JAM", "NOTTO", "AMRIT", "Overall"] as const) {
+          out[k] = Math.max(0, (d as never as Record<string, number>)[k] - (prev as never as Record<string, number>)[k]);
+        }
+        return out as unknown as typeof d;
       });
     }
     return sliced;
   }, [view, range]);
+
 
   return (
     <ChartContainer label="TRAJECTORY" title="Combined Growth · All Services" onDownload={() => window.print()}>
