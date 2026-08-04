@@ -98,13 +98,13 @@ export function ChartContainer({
 }: { label?: string; title: string; right?: ReactNode; children: ReactNode; onDownload?: () => void; defaultCollapsed?: boolean }) {
   const [collapsed, setCollapsed] = useState(defaultCollapsed);
   return (
-    <div className="bg-white rounded-lg border border-border overflow-hidden">
-      <div className="chart-header px-5 py-4 flex items-center justify-between gap-4">
-        <div>
+    <div className="bg-white rounded-lg border border-border overflow-hidden min-w-0">
+      <div className="chart-header px-3 sm:px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+        <div className="min-w-0">
           {label && <div className="text-[10px] tracking-widest opacity-80 font-semibold">{label}</div>}
-          <h3 className="text-lg font-semibold">{title}</h3>
+          <h3 className="text-base sm:text-lg font-semibold break-words">{title}</h3>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 shrink-0">
           {right}
           {onDownload && (
             <button onClick={onDownload} aria-label="Download" className="opacity-80 hover:opacity-100">
@@ -116,8 +116,9 @@ export function ChartContainer({
           </button>
         </div>
       </div>
-      {!collapsed && <div className="p-5">{children}</div>}
+      {!collapsed && <div className="p-3 sm:p-4 min-w-0 overflow-x-auto">{children}</div>}
     </div>
+
   );
 }
 
