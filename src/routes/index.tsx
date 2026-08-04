@@ -289,7 +289,8 @@ function PartnerTable({ title, rows, onDownload }: {
                   </div>
                 </td>
                 <td className="py-1.5 px-2 text-right tabular-nums">{r.searches.toLocaleString("en-IN")}</td>
-                <td className="py-1.5 px-2 text-right num-amber tabular-nums">{r.bookings.toLocaleString("en-IN")}</td>
+                <td className="py-1.5 px-2 text-right num-amber tabular-nums">{r.bookings === null ? <span className="text-muted-foreground">—</span> : r.bookings.toLocaleString("en-IN")}</td>
+
                 <td className="py-1.5 px-2 text-right text-muted-foreground">{r.onboarded}</td>
               </tr>
             ))}
