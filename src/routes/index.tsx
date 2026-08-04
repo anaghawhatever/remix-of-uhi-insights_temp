@@ -67,18 +67,22 @@ function Dashboard() {
         {/* UHI LIVE SERVICES */}
         <Section label="SERVICE-LEVEL PERFORMANCE" title="UHI Live Services">
           <div className="text-[11px] tracking-widest text-muted-foreground font-semibold mb-2">DISCOVERY SERVICES</div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 mb-5">
             <ServiceCard service="PMJAY Hospital Discovery" kind="discovery" />
             <ServiceCard service="Blood Bank Discovery" kind="discovery" />
             <ServiceCard service="Ambulance Discovery" kind="discovery" />
             <ServiceCard service="Jan Aushadhi Kendra Discovery" kind="discovery" />
+            <ServiceCard service="Jan Aushadhi Medicine Discovery" kind="discovery" />
+            <ServiceCard service="NOTTO Service Discovery" kind="discovery" />
+            <ServiceCard service="AMRIT Pharmacy Discovery" kind="discovery" />
           </div>
           <div className="text-[11px] tracking-widest text-muted-foreground font-semibold mb-2">BOOKING / FULFILMENT SERVICES</div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
             <ServiceCard service="Physical Consultation" kind="fulfilment" />
             <ServiceCard service="Teleconsultation" kind="fulfilment" />
           </div>
         </Section>
+
 
         {/* DETAILED INDICATORS + REGISTRIES — private only, side-by-side */}
         {isPrivate && (
