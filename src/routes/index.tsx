@@ -135,7 +135,7 @@ function Dashboard() {
                   name: p.name,
                   services: splitServices(p.service),
                   searches: p.searches,
-                  bookings: Math.round(p.searches * 0.04),
+                  bookings: hasBooking(p.service) ? Math.round(p.searches * 0.04) : null,
                   onboarded: p.onboarded,
                 }))}
               onDownload={() => downloadCSV("eua-partners.csv", euaPartners)}
@@ -147,12 +147,13 @@ function Dashboard() {
                   name: p.name,
                   services: splitServices(p.service),
                   searches: Math.max(0, p.bookings * 25),
-                  bookings: p.bookings,
+                  bookings: hasBooking(p.service) ? p.bookings : null,
                   onboarded: p.onboarded,
                 }))}
               onDownload={() => downloadCSV("hspa-partners.csv", hspaPartners)}
             />
           </div>
+
         </Section>
 
         {/* GEOGRAPHIC + INTEGRATION JOURNEY */}
