@@ -231,7 +231,8 @@ type PartnerRow = {
   name: string;
   services: string[];
   searches: number;
-  bookings: number;
+  bookings: number | null;
+
   onboarded: string;
 };
 
