@@ -6,14 +6,16 @@ export function ServiceTag({ name }: { name: string }) {
   const color = serviceColor[name] ?? "var(--color-muted-foreground)";
   return (
     <span
-      className="inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-semibold whitespace-nowrap"
+      title={name}
+      className="inline-flex min-w-0 max-w-full items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-semibold leading-tight"
       style={{ background: `color-mix(in oklab, ${color} 14%, white)`, color, border: `1px solid color-mix(in oklab, ${color} 40%, white)` }}
     >
-      <span className="size-1.5 rounded-full" style={{ background: color }} />
-      {name}
+      <span className="size-1.5 shrink-0 rounded-full" style={{ background: color }} />
+      <span className="truncate">{name}</span>
     </span>
   );
 }
+
 
 
 export function StatusBadge({ status }: { status: "live" | "paused" | "caution" }) {
