@@ -31,47 +31,48 @@ export function ServiceCard({ service, kind }: Props) {
   };
 
   return (
-    <div className="card-cream p-4 flex flex-col gap-3">
-      <div className="flex items-start gap-3">
-        <div className="size-10 rounded-md flex items-center justify-center text-white font-bold" style={{ background: iconBg }}>
+    <div className="card-cream p-3 sm:p-4 flex flex-col gap-2.5 min-w-0">
+      <div className="flex items-start gap-2.5 min-w-0">
+        <div className="size-9 shrink-0 rounded-md flex items-center justify-center text-white font-bold" style={{ background: iconBg }}>
           {initial}
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="text-base font-semibold leading-tight truncate">{service}</h3>
+          <h3 className="text-sm sm:text-base font-semibold leading-tight break-words">{service}</h3>
           <div className="mt-1 flex items-center gap-2">
             <StatusBadge status={status} />
           </div>
         </div>
-        <button onClick={handleDownload} aria-label="Download" className="text-muted-foreground hover:text-foreground p-1 -m-1">
+        <button onClick={handleDownload} aria-label="Download" className="shrink-0 text-muted-foreground hover:text-foreground p-1 -m-1">
           <Download className="size-4" />
         </button>
       </div>
 
       {/* Top metrics: for discovery just Total Searches; for fulfilment both Searches + Bookings */}
       {isDiscovery ? (
-        <div>
+        <div className="min-w-0">
           <div className="section-label">TOTAL SEARCHES</div>
-          <div className="num-amber text-4xl leading-none mt-0.5"><CountUp value={totalSearches} /></div>
+          <div className="num-amber text-[clamp(1.5rem,2.2vw,2rem)] leading-none mt-0.5"><CountUp value={totalSearches} /></div>
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-3">
-          <div>
+        <div className="grid grid-cols-2 gap-3 min-w-0">
+          <div className="min-w-0">
             <div className="section-label">TOTAL SEARCHES</div>
-            <div className="num-amber text-3xl leading-none mt-0.5"><CountUp value={totalSearches} /></div>
+            <div className="num-amber text-[clamp(1.25rem,1.9vw,1.75rem)] leading-none mt-0.5"><CountUp value={totalSearches} /></div>
           </div>
-          <div>
+          <div className="min-w-0">
             <div className="section-label">TOTAL BOOKINGS</div>
-            <div className="num-amber text-3xl leading-none mt-0.5"><CountUp value={totalBookings} /></div>
+            <div className="num-amber text-[clamp(1.25rem,1.9vw,1.75rem)] leading-none mt-0.5"><CountUp value={totalBookings} /></div>
           </div>
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-2 gap-2 min-w-0">
         <MiniMetric label="PATIENT APPS (EUAs)" value={d.euas} />
         <MiniMetric label="PROVIDER APPS (HSPAs)" value={d.hspas} />
         <MiniMetric label="LIVE SINCE" value={d.liveSince} />
         <MiniMetric label={d.extraLabel.toUpperCase()} value={d.extraValue} />
       </div>
+
 
 
       <div className="mt-1">
