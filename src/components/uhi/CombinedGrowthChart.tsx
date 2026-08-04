@@ -32,19 +32,16 @@ export function CombinedGrowthChart() {
       return sliced.map((d, i, all) => {
         if (i === 0) return d;
         const prev = all[i - 1];
-        return {
-          month: d.month,
-          PMJAY: Math.max(0, d.PMJAY - prev.PMJAY),
-          Blood: Math.max(0, d.Blood - prev.Blood),
-          Tele: Math.max(0, d.Tele - prev.Tele),
-          Phys: Math.max(0, d.Phys - prev.Phys),
-          Amb: Math.max(0, d.Amb - prev.Amb),
-          Overall: Math.max(0, d.Overall - prev.Overall),
-        };
+        const out: Record<string, number | string> = { month: d.month };
+        for (const k of ["PMJAY", "Blood", "Tele", "Phys", "Amb", "JAK", "JAM", "NOTTO", "AMRIT", "Overall"] as const) {
+          out[k] = Math.max(0, (d as never as Record<string, number>)[k] - (prev as never as Record<string, number>)[k]);
+        }
+        return out as unknown as typeof d;
       });
     }
     return sliced;
   }, [view, range]);
+
 
   return (
     <ChartContainer label="TRAJECTORY" title="Combined Growth · All Services" onDownload={() => window.print()}>
