@@ -1,14 +1,36 @@
 // Mock data for UHI Insights Dashboard
-export type ServiceKey = "PMJAY Hospital Discovery" | "Blood Bank Discovery" | "Teleconsultation" | "Physical Consultation" | "Ambulance Discovery" | "Jan Aushadhi Kendra Discovery";
+export type ServiceKey =
+  | "PMJAY Hospital Discovery"
+  | "Blood Bank Discovery"
+  | "Physical Consultation"
+  | "Teleconsultation"
+  | "Ambulance Discovery"
+  | "Jan Aushadhi Kendra Discovery"
+  | "Jan Aushadhi Medicine Discovery"
+  | "NOTTO Service Discovery"
+  | "AMRIT Pharmacy Discovery";
 
 export const SERVICES: ServiceKey[] = [
   "PMJAY Hospital Discovery",
   "Blood Bank Discovery",
+  "Physical Consultation",
+  "Teleconsultation",
+  "Ambulance Discovery",
+  "Jan Aushadhi Kendra Discovery",
+  "Jan Aushadhi Medicine Discovery",
+  "NOTTO Service Discovery",
+  "AMRIT Pharmacy Discovery",
+];
+
+// Services where a booking is part of the flow
+export const BOOKING_SERVICES: ServiceKey[] = [
   "Teleconsultation",
   "Physical Consultation",
   "Ambulance Discovery",
-  "Jan Aushadhi Kendra Discovery",
 ];
+
+export const hasBooking = (name: string) =>
+  (BOOKING_SERVICES as string[]).some((s) => name.includes(s));
 
 export const serviceStatus: Record<ServiceKey, "live" | "paused"> = {
   "PMJAY Hospital Discovery": "live",
@@ -17,6 +39,9 @@ export const serviceStatus: Record<ServiceKey, "live" | "paused"> = {
   "Physical Consultation": "live",
   "Ambulance Discovery": "live",
   "Jan Aushadhi Kendra Discovery": "live",
+  "Jan Aushadhi Medicine Discovery": "live",
+  "NOTTO Service Discovery": "live",
+  "AMRIT Pharmacy Discovery": "live",
 };
 
 export const serviceColor: Record<string, string> = {
@@ -27,16 +52,10 @@ export const serviceColor: Record<string, string> = {
   "Ambulance Discovery": "var(--color-chart-orange)",
   "Jan Aushadhi Kendra Discovery": "var(--color-chart-green)",
   "Jan Aushadhi Medicine Discovery": "oklch(0.6 0.15 140)",
-  "AMRIT": "oklch(0.55 0.16 20)",
-  "NOTTO": "oklch(0.5 0.18 280)",
+  "AMRIT Pharmacy Discovery": "oklch(0.55 0.16 20)",
+  "NOTTO Service Discovery": "oklch(0.5 0.18 280)",
 };
 
-// Additional live services that appear in the Service Portfolio list only
-export const ADDITIONAL_LIVE_SERVICES: Array<{ name: string; status: "live" | "paused" }> = [
-  { name: "AMRIT", status: "live" },
-  { name: "NOTTO", status: "live" },
-  { name: "Jan Aushadhi Medicine Discovery", status: "live" },
-];
 
 export const liveServices = {
   "PMJAY Hospital Discovery": {
