@@ -35,10 +35,11 @@ function Dashboard() {
     <div className="min-h-screen">
       <DashboardHeader service={service} onServiceChange={setService} view={view} onViewChange={setView} />
 
-      <main className="px-6 py-5 mx-auto max-w-[1600px] space-y-5">
+      <main className="px-3 sm:px-5 py-4 mx-auto max-w-[1600px] space-y-5">
         {/* GATEWAY AT A GLANCE */}
         <Section label="DASHBOARD OVERVIEW" title="Gateway at a Glance">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 items-stretch">
+
             <ServicePortfolioCard />
             <KPICard title="Total Searches"
               value={<CountUp value={615001} />}

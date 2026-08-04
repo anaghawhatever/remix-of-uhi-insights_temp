@@ -111,10 +111,11 @@ export function ServiceCard({ service, kind }: Props) {
 
 function MiniMetric({ label, value }: { label: string; value: string | number }) {
   return (
-    <div className="bg-white/60 rounded-md p-2 border border-border/50">
-      <div className="text-[10px] tracking-wider text-muted-foreground font-semibold">{label}</div>
-      <div className="text-sm font-semibold mt-0.5">{value}</div>
+    <div className="bg-white/60 rounded-md p-2 border border-border/50 min-w-0">
+      <div className="text-[10px] tracking-wider text-muted-foreground font-semibold break-words">{label}</div>
+      <div className="text-sm font-semibold mt-0.5 break-words">{value}</div>
     </div>
   );
 }
+
 
