@@ -365,7 +365,11 @@ function GeographicCard() {
     { name: "Blood Bank Discovery", searches: Math.round(163185 * share) },
     { name: "Ambulance Discovery", searches: Math.round(356 * share) },
     { name: "Jan Aushadhi Kendra Discovery", searches: Math.round(1435 * share) },
+    { name: "Jan Aushadhi Medicine Discovery", searches: Math.round(986 * share) },
+    { name: "NOTTO Service Discovery", searches: Math.round(742 * share) },
+    { name: "AMRIT Pharmacy Discovery", searches: Math.round(1180 * share) },
   ] : [];
+
   const fulfilmentServices: Array<{ name: string; searches: number; bookings: number; status: "live" | "paused" }> = selectedState ? [
     { name: "Physical Consultation", searches: Math.round(3554 * share), bookings: Math.round(184 * share), status: "live" },
     { name: "Teleconsultation", searches: Math.round(92000 * share), bookings: Math.round(3816 * share), status: "paused" },
