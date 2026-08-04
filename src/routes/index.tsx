@@ -246,7 +246,9 @@ function PartnerTable({ title, rows, onDownload }: {
     const cp = [...rows];
     cp.sort((a, b) => {
       if (sortKey === "searches" || sortKey === "bookings") {
-        return dir === "asc" ? a[sortKey] - b[sortKey] : b[sortKey] - a[sortKey];
+        const av = a[sortKey] ?? -1, bv = b[sortKey] ?? -1;
+        return dir === "asc" ? av - bv : bv - av;
+
       }
       return dir === "asc" ? a[sortKey].localeCompare(b[sortKey]) : b[sortKey].localeCompare(a[sortKey]);
     });
