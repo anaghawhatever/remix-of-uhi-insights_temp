@@ -159,7 +159,8 @@ function Dashboard() {
 
         {/* GEOGRAPHIC + INTEGRATION JOURNEY */}
         <GeographicCard />
-        <IntegrationJourneyCard />
+        {isPrivate && <IntegrationJourneyCard />}
+
 
         {isPrivate && <AuditSaturationSection />}
 
