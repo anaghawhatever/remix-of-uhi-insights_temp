@@ -192,27 +192,24 @@ function Section({ label, title, desc, descItalic, children }: { label?: string;
   );
 }
 
-function ServicePortfolioCard() {
+function LiveServicesTooltip() {
   const items = [...SERVICES]
-    .sort((a, b) => (a === "Teleconsultation" ? 1 : b === "Teleconsultation" ? -1 : 0))
-    .map((s) => ({ name: s, status: serviceStatus[s] }));
+    .sort((a, b) => (a === "Teleconsultation" ? 1 : b === "Teleconsultation" ? -1 : 0));
   return (
-    <div className="card-cream p-3 sm:p-4 flex flex-col gap-2 min-w-0">
-      <div className="flex items-start justify-between gap-2">
-        <div className="section-label min-w-0">Live Services</div>
-        <Tooltip content="Live UHI services. Green dot = Live, Red = Paused.">
-          <Info className="size-4 shrink-0" />
-        </Tooltip>
-      </div>
-      <ul className="space-y-1 mt-0.5 min-w-0">
-        {items.map((i) => (
-          <li key={i.name} className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 min-w-0">
-            <ServiceTag name={i.name} />
-            <StatusBadge status={i.status} />
-          </li>
+    <span className="block">
+      <span className="block font-semibold mb-1.5">All live UHI services</span>
+      <span className="block space-y-1">
+        {items.map((s) => (
+          <span key={s} className="flex items-center justify-between gap-2">
+            <span className="flex min-w-0 items-center gap-1.5">
+              <span className="size-2 shrink-0 rounded-full" style={{ background: serviceColor[s] }} />
+              <span className="truncate">{s}</span>
+            </span>
+            <StatusBadge status={serviceStatus[s]} />
+          </span>
         ))}
-      </ul>
-    </div>
+      </span>
+    </span>
   );
 }
 
