@@ -129,16 +129,17 @@ export function KPICard({
 
 
 export function ChartContainer({
-  label, title, right, children, onDownload, defaultCollapsed = false,
-}: { label?: string; title: string; right?: ReactNode; children: ReactNode; onDownload?: () => void; defaultCollapsed?: boolean }) {
+  label, title, right, children, onDownload, defaultCollapsed = false, titleAfter, className = "",
+}: { label?: string; title: string; right?: ReactNode; children: ReactNode; onDownload?: () => void; defaultCollapsed?: boolean; titleAfter?: ReactNode; className?: string }) {
   const [collapsed, setCollapsed] = useState(defaultCollapsed);
   return (
-    <div className="bg-white rounded-lg border border-border overflow-hidden min-w-0">
+    <div className={`bg-white rounded-lg border border-border overflow-hidden min-w-0 ${className}`}>
       <div className="chart-header px-3 sm:px-4 py-3 flex flex-wrap items-center justify-between gap-3">
         <div className="min-w-0">
           {label && <div className="text-[10px] tracking-widest opacity-80 font-semibold">{label}</div>}
-          <h3 className="text-base sm:text-lg font-semibold break-words">{title}</h3>
+          <h3 className="text-base sm:text-lg font-semibold break-words inline-flex items-center gap-1.5">{title}{titleAfter}</h3>
         </div>
+
         <div className="flex items-center gap-3 shrink-0">
           {right}
           {onDownload && (
