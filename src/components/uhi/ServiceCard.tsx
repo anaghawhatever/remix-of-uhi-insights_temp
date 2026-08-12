@@ -98,9 +98,8 @@ export function ServiceCard({ service, kind }: Props) {
         </div>
       </div>
 
-      {status === "paused" && (
-        <div className="text-xs text-[var(--color-paused)] font-medium">Service currently paused.</div>
-      )}
+
+
 
       <button className="mt-auto w-full bg-white border border-border rounded-md py-2 px-3 text-xs font-medium hover:border-[var(--color-navy)] transition flex items-center justify-between">
         View Details <ArrowRight className="size-3.5" />

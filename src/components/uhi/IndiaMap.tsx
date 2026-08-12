@@ -32,7 +32,7 @@ export function IndiaMap({ data, max, onSelect, selected }: { data: Datum[]; max
           projection="geoMercator"
           projectionConfig={{ center: [82.8, 22.5], scale: 900 }}
           width={600}
-          height={620}
+          height={505}
           style={{ width: "100%", height: "auto" }}
         >
           <Geographies geography={geoData as object}>
@@ -73,7 +73,7 @@ export function IndiaMap({ data, max, onSelect, selected }: { data: Datum[]; max
           </Geographies>
         </ComposableMap>
       ) : (
-        <div className="h-[420px] grid place-items-center text-sm text-muted-foreground">Loading map…</div>
+        <div className="h-[350px] grid place-items-center text-sm text-muted-foreground">Loading map…</div>
       )}
 
       {hover && (

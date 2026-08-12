@@ -1,6 +1,8 @@
-import { Info, Download, Minus, Plus } from "lucide-react";
-import { useEffect, useState, type ReactNode } from "react";
+import { Info, Download, Minus, Plus, Pause as PauseIcon } from "lucide-react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import { serviceColor } from "@/lib/uhi-data";
+
 
 export function ServiceTag({ name }: { name: string }) {
   const color = serviceColor[name] ?? "var(--color-muted-foreground)";
@@ -28,7 +30,9 @@ export function StatusBadge({ status }: { status: "live" | "paused" | "caution" 
   return (
     <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded border ${s.text} text-[10px] font-semibold tracking-wider`}
       style={{ borderColor: s.dot }}>
-      <span className="size-1.5 rounded-full" style={{ background: s.dot }} />
+      {status === "paused"
+        ? <PauseIcon className="size-2.5 shrink-0" />
+        : <span className="size-1.5 rounded-full" style={{ background: s.dot }} />}
       {s.label}
     </span>
   );
@@ -36,26 +40,48 @@ export function StatusBadge({ status }: { status: "live" | "paused" | "caution" 
 
 export function Tooltip({ children, content }: { children: ReactNode; content: ReactNode }) {
   const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLButtonElement>(null);
+  const [pos, setPos] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
+
+  const place = () => {
+    const el = ref.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const width = 288;
+    const margin = 8;
+    let left = r.left + r.width / 2 - width / 2;
+    left = Math.max(margin, Math.min(left, window.innerWidth - width - margin));
+    setPos({ top: r.bottom + 6, left });
+  };
+
+  const show = () => { place(); setOpen(true); };
+
   return (
     <span className="relative inline-flex">
       <button
-        onMouseEnter={() => setOpen(true)}
+        ref={ref}
+        onMouseEnter={show}
         onMouseLeave={() => setOpen(false)}
-        onFocus={() => setOpen(true)}
+        onFocus={show}
         onBlur={() => setOpen(false)}
         className="text-muted-foreground hover:text-foreground"
         aria-label="More info"
       >
         {children}
       </button>
-      {open && (
-        <span className="absolute z-50 right-0 top-full mt-1 w-72 p-3 rounded-md bg-white text-foreground text-xs shadow-lg border border-border">
+      {open && typeof document !== "undefined" && createPortal(
+        <span
+          className="fixed z-[9999] w-72 p-3 rounded-md bg-white text-foreground text-xs shadow-lg border border-border block"
+          style={{ top: pos.top, left: pos.left }}
+        >
           {content}
-        </span>
+        </span>,
+        document.body,
       )}
     </span>
   );
 }
+
 
 export function CountUp({ value, format = (n: number) => n.toLocaleString("en-IN") }: { value: number; format?: (n: number) => string }) {
   const [n, setN] = useState(0);
