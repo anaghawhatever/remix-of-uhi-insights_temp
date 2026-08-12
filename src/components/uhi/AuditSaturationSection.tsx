@@ -86,13 +86,13 @@ export function AuditSaturationSection() {
   const overallSat = overallCalled > 0 ? Math.round((overallAudited / overallCalled) * 1000) / 10 : 0;
 
   return (
-    <div className="private-scope relative p-3 sm:p-4">
-      <span className="absolute top-3 left-3"><PrivateBadge /></span>
-      <div className="pt-7">
+    <div className="relative">
+      <div>
         <h2 className="text-xl font-semibold tracking-tight">Audit API Saturation</h2>
         <p className="text-xs italic text-muted-foreground mt-0.5 mb-3">
           Share of fulfilment callbacks where the corresponding audit endpoint was also invoked.
         </p>
+
 
         <ChartContainer
           label="ENDPOINT VIEW"
