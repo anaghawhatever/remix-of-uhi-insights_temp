@@ -18,6 +18,15 @@ export function ServiceTag({ name }: { name: string }) {
   );
 }
 
+export function PrivateBadge() {
+  return (
+    <span className="private-badge">
+      <EyeOff className="size-3" />
+      Private view only
+    </span>
+  );
+}
+
 
 
 export function StatusBadge({ status }: { status: "live" | "paused" | "caution" }) {
