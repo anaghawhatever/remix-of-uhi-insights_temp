@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { ArrowUpRight, ArrowRight, Search, X } from "lucide-react";
+import { ArrowUpRight, ArrowRight, Search, X, EyeOff } from "lucide-react";
 import { DashboardHeader } from "@/components/uhi/DashboardHeader";
 import { ServiceCard } from "@/components/uhi/ServiceCard";
 import { CombinedGrowthChart } from "@/components/uhi/CombinedGrowthChart";
