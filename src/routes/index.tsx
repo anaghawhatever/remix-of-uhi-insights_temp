@@ -88,36 +88,7 @@ function Dashboard() {
         </Section>
 
 
-        {/* DETAILED INDICATORS + REGISTRIES — private only, side-by-side */}
-        {isPrivate && (
-          <div className="private-scope relative p-3 sm:p-4">
-            <span className="absolute top-3 left-3"><PrivateBadge /></span>
-            <div className="pt-7 grid grid-cols-1 lg:grid-cols-5 gap-4">
-              <div className="lg:col-span-2 min-w-0">
-                <h2 className="text-xl font-semibold tracking-tight mb-3">Detailed Indicators</h2>
-                <div className="grid grid-cols-2 gap-3">
-                  <KPICard title="Search Growth (QoQ)" value={<span className="text-[var(--color-live)]">+38% <ArrowUpRight className="inline size-6"/></span>}
-                    footnote="Quarter-on-quarter total searches"
-                    tooltip="(Current quarter searches − Previous quarter searches) ÷ Previous quarter searches × 100."
-                  />
-                  <KPICard title="Booking Growth (QoQ)" value={<span className="text-[var(--color-live)]">+24% <ArrowUpRight className="inline size-6"/></span>}
-                    footnote="Quarter-on-quarter completed bookings"
-                    tooltip="(Current quarter bookings − Previous quarter bookings) ÷ Previous quarter bookings × 100. Covers Teleconsultation + Physical Consultation."
-                  />
-                </div>
-              </div>
-              <div className="lg:col-span-3 min-w-0">
-                <h2 className="text-xl font-semibold tracking-tight mb-1">Registries in UHI</h2>
-                <p className="text-xs italic text-muted-foreground mb-3">Only applicable for Booking Services: Physical Consultation, Ambulance Booking, etc.</p>
-                <div className="grid grid-cols-3 gap-3">
-                  <SmallStatCard title="ABHA Saturation" value="68.4%" foot="↗ +4.2pp QoQ" tip="Requests with ABHA ID or address ÷ Total API endpoint hits." />
-                  <SmallStatCard title="HFR Saturation" value="74.2%" foot="↗ +2.1pp QoQ" tip="Providers in UHI linked to HFR ÷ Total providers in UHI." />
-                  <SmallStatCard title="HPR Saturation" value="61.8%" foot="↗ +5.4pp QoQ" tip="Doctors in UHI linked to HPR ÷ Total doctors in UHI." />
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+
 
         {/* COMBINED GROWTH */}
         <CombinedGrowthChart />
