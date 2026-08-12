@@ -90,10 +90,10 @@ function Dashboard() {
 
         {/* DETAILED INDICATORS + REGISTRIES — private only, side-by-side */}
         {isPrivate && (
-          <section>
-            <div className="section-label mb-1">PRIVATE VIEW ONLY</div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              <div>
+          <div className="private-scope relative p-3 sm:p-4">
+            <span className="absolute top-3 left-3"><PrivateBadge /></span>
+            <div className="pt-7 grid grid-cols-1 lg:grid-cols-5 gap-4">
+              <div className="lg:col-span-2 min-w-0">
                 <h2 className="text-xl font-semibold tracking-tight mb-3">Detailed Indicators</h2>
                 <div className="grid grid-cols-2 gap-3">
                   <KPICard title="Search Growth (QoQ)" value={<span className="text-[var(--color-live)]">+38% <ArrowUpRight className="inline size-6"/></span>}
@@ -106,7 +106,7 @@ function Dashboard() {
                   />
                 </div>
               </div>
-              <div>
+              <div className="lg:col-span-3 min-w-0">
                 <h2 className="text-xl font-semibold tracking-tight mb-1">Registries in UHI</h2>
                 <p className="text-xs italic text-muted-foreground mb-3">Only applicable for Booking Services: Physical Consultation, Ambulance Booking, etc.</p>
                 <div className="grid grid-cols-3 gap-3">
@@ -116,7 +116,7 @@ function Dashboard() {
                 </div>
               </div>
             </div>
-          </section>
+          </div>
         )}
 
         {/* COMBINED GROWTH */}
