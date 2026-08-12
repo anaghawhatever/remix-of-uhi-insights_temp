@@ -37,7 +37,7 @@ export function ServiceCard({ service, kind }: Props) {
           {initial}
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="text-sm sm:text-base font-semibold leading-tight break-words">{service}</h3>
+          <h3 className="text-sm sm:text-base font-medium leading-tight break-words">{service}</h3>
           <div className="mt-1 flex items-center gap-2">
             <StatusBadge status={status} />
           </div>

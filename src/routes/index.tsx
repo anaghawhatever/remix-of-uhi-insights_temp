@@ -5,7 +5,7 @@ import { DashboardHeader } from "@/components/uhi/DashboardHeader";
 import { ServiceCard } from "@/components/uhi/ServiceCard";
 import { CombinedGrowthChart } from "@/components/uhi/CombinedGrowthChart";
 import { KPICard, CountUp, ChartContainer, StatusBadge, downloadCSV, Tooltip, ServiceTag } from "@/components/uhi/primitives";
-import { euaPartners, hspaPartners, integrationJourney, metricsLogic, serviceStatus, states, SERVICES, hasBooking } from "@/lib/uhi-data";
+import { euaPartners, hspaPartners, integrationJourney, metricsLogic, serviceStatus, serviceColor, states, SERVICES, hasBooking } from "@/lib/uhi-data";
 import { Info } from "lucide-react";
 import { IndiaMap } from "@/components/uhi/IndiaMap";
 import { AuditSaturationSection } from "@/components/uhi/AuditSaturationSection";
@@ -40,7 +40,10 @@ function Dashboard() {
         <Section label="DASHBOARD OVERVIEW" title="Gateway at a Glance">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 items-stretch">
 
-            <ServicePortfolioCard />
+            <KPICard title="Total Live Services" value={<CountUp value={9} />}
+              footnote="Discovery + booking services live on UHI"
+              tooltip={<LiveServicesTooltip />}
+            />
             <KPICard title="Total Searches"
               value={<CountUp value={615001} />}
               footnote={<span className="text-[var(--color-live)] font-medium">↗ +123.6% vs last quarter</span>}
@@ -67,7 +70,7 @@ function Dashboard() {
 
         {/* UHI LIVE SERVICES */}
         <Section label="SERVICE-LEVEL PERFORMANCE" title="UHI Live Services">
-          <div className="text-[11px] tracking-widest text-muted-foreground font-semibold mb-2">DISCOVERY SERVICES</div>
+          <SubsectionLabel>DISCOVERY SERVICES</SubsectionLabel>
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 mb-5">
             <ServiceCard service="PMJAY Hospital Discovery" kind="discovery" />
             <ServiceCard service="Blood Bank Discovery" kind="discovery" />
@@ -77,7 +80,7 @@ function Dashboard() {
             <ServiceCard service="NOTTO Service Discovery" kind="discovery" />
             <ServiceCard service="AMRIT Pharmacy Discovery" kind="discovery" />
           </div>
-          <div className="text-[11px] tracking-widest text-muted-foreground font-semibold mb-2">BOOKING / FULFILMENT SERVICES</div>
+          <SubsectionLabel>BOOKING / FULFILMENT SERVICES</SubsectionLabel>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
             <ServiceCard service="Physical Consultation" kind="fulfilment" />
             <ServiceCard service="Teleconsultation" kind="fulfilment" />
@@ -181,7 +184,7 @@ function Section({ label, title, desc, descItalic, children }: { label?: string;
   return (
     <section>
       {label && <div className="section-label mb-0.5">{label}</div>}
-      <h2 className="text-xl font-semibold tracking-tight">{title}</h2>
+      <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">{title}</h2>
       {desc && <p className={`text-xs mt-0.5 mb-3 ${descItalic ? "italic text-muted-foreground" : "text-muted-foreground"}`}>{desc}</p>}
       {!desc && <div className="mb-3" />}
       {children}
@@ -189,27 +192,35 @@ function Section({ label, title, desc, descItalic, children }: { label?: string;
   );
 }
 
-function ServicePortfolioCard() {
-  const items = [...SERVICES]
-    .sort((a, b) => (a === "Teleconsultation" ? 1 : b === "Teleconsultation" ? -1 : 0))
-    .map((s) => ({ name: s, status: serviceStatus[s] }));
+function SubsectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <div className="card-cream p-3 sm:p-4 flex flex-col gap-2 min-w-0">
-      <div className="flex items-start justify-between gap-2">
-        <div className="section-label min-w-0">Live Services</div>
-        <Tooltip content="Live UHI services. Green dot = Live, Red = Paused.">
-          <Info className="size-4 shrink-0" />
-        </Tooltip>
+    <div className="sticky top-1 z-20 mb-2 rounded-md border border-border bg-white/95 px-2 py-1.5 backdrop-blur">
+      <div className="flex items-center gap-2">
+        <span className="h-4 w-1 rounded-full bg-[var(--color-navy)]" />
+        <span className="text-[13px] font-bold uppercase tracking-widest text-[var(--color-navy)]">{children}</span>
       </div>
-      <ul className="space-y-1 mt-0.5 min-w-0">
-        {items.map((i) => (
-          <li key={i.name} className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 min-w-0">
-            <ServiceTag name={i.name} />
-            <StatusBadge status={i.status} />
-          </li>
-        ))}
-      </ul>
     </div>
+  );
+}
+
+function LiveServicesTooltip() {
+  const items = [...SERVICES]
+    .sort((a, b) => (a === "Teleconsultation" ? 1 : b === "Teleconsultation" ? -1 : 0));
+  return (
+    <span className="block">
+      <span className="block font-semibold mb-1.5">All live UHI services</span>
+      <span className="block space-y-1">
+        {items.map((s) => (
+          <span key={s} className="flex items-center justify-between gap-2">
+            <span className="flex min-w-0 items-center gap-1.5">
+              <span className="size-2 shrink-0 rounded-full" style={{ background: serviceColor[s] }} />
+              <span className="truncate">{s}</span>
+            </span>
+            <StatusBadge status={serviceStatus[s]} />
+          </span>
+        ))}
+      </span>
+    </span>
   );
 }
 

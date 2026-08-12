@@ -42,42 +42,57 @@ export function CombinedGrowthChart() {
     return sliced;
   }, [view, range]);
 
+  const [hidden, setHidden] = useState<Record<string, boolean>>({});
+  const toggle = (k: string) => setHidden((h) => ({ ...h, [k]: !h[k] }));
 
   return (
     <ChartContainer label="TRAJECTORY" title="Combined Growth · All Services" onDownload={() => window.print()}>
-      <div className="flex flex-wrap items-center gap-4 mb-4 text-xs">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mb-3 text-[11px]">
         <ToggleGroup label="Chart:" value={chart} onChange={setChart} options={[["line","Line"],["area","Area"],["bar","Bar"]]} />
         <ToggleGroup label="View:" value={view} onChange={setView} options={[["cumulative","Cumulative"],["incremental","Incremental"]]} />
         <ToggleGroup label="Range:" value={range} onChange={setRange} options={[["ALL","ALL"],["1Y","1Y"],["6M","6M"]]} />
-        <div className="flex flex-wrap items-center gap-3 ml-auto">
-          {SERIES.map((s) => (
-            <span key={s.key} className="flex items-center gap-1.5 text-[11px]">
-              <span className="size-2.5 rounded-full" style={{ background: s.color, outline: s.paused ? `1.5px solid var(--color-paused)` : "none", outlineOffset: 1 }} />
-              {s.name}
-            </span>
-          ))}
-          <span className="flex items-center gap-1.5 text-[11px]">
-            <span className="w-4 border-t-2 border-dashed border-[var(--color-navy)]" /> Overall (Avg)
-          </span>
-        </div>
       </div>
 
-      <div className="h-96">
-        <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart data={data} margin={{ top: 10, right: 16, left: 16, bottom: 24 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-            <XAxis dataKey="month" tick={{ fontSize: 11 }} />
-            <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => v >= 1000 ? `${Math.round(v/1000)}K` : `${v}`} />
-            <Tooltip contentStyle={{ fontSize: 12, borderRadius: 6 }} />
-            <Legend wrapperStyle={{ display: "none" }} />
-            {SERIES.map((s) => {
-              if (chart === "bar") return <Bar key={s.key} dataKey={s.key} fill={s.color} name={s.name} />;
-              if (chart === "area") return <Area key={s.key} type="monotone" dataKey={s.key} stroke={s.color} fill={s.color} fillOpacity={0.25} name={s.name} />;
-              return <Line key={s.key} type="monotone" dataKey={s.key} stroke={s.color} strokeWidth={2} dot={false} name={s.name} />;
+      <div className="flex flex-col lg:flex-row gap-4 min-w-0">
+        <div className="h-[380px] min-w-0 lg:w-[68%]">
+          <ResponsiveContainer width="100%" height="100%">
+            <ComposedChart data={data} margin={{ top: 10, right: 12, left: 8, bottom: 16 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+              <XAxis dataKey="month" tick={{ fontSize: 11 }} />
+              <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => v >= 1000 ? `${Math.round(v/1000)}K` : `${v}`} />
+              <Tooltip contentStyle={{ fontSize: 12, borderRadius: 6 }} />
+              <Legend wrapperStyle={{ display: "none" }} />
+              {SERIES.filter((s) => !hidden[s.key]).map((s) => {
+                if (chart === "bar") return <Bar key={s.key} dataKey={s.key} fill={s.color} name={s.name} />;
+                if (chart === "area") return <Area key={s.key} type="monotone" dataKey={s.key} stroke={s.color} fill={s.color} fillOpacity={0.25} name={s.name} />;
+                return <Line key={s.key} type="monotone" dataKey={s.key} stroke={s.color} strokeWidth={2} dot={false} name={s.name} />;
+              })}
+              {!hidden["Overall"] && (
+                <Line type="monotone" dataKey="Overall" stroke="var(--color-navy)" strokeDasharray="6 4" strokeWidth={2} dot={false} name="Overall (Avg)" />
+              )}
+            </ComposedChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="lg:w-[32%] min-w-0 border border-border rounded-md p-2 self-start">
+          <div className="text-[10px] font-semibold tracking-widest text-muted-foreground mb-1.5">SERIES</div>
+          <ul className="space-y-0.5">
+            {[...SERIES, { key: "Overall", name: "Overall (Avg)", color: "var(--color-navy)" }].map((s) => {
+              const off = !!hidden[s.key];
+              return (
+                <li key={s.key}>
+                  <button
+                    onClick={() => toggle(s.key)}
+                    className={`flex w-full min-w-0 items-center gap-2 rounded px-1.5 py-1 text-left text-[11px] hover:bg-muted ${off ? "opacity-40" : ""}`}
+                  >
+                    <span className="size-3 shrink-0 rounded-[3px] border" style={{ background: off ? "transparent" : s.color, borderColor: s.color }} />
+                    <span className="truncate">{s.name}</span>
+                  </button>
+                </li>
+              );
             })}
-            <Line type="monotone" dataKey="Overall" stroke="var(--color-navy)" strokeDasharray="6 4" strokeWidth={2} dot={false} name="Overall (Avg)" />
-          </ComposedChart>
-        </ResponsiveContainer>
+          </ul>
+        </div>
       </div>
     </ChartContainer>
   );
