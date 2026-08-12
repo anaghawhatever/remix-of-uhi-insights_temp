@@ -79,15 +79,15 @@ export function KPICard({
   title, value, footnote, tooltip,
 }: { title: string; value: ReactNode; footnote?: ReactNode; tooltip?: ReactNode }) {
   return (
-    <div className="card-cream p-3 sm:p-4 flex flex-col gap-1.5 min-w-0 min-h-[130px]">
-      <div className="flex items-start justify-between gap-2 min-w-0">
-        <div className="section-label min-w-0 break-words">{title}</div>
+    <div className="card-cream p-3 sm:p-4 flex flex-col min-w-0 min-h-[140px]">
+      <div className="flex items-start justify-between gap-2 min-w-0 h-8">
+        <div className="section-label min-w-0 break-words line-clamp-2 leading-[1rem]">{title}</div>
         {tooltip && (
           <Tooltip content={tooltip}><Info className="size-4 shrink-0" /></Tooltip>
         )}
       </div>
-      <div className="num-amber text-[clamp(1.5rem,2.4vw,2.25rem)] leading-none mt-1 break-words">{value}</div>
-      {footnote && <div className="text-[11px] text-muted-foreground mt-auto break-words">{footnote}</div>}
+      <div className="num-amber text-left text-[clamp(1.5rem,2.4vw,2.25rem)] leading-none mt-2 break-words">{value}</div>
+      {footnote && <div className="text-[11px] text-muted-foreground mt-auto pt-2 break-words">{footnote}</div>}
     </div>
   );
 }
