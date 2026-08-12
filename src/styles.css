@@ -125,4 +125,26 @@
     border-top-left-radius: var(--radius-lg);
     border-top-right-radius: var(--radius-lg);
   }
+  .private-scope {
+    position: relative;
+    background-color: color-mix(in oklab, var(--color-navy) 5%, white);
+    border: 1px solid color-mix(in oklab, var(--color-navy) 28%, white);
+    border-radius: var(--radius-lg);
+  }
+  .private-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    background: color-mix(in oklab, var(--color-navy) 14%, white);
+    color: var(--color-navy);
+    border: 1px solid color-mix(in oklab, var(--color-navy) 35%, white);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 0.2rem 0.55rem;
+    border-radius: 9999px;
+    line-height: 1;
+    white-space: nowrap;
+  }
 }
