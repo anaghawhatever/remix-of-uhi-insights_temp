@@ -233,13 +233,13 @@ function LiveServicesTooltip() {
 
 function SmallStatCard({ title, value, foot, tip }: { title: string; value: string; foot: string; tip: string }) {
   return (
-    <div className="card-cream p-4">
-      <div className="flex items-start justify-between">
-        <div className="section-label">{title}</div>
-        <Tooltip content={tip}><Info className="size-3.5" /></Tooltip>
+    <div className="card-cream p-3 sm:p-4 flex flex-col min-w-0 min-h-[140px]">
+      <div className="flex items-start justify-between gap-2 min-w-0 h-8">
+        <div className="section-label min-w-0 break-words line-clamp-2 leading-[1rem]">{title}</div>
+        <Tooltip content={tip}><Info className="size-4 shrink-0" /></Tooltip>
       </div>
-      <div className="num-amber text-2xl mt-1">{value}</div>
-      <div className="text-[11px] text-muted-foreground mt-1">{foot}</div>
+      <div className="num-amber text-left text-[clamp(1.5rem,2.4vw,2.25rem)] leading-none mt-2 break-words">{value}</div>
+      <div className="text-[11px] text-muted-foreground mt-auto pt-2 break-words">{foot}</div>
     </div>
   );
 }
