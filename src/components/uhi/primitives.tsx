@@ -1,4 +1,4 @@
-import { Info, Download, Minus, Plus, Pause as PauseIcon } from "lucide-react";
+import { Info, Download, Minus, Plus, Pause as PauseIcon, EyeOff } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { serviceColor } from "@/lib/uhi-data";
