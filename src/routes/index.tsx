@@ -5,7 +5,7 @@ import { DashboardHeader } from "@/components/uhi/DashboardHeader";
 import { ServiceCard } from "@/components/uhi/ServiceCard";
 import { CombinedGrowthChart } from "@/components/uhi/CombinedGrowthChart";
 import { KPICard, CountUp, ChartContainer, StatusBadge, downloadCSV, Tooltip, ServiceTag } from "@/components/uhi/primitives";
-import { euaPartners, hspaPartners, integrationJourney, metricsLogic, serviceStatus, states, SERVICES, hasBooking } from "@/lib/uhi-data";
+import { euaPartners, hspaPartners, integrationJourney, metricsLogic, serviceStatus, serviceColor, states, SERVICES, hasBooking } from "@/lib/uhi-data";
 import { Info } from "lucide-react";
 import { IndiaMap } from "@/components/uhi/IndiaMap";
 import { AuditSaturationSection } from "@/components/uhi/AuditSaturationSection";
@@ -70,7 +70,7 @@ function Dashboard() {
 
         {/* UHI LIVE SERVICES */}
         <Section label="SERVICE-LEVEL PERFORMANCE" title="UHI Live Services">
-          <div className="text-[11px] tracking-widest text-muted-foreground font-semibold mb-2">DISCOVERY SERVICES</div>
+          <SubsectionLabel>DISCOVERY SERVICES</SubsectionLabel>
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 mb-5">
             <ServiceCard service="PMJAY Hospital Discovery" kind="discovery" />
             <ServiceCard service="Blood Bank Discovery" kind="discovery" />
@@ -80,7 +80,7 @@ function Dashboard() {
             <ServiceCard service="NOTTO Service Discovery" kind="discovery" />
             <ServiceCard service="AMRIT Pharmacy Discovery" kind="discovery" />
           </div>
-          <div className="text-[11px] tracking-widest text-muted-foreground font-semibold mb-2">BOOKING / FULFILMENT SERVICES</div>
+          <SubsectionLabel>BOOKING / FULFILMENT SERVICES</SubsectionLabel>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
             <ServiceCard service="Physical Consultation" kind="fulfilment" />
             <ServiceCard service="Teleconsultation" kind="fulfilment" />
@@ -184,7 +184,7 @@ function Section({ label, title, desc, descItalic, children }: { label?: string;
   return (
     <section>
       {label && <div className="section-label mb-0.5">{label}</div>}
-      <h2 className="text-xl font-semibold tracking-tight">{title}</h2>
+      <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">{title}</h2>
       {desc && <p className={`text-xs mt-0.5 mb-3 ${descItalic ? "italic text-muted-foreground" : "text-muted-foreground"}`}>{desc}</p>}
       {!desc && <div className="mb-3" />}
       {children}
