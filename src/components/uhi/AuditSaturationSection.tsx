@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { ChartContainer, downloadCSV, Tooltip, PrivateBadge } from "./primitives";
+import { ChartContainer, downloadCSV, Tooltip } from "./primitives";
 import { Info } from "lucide-react";
 
 const AUDIT_SERVICES = ["All Services", "Physical Consultation", "Teleconsultation"] as const;
