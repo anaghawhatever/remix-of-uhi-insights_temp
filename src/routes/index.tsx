@@ -160,12 +160,18 @@ function Dashboard() {
 
         </Section>
 
-        {/* GEOGRAPHIC + INTEGRATION JOURNEY */}
+        {/* GEOGRAPHIC + INTEGRATION JOURNEY + AUDIT */}
         <GeographicCard />
-        {isPrivate && <IntegrationJourneyCard />}
-
-
-        {isPrivate && <AuditSaturationSection />}
+        {isPrivate && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+            <div className="min-w-0">
+              <IntegrationJourneyCard />
+            </div>
+            <div className="min-w-0">
+              <AuditSaturationSection />
+            </div>
+          </div>
+        )}
 
         <Footer onOpenMetrics={() => setShowMetricsLogic(true)} />
       </main>
