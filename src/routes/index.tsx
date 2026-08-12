@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { ArrowUpRight, ArrowRight, Search, X } from "lucide-react";
+import { ArrowUpRight, ArrowRight, Search, X, EyeOff } from "lucide-react";
 import { DashboardHeader } from "@/components/uhi/DashboardHeader";
 import { ServiceCard } from "@/components/uhi/ServiceCard";
 import { CombinedGrowthChart } from "@/components/uhi/CombinedGrowthChart";
-import { KPICard, CountUp, ChartContainer, StatusBadge, downloadCSV, Tooltip, ServiceTag, PrivateBadge } from "@/components/uhi/primitives";
+import { KPICard, CountUp, ChartContainer, StatusBadge, downloadCSV, Tooltip, ServiceTag } from "@/components/uhi/primitives";
 import { euaPartners, hspaPartners, integrationJourney, metricsLogic, serviceStatus, serviceColor, states, SERVICES, hasBooking } from "@/lib/uhi-data";
 import { Info } from "lucide-react";
 import { IndiaMap } from "@/components/uhi/IndiaMap";
@@ -88,36 +88,7 @@ function Dashboard() {
         </Section>
 
 
-        {/* DETAILED INDICATORS + REGISTRIES — private only, side-by-side */}
-        {isPrivate && (
-          <div className="private-scope relative p-3 sm:p-4">
-            <span className="absolute top-3 left-3"><PrivateBadge /></span>
-            <div className="pt-7 grid grid-cols-1 lg:grid-cols-5 gap-4">
-              <div className="lg:col-span-2 min-w-0">
-                <h2 className="text-xl font-semibold tracking-tight mb-3">Detailed Indicators</h2>
-                <div className="grid grid-cols-2 gap-3">
-                  <KPICard title="Search Growth (QoQ)" value={<span className="text-[var(--color-live)]">+38% <ArrowUpRight className="inline size-6"/></span>}
-                    footnote="Quarter-on-quarter total searches"
-                    tooltip="(Current quarter searches − Previous quarter searches) ÷ Previous quarter searches × 100."
-                  />
-                  <KPICard title="Booking Growth (QoQ)" value={<span className="text-[var(--color-live)]">+24% <ArrowUpRight className="inline size-6"/></span>}
-                    footnote="Quarter-on-quarter completed bookings"
-                    tooltip="(Current quarter bookings − Previous quarter bookings) ÷ Previous quarter bookings × 100. Covers Teleconsultation + Physical Consultation."
-                  />
-                </div>
-              </div>
-              <div className="lg:col-span-3 min-w-0">
-                <h2 className="text-xl font-semibold tracking-tight mb-1">Registries in UHI</h2>
-                <p className="text-xs italic text-muted-foreground mb-3">Only applicable for Booking Services: Physical Consultation, Ambulance Booking, etc.</p>
-                <div className="grid grid-cols-3 gap-3">
-                  <SmallStatCard title="ABHA Saturation" value="68.4%" foot="↗ +4.2pp QoQ" tip="Requests with ABHA ID or address ÷ Total API endpoint hits." />
-                  <SmallStatCard title="HFR Saturation" value="74.2%" foot="↗ +2.1pp QoQ" tip="Providers in UHI linked to HFR ÷ Total providers in UHI." />
-                  <SmallStatCard title="HPR Saturation" value="61.8%" foot="↗ +5.4pp QoQ" tip="Doctors in UHI linked to HPR ÷ Total doctors in UHI." />
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+
 
         {/* COMBINED GROWTH */}
         <CombinedGrowthChart />
@@ -160,15 +131,56 @@ function Dashboard() {
 
         </Section>
 
-        {/* GEOGRAPHIC + INTEGRATION JOURNEY + AUDIT */}
+        {/* GEOGRAPHIC */}
         <GeographicCard />
+
+        {/* ===== PRIVATE VIEW ZONE ===== */}
         {isPrivate && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
-            <div className="min-w-0">
-              <IntegrationJourneyCard />
+          <div className="space-y-5">
+            <div className="flex items-center gap-3 pt-2">
+              <span className="h-px flex-1 bg-[color-mix(in_oklab,var(--color-navy)_30%,white)]" />
+              <span className="private-badge"><EyeOff className="size-3" /> Private view only</span>
+              <span className="h-px flex-1 bg-[color-mix(in_oklab,var(--color-navy)_30%,white)]" />
             </div>
-            <div className="min-w-0">
-              <AuditSaturationSection />
+
+            {/* Detailed Indicators + Registries in one line */}
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-3 items-start">
+              <div className="lg:col-span-2 min-w-0">
+                <h2 className="text-xl font-semibold tracking-tight mb-3 h-7 flex items-center">Detailed Indicators</h2>
+                <div className="grid grid-cols-2 gap-3">
+                  <KPICard title="Search Growth (QoQ)" value={<span className="text-[var(--color-live)]">+38% <ArrowUpRight className="inline size-6"/></span>}
+                    footnote="Quarter-on-quarter total searches"
+                    tooltip="(Current quarter searches − Previous quarter searches) ÷ Previous quarter searches × 100."
+                  />
+                  <KPICard title="Booking Growth (QoQ)" value={<span className="text-[var(--color-live)]">+24% <ArrowUpRight className="inline size-6"/></span>}
+                    footnote="Quarter-on-quarter completed bookings"
+                    tooltip="(Current quarter bookings − Previous quarter bookings) ÷ Previous quarter bookings × 100. Covers Teleconsultation + Physical Consultation."
+                  />
+                </div>
+              </div>
+              <div className="lg:col-span-3 min-w-0">
+                <h2 className="text-xl font-semibold tracking-tight mb-3 h-7 flex items-center gap-2">
+                  Registries in UHI
+                  <Tooltip content="Only applicable for Booking Services: Physical Consultation, Ambulance Booking, etc.">
+                    <Info className="size-4" />
+                  </Tooltip>
+                </h2>
+                <div className="grid grid-cols-3 gap-3">
+                  <SmallStatCard title="ABHA Saturation" value="68.4%" foot="↗ +4.2pp QoQ" tip="Requests with ABHA ID or address ÷ Total API endpoint hits." />
+                  <SmallStatCard title="HFR Saturation" value="74.2%" foot="↗ +2.1pp QoQ" tip="Providers in UHI linked to HFR ÷ Total providers in UHI." />
+                  <SmallStatCard title="HPR Saturation" value="61.8%" foot="↗ +5.4pp QoQ" tip="Doctors in UHI linked to HPR ÷ Total doctors in UHI." />
+                </div>
+              </div>
+            </div>
+
+            {/* Integration Journey + Audit Saturation */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+              <div className="min-w-0">
+                <IntegrationJourneyCard />
+              </div>
+              <div className="min-w-0">
+                <AuditSaturationSection />
+              </div>
             </div>
           </div>
         )}
