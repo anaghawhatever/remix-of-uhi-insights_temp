@@ -174,14 +174,15 @@ function Dashboard() {
             </div>
 
             {/* Integration Journey + Audit Saturation */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
-              <div className="min-w-0">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-stretch">
+              <div className="min-w-0 flex [&>div]:w-full [&>div]:h-full">
                 <IntegrationJourneyCard />
               </div>
-              <div className="min-w-0">
+              <div className="min-w-0 flex [&>div]:w-full [&>div]:h-full">
                 <AuditSaturationSection />
               </div>
             </div>
+
           </div>
         )}
 
