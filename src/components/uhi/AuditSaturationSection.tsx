@@ -131,9 +131,8 @@ export function AuditSaturationSection() {
                 <td className="py-1.5 px-2"><SatCell pct={overallSat} /></td>
               </tr>
             </tbody>
-          </table>
-        </ChartContainer>
-      </div>
-    </div>
+      </table>
+    </ChartContainer>
   );
+
 }
