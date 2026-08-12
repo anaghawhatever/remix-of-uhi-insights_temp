@@ -1,4 +1,4 @@
-import { Info, Download, Minus, Plus, Pause as PauseIcon } from "lucide-react";
+import { Info, Download, Minus, Plus, Pause as PauseIcon, EyeOff } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { serviceColor } from "@/lib/uhi-data";
@@ -14,6 +14,15 @@ export function ServiceTag({ name }: { name: string }) {
     >
       <span className="size-1.5 shrink-0 rounded-full" style={{ background: color }} />
       <span className="truncate">{name}</span>
+    </span>
+  );
+}
+
+export function PrivateBadge() {
+  return (
+    <span className="private-badge">
+      <EyeOff className="size-3" />
+      Private view only
     </span>
   );
 }

@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { ChartContainer, downloadCSV, Tooltip } from "./primitives";
+import { ChartContainer, downloadCSV, Tooltip, PrivateBadge } from "./primitives";
 import { Info } from "lucide-react";
 
 const AUDIT_SERVICES = ["All Services", "Physical Consultation", "Teleconsultation"] as const;
@@ -86,54 +86,56 @@ export function AuditSaturationSection() {
   const overallSat = overallCalled > 0 ? Math.round((overallAudited / overallCalled) * 1000) / 10 : 0;
 
   return (
-    <section>
-      <div className="section-label mb-1">PRIVATE VIEW ONLY</div>
-      <h2 className="text-xl font-semibold tracking-tight">Audit API Saturation</h2>
-      <p className="text-xs italic text-muted-foreground mt-0.5 mb-3">
-        Share of fulfilment callbacks where the corresponding audit endpoint was also invoked.
-      </p>
+    <div className="private-scope relative p-3 sm:p-4">
+      <span className="absolute top-3 left-3"><PrivateBadge /></span>
+      <div className="pt-7">
+        <h2 className="text-xl font-semibold tracking-tight">Audit API Saturation</h2>
+        <p className="text-xs italic text-muted-foreground mt-0.5 mb-3">
+          Share of fulfilment callbacks where the corresponding audit endpoint was also invoked.
+        </p>
 
-      <ChartContainer
-        label="ENDPOINT VIEW"
-        title="Audit API Saturation by Endpoint"
-        right={<FilterBar svc={svc1} setSvc={setSvc1} range={range1} setRange={setRange1}
-          start={start1} setStart={setStart1} end={end1} setEnd={setEnd1} />}
-        onDownload={() => downloadCSV("audit-endpoints.csv", endpointRows)}
-      >
-        <table className="w-full text-xs">
-          <thead>
-            <tr className="border-b border-border text-left">
-              <th className="py-1 px-2 text-[10px] tracking-wider text-[var(--color-navy)] font-semibold">
-                <span className="inline-flex items-center gap-1">
-                  AUDIT ENDPOINT
-                  <Tooltip content={<><div className="font-semibold mb-1">Saturation calculation</div><div>Audit hits ÷ corresponding gateway calls per endpoint. Overall row uses aggregated totals.</div></>}>
-                    <Info className="size-3" />
-                  </Tooltip>
-                </span>
-              </th>
-              <th className="py-1 px-2 text-[10px] tracking-wider text-[var(--color-navy)] font-semibold text-right">GATEWAY CALLS</th>
-              <th className="py-1 px-2 text-[10px] tracking-wider text-[var(--color-navy)] font-semibold text-right">AUDIT HITS</th>
-              <th className="py-1 px-2 text-[10px] tracking-wider text-[var(--color-navy)] font-semibold w-[200px]">SATURATION %</th>
-            </tr>
-          </thead>
-          <tbody>
-            {endpointRows.map((r, i) => (
-              <tr key={r.endpoint} className={i % 2 ? "bg-muted/40" : ""}>
-                <td className="py-1 px-2 font-medium font-mono text-[11px]">{r.endpoint}</td>
-                <td className="py-1 px-2 text-right tabular-nums text-[11px]">{r.called.toLocaleString("en-IN")}</td>
-                <td className="py-1 px-2 text-right tabular-nums text-[11px]">{r.audited.toLocaleString("en-IN")}</td>
-                <td className="py-1 px-2"><SatCell pct={r.sat} /></td>
+        <ChartContainer
+          label="ENDPOINT VIEW"
+          title="Audit API Saturation by Endpoint"
+          right={<FilterBar svc={svc1} setSvc={setSvc1} range={range1} setRange={setRange1}
+            start={start1} setStart={setStart1} end={end1} setEnd={setEnd1} />}
+          onDownload={() => downloadCSV("audit-endpoints.csv", endpointRows)}
+        >
+          <table className="w-full text-xs">
+            <thead>
+              <tr className="border-b border-border text-left">
+                <th className="py-1 px-2 text-[10px] tracking-wider text-[var(--color-navy)] font-semibold">
+                  <span className="inline-flex items-center gap-1">
+                    AUDIT ENDPOINT
+                    <Tooltip content={<><div className="font-semibold mb-1">Saturation calculation</div><div>Audit hits ÷ corresponding gateway calls per endpoint. Overall row uses aggregated totals.</div></>}>
+                      <Info className="size-3" />
+                    </Tooltip>
+                  </span>
+                </th>
+                <th className="py-1 px-2 text-[10px] tracking-wider text-[var(--color-navy)] font-semibold text-right">GATEWAY CALLS</th>
+                <th className="py-1 px-2 text-[10px] tracking-wider text-[var(--color-navy)] font-semibold text-right">AUDIT HITS</th>
+                <th className="py-1 px-2 text-[10px] tracking-wider text-[var(--color-navy)] font-semibold w-[200px]">SATURATION %</th>
               </tr>
-            ))}
-            <tr className="border-t-2 border-[var(--color-navy)] bg-[var(--color-navy)]/5">
-              <td className="py-1.5 px-2 font-semibold text-[var(--color-navy)] text-[11px]">Overall Audit API Saturation</td>
-              <td className="py-1.5 px-2 text-right tabular-nums font-semibold text-[11px]">{overallCalled.toLocaleString("en-IN")}</td>
-              <td className="py-1.5 px-2 text-right tabular-nums font-semibold text-[11px]">{overallAudited.toLocaleString("en-IN")}</td>
-              <td className="py-1.5 px-2"><SatCell pct={overallSat} /></td>
-            </tr>
-          </tbody>
-        </table>
-      </ChartContainer>
-    </section>
+            </thead>
+            <tbody>
+              {endpointRows.map((r, i) => (
+                <tr key={r.endpoint} className={i % 2 ? "bg-muted/40" : ""}>
+                  <td className="py-1 px-2 font-medium font-mono text-[11px]">{r.endpoint}</td>
+                  <td className="py-1 px-2 text-right tabular-nums text-[11px]">{r.called.toLocaleString("en-IN")}</td>
+                  <td className="py-1 px-2 text-right tabular-nums text-[11px]">{r.audited.toLocaleString("en-IN")}</td>
+                  <td className="py-1 px-2"><SatCell pct={r.sat} /></td>
+                </tr>
+              ))}
+              <tr className="border-t-2 border-[var(--color-navy)] bg-[var(--color-navy)]/5">
+                <td className="py-1.5 px-2 font-semibold text-[var(--color-navy)] text-[11px]">Overall Audit API Saturation</td>
+                <td className="py-1.5 px-2 text-right tabular-nums font-semibold text-[11px]">{overallCalled.toLocaleString("en-IN")}</td>
+                <td className="py-1.5 px-2 text-right tabular-nums font-semibold text-[11px]">{overallAudited.toLocaleString("en-IN")}</td>
+                <td className="py-1.5 px-2"><SatCell pct={overallSat} /></td>
+              </tr>
+            </tbody>
+          </table>
+        </ChartContainer>
+      </div>
+    </div>
   );
 }

@@ -4,7 +4,7 @@ import { ArrowUpRight, ArrowRight, Search, X } from "lucide-react";
 import { DashboardHeader } from "@/components/uhi/DashboardHeader";
 import { ServiceCard } from "@/components/uhi/ServiceCard";
 import { CombinedGrowthChart } from "@/components/uhi/CombinedGrowthChart";
-import { KPICard, CountUp, ChartContainer, StatusBadge, downloadCSV, Tooltip, ServiceTag } from "@/components/uhi/primitives";
+import { KPICard, CountUp, ChartContainer, StatusBadge, downloadCSV, Tooltip, ServiceTag, PrivateBadge } from "@/components/uhi/primitives";
 import { euaPartners, hspaPartners, integrationJourney, metricsLogic, serviceStatus, serviceColor, states, SERVICES, hasBooking } from "@/lib/uhi-data";
 import { Info } from "lucide-react";
 import { IndiaMap } from "@/components/uhi/IndiaMap";
@@ -90,10 +90,10 @@ function Dashboard() {
 
         {/* DETAILED INDICATORS + REGISTRIES — private only, side-by-side */}
         {isPrivate && (
-          <section>
-            <div className="section-label mb-1">PRIVATE VIEW ONLY</div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              <div>
+          <div className="private-scope relative p-3 sm:p-4">
+            <span className="absolute top-3 left-3"><PrivateBadge /></span>
+            <div className="pt-7 grid grid-cols-1 lg:grid-cols-5 gap-4">
+              <div className="lg:col-span-2 min-w-0">
                 <h2 className="text-xl font-semibold tracking-tight mb-3">Detailed Indicators</h2>
                 <div className="grid grid-cols-2 gap-3">
                   <KPICard title="Search Growth (QoQ)" value={<span className="text-[var(--color-live)]">+38% <ArrowUpRight className="inline size-6"/></span>}
@@ -106,7 +106,7 @@ function Dashboard() {
                   />
                 </div>
               </div>
-              <div>
+              <div className="lg:col-span-3 min-w-0">
                 <h2 className="text-xl font-semibold tracking-tight mb-1">Registries in UHI</h2>
                 <p className="text-xs italic text-muted-foreground mb-3">Only applicable for Booking Services: Physical Consultation, Ambulance Booking, etc.</p>
                 <div className="grid grid-cols-3 gap-3">
@@ -116,7 +116,7 @@ function Dashboard() {
                 </div>
               </div>
             </div>
-          </section>
+          </div>
         )}
 
         {/* COMBINED GROWTH */}
@@ -160,12 +160,18 @@ function Dashboard() {
 
         </Section>
 
-        {/* GEOGRAPHIC + INTEGRATION JOURNEY */}
+        {/* GEOGRAPHIC + INTEGRATION JOURNEY + AUDIT */}
         <GeographicCard />
-        {isPrivate && <IntegrationJourneyCard />}
-
-
-        {isPrivate && <AuditSaturationSection />}
+        {isPrivate && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+            <div className="min-w-0">
+              <IntegrationJourneyCard />
+            </div>
+            <div className="min-w-0">
+              <AuditSaturationSection />
+            </div>
+          </div>
+        )}
 
         <Footer onOpenMetrics={() => setShowMetricsLogic(true)} />
       </main>
@@ -227,13 +233,13 @@ function LiveServicesTooltip() {
 
 function SmallStatCard({ title, value, foot, tip }: { title: string; value: string; foot: string; tip: string }) {
   return (
-    <div className="card-cream p-4">
-      <div className="flex items-start justify-between">
-        <div className="section-label">{title}</div>
-        <Tooltip content={tip}><Info className="size-3.5" /></Tooltip>
+    <div className="card-cream p-3 sm:p-4 flex flex-col min-w-0 min-h-[140px]">
+      <div className="flex items-start justify-between gap-2 min-w-0 h-8">
+        <div className="section-label min-w-0 break-words line-clamp-2 leading-[1rem]">{title}</div>
+        <Tooltip content={tip}><Info className="size-4 shrink-0" /></Tooltip>
       </div>
-      <div className="num-amber text-2xl mt-1">{value}</div>
-      <div className="text-[11px] text-muted-foreground mt-1">{foot}</div>
+      <div className="num-amber text-left text-[clamp(1.5rem,2.4vw,2.25rem)] leading-none mt-2 break-words">{value}</div>
+      <div className="text-[11px] text-muted-foreground mt-auto pt-2 break-words">{foot}</div>
     </div>
   );
 }
