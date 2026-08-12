@@ -40,7 +40,10 @@ function Dashboard() {
         <Section label="DASHBOARD OVERVIEW" title="Gateway at a Glance">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 items-stretch">
 
-            <ServicePortfolioCard />
+            <KPICard title="Total Live Services" value={<CountUp value={9} />}
+              footnote="Discovery + booking services live on UHI"
+              tooltip={<LiveServicesTooltip />}
+            />
             <KPICard title="Total Searches"
               value={<CountUp value={615001} />}
               footnote={<span className="text-[var(--color-live)] font-medium">↗ +123.6% vs last quarter</span>}
