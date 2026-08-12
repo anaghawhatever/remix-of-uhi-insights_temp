@@ -86,21 +86,19 @@ export function AuditSaturationSection() {
   const overallSat = overallCalled > 0 ? Math.round((overallAudited / overallCalled) * 1000) / 10 : 0;
 
   return (
-    <div className="relative">
-      <div>
-        <h2 className="text-xl font-semibold tracking-tight">Audit API Saturation</h2>
-        <p className="text-xs italic text-muted-foreground mt-0.5 mb-3">
-          Share of fulfilment callbacks where the corresponding audit endpoint was also invoked.
-        </p>
+    <ChartContainer
+      label="AUDIT API · ENDPOINT VIEW"
+      title="Audit API Saturation by Endpoint"
+      titleAfter={
+        <Tooltip content={<>Share of fulfilment callbacks where the corresponding audit endpoint was also invoked.</>}>
+          <Info className="size-4 text-white/80" />
+        </Tooltip>
+      }
+      right={<FilterBar svc={svc1} setSvc={setSvc1} range={range1} setRange={setRange1}
+        start={start1} setStart={setStart1} end={end1} setEnd={setEnd1} />}
+      onDownload={() => downloadCSV("audit-endpoints.csv", endpointRows)}
+    >
 
-
-        <ChartContainer
-          label="ENDPOINT VIEW"
-          title="Audit API Saturation by Endpoint"
-          right={<FilterBar svc={svc1} setSvc={setSvc1} range={range1} setRange={setRange1}
-            start={start1} setStart={setStart1} end={end1} setEnd={setEnd1} />}
-          onDownload={() => downloadCSV("audit-endpoints.csv", endpointRows)}
-        >
           <table className="w-full text-xs">
             <thead>
               <tr className="border-b border-border text-left">
