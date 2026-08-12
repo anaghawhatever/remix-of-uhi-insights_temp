@@ -192,6 +192,17 @@ function Section({ label, title, desc, descItalic, children }: { label?: string;
   );
 }
 
+function SubsectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="sticky top-1 z-20 mb-2 rounded-md border border-border bg-white/95 px-2 py-1.5 backdrop-blur">
+      <div className="flex items-center gap-2">
+        <span className="h-4 w-1 rounded-full bg-[var(--color-navy)]" />
+        <span className="text-[13px] font-bold uppercase tracking-widest text-[var(--color-navy)]">{children}</span>
+      </div>
+    </div>
+  );
+}
+
 function LiveServicesTooltip() {
   const items = [...SERVICES]
     .sort((a, b) => (a === "Teleconsultation" ? 1 : b === "Teleconsultation" ? -1 : 0));
