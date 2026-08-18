@@ -51,15 +51,15 @@ function Dashboard() {
             />
             <KPICard title="Total Network Partners" value={<CountUp value={28} />}
               footnote="Unique integrators (EUA, HSPA or both)"
-              tooltip="Number of unique integrators counted once, whether they operate as a Patient App (EUA), a Provider App (HSPA), or both."
+              tooltip="Number of unique integrators counted once, whether they operate as an End User App (EUA), a Provider App (HSPA), or both."
             />
             <KPICard title="Total Bookings" value={<CountUp value={4000} />}
               footnote="Teleconsultation · Physical Consultation"
               tooltip="Total completed bookings from Teleconsultation + Physical Consultation."
             />
-            <KPICard title="Patient Applications (EUAs) Integrated" value={<CountUp value={22} />}
+            <KPICard title="End User Applications (EUAs) Integrated" value={<CountUp value={22} />}
               footnote="Live across all services"
-              tooltip="Count of Patient Applications (EUAs) that have reached Go Live status across all live services."
+              tooltip="Count of End User Applications (EUAs) that have reached Go Live status across all live services."
             />
             <KPICard title="Provider Applications (HSPAs) Integrated" value={<CountUp value={9} />}
               footnote="Live across all services"
@@ -94,7 +94,7 @@ function Dashboard() {
         <CombinedGrowthChart />
 
         {/* PARTNER REGISTRY */}
-        <Section label="NETWORK PARTNERS" title="Patient & Provider Applications Registry">
+        <Section label="NETWORK PARTNERS" title="End User & Provider Applications Registry">
           <div className="flex items-center gap-3 mb-3">
             <span className="text-[11px] tracking-wider text-muted-foreground font-semibold">FILTER BY SERVICE</span>
             <select value={partnerService} onChange={(e) => setPartnerService(e.target.value)}
@@ -104,7 +104,7 @@ function Dashboard() {
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <PartnerTable
-              title="List of Patient Applications (EUAs)"
+              title="List of End User Applications (EUAs)"
               rows={euaPartners.filter((p) => partnerService === "All Services" || p.service.includes(partnerService.replace(" Discovery", "")))
                 .map((p) => ({
                   name: p.name,
