@@ -19,7 +19,6 @@ const SERIES: Array<{ key: string; name: string; color: string; paused?: boolean
 
 
 export function CombinedGrowthChart() {
-  const [chart, setChart] = useState<ChartType>("area");
   const [view, setView] = useState<ViewType>("cumulative");
   const [range, setRange] = useState<Range>("1Y");
 
