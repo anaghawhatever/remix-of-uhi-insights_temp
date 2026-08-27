@@ -58,11 +58,9 @@ export function CombinedGrowthChart() {
               <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => v >= 1000 ? `${Math.round(v/1000)}K` : `${v}`} />
               <Tooltip contentStyle={{ fontSize: 12, borderRadius: 6 }} />
               <Legend wrapperStyle={{ display: "none" }} />
-              {SERIES.filter((s) => !hidden[s.key]).map((s) => {
-                if (chart === "bar") return <Bar key={s.key} dataKey={s.key} fill={s.color} name={s.name} />;
-                if (chart === "area") return <Area key={s.key} type="monotone" dataKey={s.key} stroke={s.color} fill={s.color} fillOpacity={0.25} name={s.name} />;
-                return <Line key={s.key} type="monotone" dataKey={s.key} stroke={s.color} strokeWidth={2} dot={false} name={s.name} />;
-              })}
+              {SERIES.filter((s) => !hidden[s.key]).map((s) => (
+                <Area key={s.key} type="monotone" dataKey={s.key} stroke={s.color} fill={s.color} fillOpacity={0.25} name={s.name} />
+              ))}
               {!hidden["Overall"] && (
                 <Line type="monotone" dataKey="Overall" stroke="var(--color-navy)" strokeDasharray="6 4" strokeWidth={2} dot={false} name="Overall (Avg)" />
               )}
