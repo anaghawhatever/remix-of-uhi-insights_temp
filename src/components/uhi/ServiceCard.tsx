@@ -57,7 +57,7 @@ export function ServiceCard({ service, kind }: Props) {
       )}
 
       <div className="grid grid-cols-2 gap-2 min-w-0">
-        <MiniMetric label="END USER APPS (EUAs)" value={d.euas} />
+        <MiniMetric label="CITIZEN-FACING APPS (EUAs)" value={d.euas} />
         <MiniMetric label="PROVIDER APPS (HSPAs)" value={d.hspas} />
         <MiniMetric label="LIVE SINCE" value={d.liveSince} />
         <MiniMetric label={d.extraLabel.toUpperCase()} value={d.extraValue} />
