@@ -1,9 +1,8 @@
 import { useMemo, useState } from "react";
-import { ResponsiveContainer, ComposedChart, Area, Line, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Legend } from "recharts";
-import { combinedGrowth } from "@/lib/uhi-data";
+import { ResponsiveContainer, ComposedChart, Area, Line, XAxis, YAxis, Tooltip, CartesianGrid, Legend } from "recharts";
+import { combinedGrowth, METRIC_SHEETS, openSheet } from "@/lib/uhi-data";
 import { ChartContainer } from "./primitives";
 
-type ChartType = "line" | "area" | "bar";
 type ViewType = "cumulative" | "incremental";
 type Range = "ALL" | "1Y" | "6M";
 
