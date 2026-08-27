@@ -1,9 +1,8 @@
 import { useMemo, useState } from "react";
-import { ResponsiveContainer, ComposedChart, Area, Line, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Legend } from "recharts";
-import { combinedGrowth } from "@/lib/uhi-data";
+import { ResponsiveContainer, ComposedChart, Area, Line, XAxis, YAxis, Tooltip, CartesianGrid, Legend } from "recharts";
+import { combinedGrowth, METRIC_SHEETS, openSheet } from "@/lib/uhi-data";
 import { ChartContainer } from "./primitives";
 
-type ChartType = "line" | "area" | "bar";
 type ViewType = "cumulative" | "incremental";
 type Range = "ALL" | "1Y" | "6M";
 
@@ -12,8 +11,7 @@ const SERIES: Array<{ key: string; name: string; color: string; paused?: boolean
   { key: "Blood", name: "Blood Bank Discovery", color: "var(--color-bar-coral)" },
   { key: "Tele", name: "Teleconsultation", color: "var(--color-chart-teal)", paused: true },
   { key: "Phys", name: "Physical Consultation", color: "var(--color-chart-purple)" },
-  { key: "Amb", name: "Ambulance Discovery", color: "var(--color-chart-orange)" },
-  { key: "JAK", name: "Jan Aushadhi Kendra Discovery", color: "var(--color-chart-green)" },
+  { key: "Amb", name: "Ambulance Booking", color: "var(--color-chart-orange)" },
   { key: "JAM", name: "Jan Aushadhi Medicine Discovery", color: "oklch(0.6 0.15 140)" },
   { key: "NOTTO", name: "NOTTO Service Discovery", color: "oklch(0.5 0.18 280)" },
   { key: "AMRIT", name: "AMRIT Pharmacy Discovery", color: "oklch(0.55 0.16 20)" },
@@ -21,7 +19,6 @@ const SERIES: Array<{ key: string; name: string; color: string; paused?: boolean
 
 
 export function CombinedGrowthChart() {
-  const [chart, setChart] = useState<ChartType>("area");
   const [view, setView] = useState<ViewType>("cumulative");
   const [range, setRange] = useState<Range>("1Y");
 
@@ -46,9 +43,8 @@ export function CombinedGrowthChart() {
   const toggle = (k: string) => setHidden((h) => ({ ...h, [k]: !h[k] }));
 
   return (
-    <ChartContainer label="TRAJECTORY" title="Combined Growth · All Services" onDownload={() => window.print()}>
+    <ChartContainer label="TRAJECTORY" title="Combined Growth · All Services" onDownload={() => openSheet(METRIC_SHEETS.combinedGrowth)}>
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mb-3 text-[11px]">
-        <ToggleGroup label="Chart:" value={chart} onChange={setChart} options={[["line","Line"],["area","Area"],["bar","Bar"]]} />
         <ToggleGroup label="View:" value={view} onChange={setView} options={[["cumulative","Cumulative"],["incremental","Incremental"]]} />
         <ToggleGroup label="Range:" value={range} onChange={setRange} options={[["ALL","ALL"],["1Y","1Y"],["6M","6M"]]} />
       </div>
@@ -62,11 +58,9 @@ export function CombinedGrowthChart() {
               <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => v >= 1000 ? `${Math.round(v/1000)}K` : `${v}`} />
               <Tooltip contentStyle={{ fontSize: 12, borderRadius: 6 }} />
               <Legend wrapperStyle={{ display: "none" }} />
-              {SERIES.filter((s) => !hidden[s.key]).map((s) => {
-                if (chart === "bar") return <Bar key={s.key} dataKey={s.key} fill={s.color} name={s.name} />;
-                if (chart === "area") return <Area key={s.key} type="monotone" dataKey={s.key} stroke={s.color} fill={s.color} fillOpacity={0.25} name={s.name} />;
-                return <Line key={s.key} type="monotone" dataKey={s.key} stroke={s.color} strokeWidth={2} dot={false} name={s.name} />;
-              })}
+              {SERIES.filter((s) => !hidden[s.key]).map((s) => (
+                <Area key={s.key} type="monotone" dataKey={s.key} stroke={s.color} fill={s.color} fillOpacity={0.25} name={s.name} />
+              ))}
               {!hidden["Overall"] && (
                 <Line type="monotone" dataKey="Overall" stroke="var(--color-navy)" strokeDasharray="6 4" strokeWidth={2} dot={false} name="Overall (Avg)" />
               )}

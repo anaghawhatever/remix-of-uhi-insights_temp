@@ -4,29 +4,42 @@ export type ServiceKey =
   | "Blood Bank Discovery"
   | "Physical Consultation"
   | "Teleconsultation"
-  | "Ambulance Discovery"
+  | "Ambulance Booking"
   | "Jan Aushadhi Kendra Discovery"
   | "Jan Aushadhi Medicine Discovery"
   | "NOTTO Service Discovery"
-  | "AMRIT Pharmacy Discovery";
+  | "AMRIT Pharmacy Discovery"
+  | "Dialysis Centre Discovery";
 
 export const SERVICES: ServiceKey[] = [
   "PMJAY Hospital Discovery",
   "Blood Bank Discovery",
   "Physical Consultation",
   "Teleconsultation",
-  "Ambulance Discovery",
-  "Jan Aushadhi Kendra Discovery",
+  "Ambulance Booking",
   "Jan Aushadhi Medicine Discovery",
   "NOTTO Service Discovery",
   "AMRIT Pharmacy Discovery",
+  "Dialysis Centre Discovery",
 ];
+
+// External metric logic sheets (linked from download icons)
+export const METRIC_SHEETS = {
+  serviceCards: "https://docs.google.com/spreadsheets/d/1A5PAPoGP5ANfTCGuq83dTtq6lkIe0ABGbKzhPFx1X9E/edit?gid=0#gid=0",
+  integrationTable: "https://docs.google.com/spreadsheets/d/1A5PAPoGP5ANfTCGuq83dTtq6lkIe0ABGbKzhPFx1X9E/edit?gid=1620469653#gid=1620469653",
+  geographic: "https://docs.google.com/spreadsheets/d/1A5PAPoGP5ANfTCGuq83dTtq6lkIe0ABGbKzhPFx1X9E/edit?gid=188279482#gid=188279482",
+  combinedGrowth: "https://docs.google.com/spreadsheets/d/1A5PAPoGP5ANfTCGuq83dTtq6lkIe0ABGbKzhPFx1X9E/edit?gid=1851795242#gid=1851795242",
+} as const;
+
+export const openSheet = (url: string) => {
+  if (typeof window !== "undefined") window.open(url, "_blank", "noopener,noreferrer");
+};
 
 // Services where a booking is part of the flow
 export const BOOKING_SERVICES: ServiceKey[] = [
   "Teleconsultation",
   "Physical Consultation",
-  "Ambulance Discovery",
+  "Ambulance Booking",
 ];
 
 export const hasBooking = (name: string) =>
@@ -37,11 +50,12 @@ export const serviceStatus: Record<ServiceKey, "live" | "paused"> = {
   "Blood Bank Discovery": "live",
   "Teleconsultation": "paused",
   "Physical Consultation": "live",
-  "Ambulance Discovery": "live",
+  "Ambulance Booking": "live",
   "Jan Aushadhi Kendra Discovery": "live",
   "Jan Aushadhi Medicine Discovery": "live",
   "NOTTO Service Discovery": "live",
   "AMRIT Pharmacy Discovery": "live",
+  "Dialysis Centre Discovery": "live",
 };
 
 export const serviceColor: Record<string, string> = {
@@ -49,11 +63,13 @@ export const serviceColor: Record<string, string> = {
   "Blood Bank Discovery": "var(--color-bar-coral)",
   "Teleconsultation": "var(--color-chart-teal)",
   "Physical Consultation": "var(--color-chart-purple)",
+  "Ambulance Booking": "var(--color-chart-orange)",
   "Ambulance Discovery": "var(--color-chart-orange)",
   "Jan Aushadhi Kendra Discovery": "var(--color-chart-green)",
   "Jan Aushadhi Medicine Discovery": "oklch(0.6 0.15 140)",
   "AMRIT Pharmacy Discovery": "oklch(0.55 0.16 20)",
   "NOTTO Service Discovery": "oklch(0.5 0.18 280)",
+  "Dialysis Centre Discovery": "oklch(0.55 0.14 200)",
 };
 
 
@@ -66,11 +82,13 @@ export const liveServices = {
     extraLabel: "Empanelled Hospitals",
     extraValue: "30,864",
     monthly: [
-      { month: "Nov", value: 4200 },
-      { month: "Dec", value: 9800 },
       { month: "Jan", value: 16400 },
       { month: "Feb", value: 19200 },
       { month: "Mar", value: 35400 },
+      { month: "Apr", value: 41200 },
+      { month: "May", value: 46800 },
+      { month: "Jun", value: 52100 },
+      { month: "Jul", value: 58400 },
     ],
   },
   "Blood Bank Discovery": {
@@ -88,39 +106,38 @@ export const liveServices = {
       { month: "May", value: 3200 },
       { month: "Jun", value: 4100 },
       { month: "Jul", value: 6800 },
-      { month: "Aug", value: 11200 },
-      { month: "Sep", value: 17400 },
-      { month: "Oct", value: 8200 },
-      { month: "Nov", value: 7500 },
-      { month: "Dec", value: 9800 },
     ],
   },
-  "Ambulance Discovery": {
+  "Ambulance Booking": {
     totalSearches: 356,
+    totalBookings: 128,
     euas: 2,
     hspas: 1,
     liveSince: "May 2026",
     extraLabel: "Fleet Size",
     extraValue: "5,000+",
     monthly: [
-      { month: "May", value: 4200 },
-      { month: "Jun", value: 14040 },
+      { month: "May", value: 24 },
+      { month: "Jun", value: 46 },
+      { month: "Jul", value: 58 },
     ],
   },
   "Teleconsultation": {
     totalBookings: 3816,
+    totalSearches: 92000,
     euas: 5,
     hspas: 4,
     liveSince: "Jun 2023",
-    extraLabel: "Doctors Onboarded",
+    extraLabel: "Doctors Available",
     extraValue: "1,820",
     monthly: [
-      { month: "Jun '23", value: 120 },
-      { month: "Sep '23", value: 380 },
-      { month: "Dec '23", value: 520 },
-      { month: "Mar '24", value: 640 },
-      { month: "Apr '24", value: 270 },
-      { month: "Today", value: 120 },
+      { month: "Jan", value: 520 },
+      { month: "Feb", value: 610 },
+      { month: "Mar", value: 640 },
+      { month: "Apr", value: 270 },
+      { month: "May", value: 310 },
+      { month: "Jun", value: 285 },
+      { month: "Jul", value: 240 },
     ],
   },
   "Physical Consultation": {
@@ -129,13 +146,14 @@ export const liveServices = {
     euas: 3,
     hspas: 2,
     liveSince: "Mar 2026",
-    extraLabel: "Doctors Onboarded",
+    extraLabel: "Doctors Available",
     extraValue: "184",
     monthly: [
-      { month: "Dec", value: 0 },
-      { month: "Jan", value: 0 },
-      { month: "Feb", value: 4 },
       { month: "Mar", value: 22 },
+      { month: "Apr", value: 38 },
+      { month: "May", value: 44 },
+      { month: "Jun", value: 40 },
+      { month: "Jul", value: 40 },
     ],
   },
   "Jan Aushadhi Kendra Discovery": {
@@ -146,9 +164,10 @@ export const liveServices = {
     extraLabel: "Kendras Listed",
     extraValue: "10,500+",
     monthly: [
-      { month: "Apr", value: 3200 },
-      { month: "May", value: 4180 },
-      { month: "Jun", value: 5100 },
+      { month: "Apr", value: 320 },
+      { month: "May", value: 418 },
+      { month: "Jun", value: 510 },
+      { month: "Jul", value: 187 },
     ],
   },
   "Jan Aushadhi Medicine Discovery": {
@@ -162,6 +181,7 @@ export const liveServices = {
       { month: "Apr", value: 210 },
       { month: "May", value: 320 },
       { month: "Jun", value: 456 },
+      { month: "Jul", value: 512 },
     ],
   },
   "NOTTO Service Discovery": {
@@ -174,19 +194,30 @@ export const liveServices = {
     monthly: [
       { month: "May", value: 280 },
       { month: "Jun", value: 462 },
+      { month: "Jul", value: 508 },
     ],
   },
   "AMRIT Pharmacy Discovery": {
     totalSearches: 1180,
     euas: 2,
     hspas: 1,
-    liveSince: "Apr 2026",
+    liveSince: "Jun 2026",
     extraLabel: "Pharmacies Listed",
     extraValue: "220+",
     monthly: [
-      { month: "Apr", value: 240 },
-      { month: "May", value: 400 },
       { month: "Jun", value: 540 },
+      { month: "Jul", value: 640 },
+    ],
+  },
+  "Dialysis Centre Discovery": {
+    totalSearches: 412,
+    euas: 1,
+    hspas: 1,
+    liveSince: "Jul 2026",
+    extraLabel: "Centres Listed",
+    extraValue: "1,300+",
+    monthly: [
+      { month: "Jul", value: 412 },
     ],
   },
 } as const;
@@ -228,14 +259,14 @@ export const euaPartners = [
   { name: "MyHealthRecords", service: "Blood Bank Discovery", searches: 2480, onboarded: "Sep 2025" },
   { name: "DocsApp", service: "Teleconsultation", searches: 8200, onboarded: "Jan 2024" },
   { name: "PMJAY Connect", service: "PMJAY Hospital Discovery", searches: 12420, onboarded: "Dec 2025" },
-  { name: "AmbuFleet", service: "Ambulance Discovery", searches: 9140, onboarded: "May 2026" },
+  { name: "AmbuFleet", service: "Ambulance Booking", searches: 9140, onboarded: "May 2026" },
 ];
 
 export const hspaPartners = [
   { name: "C-Dac E-Sushrut", service: "Teleconsultation", bookings: 820, onboarded: "Jun 2023" },
   { name: "eSanjeevani", service: "Teleconsultation", bookings: 1100, onboarded: "Jul 2023" },
   { name: "Apollo 24/7", service: "Teleconsultation · Physical Consultation", bookings: 184, onboarded: "Mar 2026" },
-  { name: "Ziqitza HealthCare", service: "Ambulance Discovery", bookings: 0, onboarded: "May 2026" },
+  { name: "Ziqitza HealthCare", service: "Ambulance Booking", bookings: 0, onboarded: "May 2026" },
   { name: "Pmjay", service: "PMJAY Hospital Discovery", bookings: 0, onboarded: "Nov 2025" },
   { name: "Anahat Networks", service: "Blood Bank Discovery", bookings: 0, onboarded: "Aug 2025" },
 ];
@@ -263,25 +294,16 @@ export const states = [
   { name: "Uttarakhand", value: 1820 },
 ];
 
-export const integrationJourney = [
-  { service: "Blood Bank Discovery", days: 268, integrators: 6, from: "Sept 24", to: "Jun 25", color: "var(--color-bar-coral)" },
-  { service: "Physical Consultation", days: 199, integrators: 3, from: "Sept 25", to: "Mar 26", color: "var(--color-chart-purple)" },
-  { service: "Ambulance Discovery", days: 160, integrators: 2, from: "Nov 25", to: "May 26", color: "var(--color-chart-orange)" },
-  { service: "PMJAY Hospital Discovery", days: 157, integrators: 4, from: "May 25", to: "Nov 25", color: "var(--color-chart-blue)" },
-  { service: "Teleconsultation", days: 148, integrators: 5, from: "Jan 23", to: "Jun 23", color: "var(--color-chart-teal)" },
-];
-
 export const metricsLogic = [
   { metric: "Booking Conversion Rate", service: "All", definition: "% of searches that convert to completed bookings", source: "Gateway logs", calc: "Total completed bookings ÷ Total searches across all services", unit: "%", refresh: "Daily", location: "Detailed Indicators" },
   { metric: "ABHA Saturation", service: "All", definition: "% of UHI requests carrying ABHA ID/address", source: "Gateway logs", calc: "Requests with ABHA ID or ABHA address ÷ Total API endpoint hits", unit: "%", refresh: "Daily", location: "Registries / Gateway" },
   { metric: "HFR Saturation", service: "All", definition: "% of UHI providers linked to HFR", source: "HFR Registry", calc: "Providers in UHI linked to HFR ÷ Total providers in UHI", unit: "%", refresh: "Weekly", location: "Registries in UHI" },
   { metric: "HPR Saturation", service: "All", definition: "% of UHI doctors linked to HPR", source: "HPR Registry", calc: "Doctors in UHI linked to HPR ÷ Total doctors in UHI", unit: "%", refresh: "Weekly", location: "Registries in UHI" },
-  { metric: "Audit API %", service: "All", definition: "Share of API calls that are Audit API hits", source: "Gateway logs", calc: "Audit API endpoint hits ÷ All API endpoint hits which have the Audit API endpoint designed", unit: "%", refresh: "Daily", location: "Gateway at a Glance (private)" },
   { metric: "Search Growth (QoQ %)", service: "All", definition: "Quarter-on-quarter % growth in searches", source: "Gateway logs", calc: "(Current quarter searches − Previous quarter searches) ÷ Previous quarter searches × 100", unit: "%", refresh: "Quarterly", location: "Detailed Indicators" },
-  { metric: "EUAs Integrated", service: "All", definition: "Count of EUAs live", source: "Onboarding", calc: "Count of End User Applications that have reached Go Live status", unit: "Count", refresh: "On change", location: "Gateway / Service cards" },
+  { metric: "EUAs Integrated", service: "All", definition: "Count of EUAs live", source: "Onboarding", calc: "Count of Citizen-Facing Applications that have reached Go Live status", unit: "Count", refresh: "On change", location: "Gateway / Service cards" },
   { metric: "Ecosystem Depth", service: "All", definition: "Live EUAs + HSPAs", source: "Onboarding", calc: "Total count of live EUAs + live HSPAs across all services", unit: "Count", refresh: "On change", location: "Detailed Indicators" },
   { metric: "Daily Search Requests", service: "All", definition: "Avg searches per day", source: "Gateway logs", calc: "Total searches ÷ Number of active days in period", unit: "Count/day", refresh: "Daily", location: "Gateway at a Glance" },
-  { metric: "Number of Bookings", service: "Tele + Physical", definition: "Aggregate completed bookings", source: "Fulfilment logs", calc: "Total completed bookings from Teleconsultation + Physical Consultation", unit: "Count", refresh: "Daily", location: "Gateway at a Glance" },
+  { metric: "Number of Bookings", service: "Tele + Physical + Ambulance", definition: "Aggregate completed bookings", source: "Fulfilment logs", calc: "Total completed bookings from Teleconsultation + Physical Consultation + Ambulance Booking", unit: "Count", refresh: "Daily", location: "Gateway at a Glance" },
 ];
 
 export type Integrator = {
@@ -307,8 +329,12 @@ export const integrators: Integrator[] = [
   { name: "DocsApp", role: "EUA", service: "Teleconsultation", onboardDate: "2023-01-15", goLiveDate: "2023-06-12" },
   { name: "eSanjeevani", role: "HSPA", service: "Teleconsultation", onboardDate: "2023-02-01", goLiveDate: "2023-07-04" },
   { name: "C-Dac E-Sushrut", role: "HSPA", service: "Teleconsultation", onboardDate: "2023-01-20", goLiveDate: "2023-06-25" },
-  { name: "AmbuFleet", role: "EUA", service: "Ambulance Discovery", onboardDate: "2025-11-12", goLiveDate: "2026-05-02" },
-  { name: "Ziqitza HealthCare", role: "HSPA", service: "Ambulance Discovery", onboardDate: "2025-12-05", goLiveDate: "2026-05-20" },
+  { name: "AmbuFleet", role: "EUA", service: "Ambulance Booking", onboardDate: "2025-11-12", goLiveDate: "2026-05-02" },
+  { name: "Ziqitza HealthCare", role: "HSPA", service: "Ambulance Booking", onboardDate: "2025-12-05", goLiveDate: "2026-05-20" },
+  { name: "MedNet Dialysis", role: "HSPA", service: "Dialysis Centre Discovery", onboardDate: "2026-01-14", goLiveDate: "2026-07-08" },
+  { name: "NephroCare App", role: "EUA", service: "Dialysis Centre Discovery", onboardDate: "2026-01-28", goLiveDate: "2026-07-15" },
+  { name: "AMRIT Connect", role: "EUA", service: "AMRIT Pharmacy Discovery", onboardDate: "2025-12-18", goLiveDate: "2026-06-10" },
+  { name: "NOTTO Portal", role: "HSPA", service: "NOTTO Service Discovery", onboardDate: "2025-11-30", goLiveDate: "2026-05-12" },
 ];
 
 // State name → key used in topojson india-states.json (st_nm)
