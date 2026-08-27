@@ -201,71 +201,86 @@ function SmallStatCard({ title, value, foot, tip }: { title: string; value: stri
 
 
 
-type PartnerRow = {
-  name: string;
-  services: string[];
-  searches: number;
-  bookings: number | null;
-
-  onboarded: string;
-};
-
-function PartnerTable({ title, rows, onDownload }: {
-  title: string; rows: PartnerRow[]; onDownload: () => void;
+function MultiSelect({ label, options, selected, onToggle }: {
+  label: string; options: string[]; selected: string[]; onToggle: (v: string) => void;
 }) {
-  type SortKey = "name" | "searches" | "bookings" | "onboarded";
-  const [sortKey, setSortKey] = useState<SortKey>("searches");
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="relative">
+      <button onClick={() => setOpen((o) => !o)}
+        className="text-xs border border-white/30 bg-white/10 text-white rounded px-2 py-1 min-w-[150px] text-left">
+        {label}{selected.length ? ` · ${selected.length}` : ""} ▾
+      </button>
+      {open && (
+        <div className="absolute right-0 z-30 mt-1 w-64 max-h-64 overflow-auto rounded-md border border-border bg-white p-1 shadow-lg">
+          {options.map((o) => (
+            <label key={o} className="flex items-center gap-2 rounded px-2 py-1 text-xs hover:bg-muted cursor-pointer">
+              <input type="checkbox" checked={selected.includes(o)} onChange={() => onToggle(o)} />
+              <span className="truncate">{o}</span>
+            </label>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function IntegrationTable() {
+  const [svcFilter, setSvcFilter] = useState<string[]>([]);
+  const [roleFilter, setRoleFilter] = useState<string[]>([]);
+  const [sortKey, setSortKey] = useState<"name" | "role" | "service" | "goLiveDate">("goLiveDate");
   const [dir, setDir] = useState<"asc" | "desc">("desc");
-  const sorted = useMemo(() => {
-    const cp = [...rows];
-    cp.sort((a, b) => {
-      if (sortKey === "searches" || sortKey === "bookings") {
-        const av = a[sortKey] ?? -1, bv = b[sortKey] ?? -1;
-        return dir === "asc" ? av - bv : bv - av;
 
-      }
-      return dir === "asc" ? a[sortKey].localeCompare(b[sortKey]) : b[sortKey].localeCompare(a[sortKey]);
-    });
-    return cp;
-  }, [rows, sortKey, dir]);
+  const rows = useMemo(() => {
+    const filtered = integrators.filter((r) =>
+      (svcFilter.length === 0 || svcFilter.includes(r.service)) &&
+      (roleFilter.length === 0 || roleFilter.includes(r.role))
+    );
+    return [...filtered].sort((a, b) =>
+      dir === "asc" ? a[sortKey].localeCompare(b[sortKey]) : b[sortKey].localeCompare(a[sortKey])
+    );
+  }, [svcFilter, roleFilter, sortKey, dir]);
 
-  const th = (label: string, key: SortKey, align: "left" | "right" = "left") => (
-    <th
-      className={`py-1.5 px-2 text-[10px] tracking-wider text-[var(--color-navy)] font-semibold cursor-pointer select-none ${align === "right" ? "text-right" : ""}`}
-      onClick={() => { if (sortKey === key) setDir((d) => d === "asc" ? "desc" : "asc"); else { setSortKey(key); setDir("desc"); } }}
-    >
+  const th = (label: string, key: typeof sortKey) => (
+    <th className="py-1.5 px-2 text-[10px] tracking-wider text-[var(--color-navy)] font-semibold cursor-pointer select-none"
+      onClick={() => { if (sortKey === key) setDir((d) => d === "asc" ? "desc" : "asc"); else { setSortKey(key); setDir("asc"); } }}>
       {label.toUpperCase()} {sortKey === key ? (dir === "asc" ? "↑" : "↓") : ""}
     </th>
   );
 
   return (
-    <ChartContainer label="NETWORK PARTNERS" title={title} onDownload={onDownload}>
-      <div className="max-h-[300px] overflow-y-auto">
+    <ChartContainer
+      label="INTEGRATORS"
+      title="Integration Table"
+      right={
+        <div className="flex items-center gap-2">
+          <MultiSelect label="Service" options={[...SERVICES]} selected={svcFilter}
+            onToggle={(v) => setSvcFilter((s) => s.includes(v) ? s.filter((x) => x !== v) : [...s, v])} />
+          <MultiSelect label="Role" options={["EUA", "HSPA"]} selected={roleFilter}
+            onToggle={(v) => setRoleFilter((s) => s.includes(v) ? s.filter((x) => x !== v) : [...s, v])} />
+        </div>
+      }
+      onDownload={() => openSheet(METRIC_SHEETS.integrationTable)}
+    >
+      <div className="max-h-[420px] overflow-y-auto">
         <table className="w-full text-xs">
           <thead className="sticky top-0 bg-white">
             <tr className="border-b border-border text-left">
               <th className="py-1.5 pr-2 text-[10px] tracking-wider text-muted-foreground font-semibold w-6">#</th>
-              {th("Partner", "name")}
-              <th className="py-1.5 px-2 text-[10px] tracking-wider text-[var(--color-navy)] font-semibold">INTEGRATED SERVICES</th>
-              {th("Searches", "searches", "right")}
-              {th("Bookings", "bookings", "right")}
-              {th("Onboarded", "onboarded", "right")}
+              {th("Role", "role")}
+              {th("Integrator Name", "name")}
+              {th("Service", "service")}
+              {th("Go Live Date", "goLiveDate")}
             </tr>
           </thead>
           <tbody>
-            {sorted.map((r, i) => (
-              <tr key={r.name} className={i % 2 ? "bg-muted/40" : ""}>
+            {rows.map((r, i) => (
+              <tr key={`${r.name}-${r.service}-${r.role}`} className={i % 2 ? "bg-muted/40" : ""}>
                 <td className="py-1.5 pr-2 text-muted-foreground">{i + 1}</td>
+                <td className="py-1.5 px-2 font-semibold text-[var(--color-navy)]">{r.role}</td>
                 <td className="py-1.5 px-2 font-medium">{r.name}</td>
-                <td className="py-1.5 px-2">
-                  <div className="flex flex-wrap gap-1">
-                    {r.services.map((s) => <ServiceTag key={s} name={s} />)}
-                  </div>
-                </td>
-                <td className="py-1.5 px-2 text-right tabular-nums">{r.searches.toLocaleString("en-IN")}</td>
-                <td className="py-1.5 px-2 text-right num-amber tabular-nums">{r.bookings === null ? <span className="text-muted-foreground">—</span> : r.bookings.toLocaleString("en-IN")}</td>
-
-                <td className="py-1.5 px-2 text-right text-muted-foreground">{r.onboarded}</td>
+                <td className="py-1.5 px-2"><ServiceTag name={r.service} /></td>
+                <td className="py-1.5 px-2 tabular-nums text-muted-foreground">{r.goLiveDate}</td>
               </tr>
             ))}
           </tbody>
@@ -275,49 +290,9 @@ function PartnerTable({ title, rows, onDownload }: {
   );
 }
 
-function IntegrationJourneyCard() {
-  const [sortDesc, setSortDesc] = useState(true);
-  const publicMax = Math.max(...integrationJourney.map((d) => d.days));
-  const publicRows = useMemo(() => {
-    const cp = [...integrationJourney];
-    cp.sort((a, b) => sortDesc ? b.days - a.days : a.days - b.days);
-    return cp;
-  }, [sortDesc]);
-
-  return (
-    <ChartContainer
-      label="ONBOARDING · SERVICE-WISE AVERAGE"
-      title="Integration Journey"
-      right={
-        <button onClick={() => setSortDesc((s) => !s)} className="text-xs opacity-80 hover:opacity-100">↕ Sort</button>
-      }
-      onDownload={() => downloadCSV("integration-journey.csv", integrationJourney)}
-    >
-      <div className="space-y-3">
-        {publicRows.map((r) => (
-          <div key={r.service} className="grid grid-cols-12 items-center gap-3">
-            <div className="col-span-3">
-              <div className="font-semibold text-sm">{r.service}</div>
-              <div className="text-xs text-muted-foreground">{r.integrators} integrators</div>
-            </div>
-            <div className="col-span-7">
-              <div className="h-6 rounded relative bg-muted/40">
-                <div className="h-full rounded flex items-center px-2 text-xs font-semibold text-white"
-                  style={{ width: `${(r.days / publicMax) * 100}%`, background: r.color }}>
-                  {r.days} days
-                </div>
-              </div>
-            </div>
-            <div className="col-span-2 text-xs text-muted-foreground text-right">{r.from} → {r.to}</div>
-          </div>
-        ))}
-      </div>
-    </ChartContainer>
-  );
-}
-
 
 function GeographicCard() {
+  const [mode, setMode] = useState<"map" | "table">("map");
   const [serviceFilter, setServiceFilter] = useState("All Services");
   const [selectedState, setSelectedState] = useState<string | null>(null);
 
