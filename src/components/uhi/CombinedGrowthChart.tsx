@@ -43,9 +43,8 @@ export function CombinedGrowthChart() {
   const toggle = (k: string) => setHidden((h) => ({ ...h, [k]: !h[k] }));
 
   return (
-    <ChartContainer label="TRAJECTORY" title="Combined Growth · All Services" onDownload={() => window.print()}>
+    <ChartContainer label="TRAJECTORY" title="Combined Growth · All Services" onDownload={() => openSheet(METRIC_SHEETS.combinedGrowth)}>
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mb-3 text-[11px]">
-        <ToggleGroup label="Chart:" value={chart} onChange={setChart} options={[["line","Line"],["area","Area"],["bar","Bar"]]} />
         <ToggleGroup label="View:" value={view} onChange={setView} options={[["cumulative","Cumulative"],["incremental","Incremental"]]} />
         <ToggleGroup label="Range:" value={range} onChange={setRange} options={[["ALL","ALL"],["1Y","1Y"],["6M","6M"]]} />
       </div>
