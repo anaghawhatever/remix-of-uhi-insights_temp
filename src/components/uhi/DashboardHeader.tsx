@@ -7,7 +7,7 @@ const TABS_AFTER = [
   "HIECM", "ABHA Transaction Visibility", "Scan & Pay", "CDSS", "Partner Reporting", "NMC",
 ] as const;
 
-const SERVICES = ["All", "PMJAY Hospital Discovery", "Blood Bank Discovery", "Physical Consultation", "Teleconsultation", "Ambulance Discovery", "Jan Aushadhi Kendra Discovery", "Jan Aushadhi Medicine Discovery", "NOTTO Service Discovery", "AMRIT Pharmacy Discovery"];
+const SERVICES = ["All", "PMJAY Hospital Discovery", "Blood Bank Discovery", "Physical Consultation", "Teleconsultation", "Ambulance Booking", "Jan Aushadhi Medicine Discovery", "NOTTO Service Discovery", "AMRIT Pharmacy Discovery"];
 
 export type DashboardView = "public" | "private";
 
