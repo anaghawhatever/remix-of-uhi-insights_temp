@@ -18,17 +18,7 @@ export function ServiceCard({ service, kind }: Props) {
   const iconBg = serviceColor[service];
 
 
-  const handleDownload = () => {
-    const rows = [
-      { metric: "Total Searches", value: totalSearches },
-      ...(isDiscovery ? [] : [{ metric: "Total Bookings", value: totalBookings }]),
-      { metric: "EUAs Integrated", value: d.euas },
-      { metric: "HSPAs Integrated", value: d.hspas },
-      { metric: "Live Since", value: d.liveSince },
-      ...d.monthly.map((m) => ({ metric: `Month · ${m.month}`, value: m.value })),
-    ];
-    downloadCSV(`${service.replace(/\s+/g, "-").toLowerCase()}.csv`, rows);
-  };
+  const handleDownload = () => openSheet(METRIC_SHEETS.serviceCards);
 
   return (
     <div className="card-cream p-3 sm:p-4 flex flex-col gap-2.5 min-w-0">
