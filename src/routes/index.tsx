@@ -457,6 +457,7 @@ function GeographicCard() {
           )}
         </div>
       </div>
+      )}
     </ChartContainer>
   );
 }
