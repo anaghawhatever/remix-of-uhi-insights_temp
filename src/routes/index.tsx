@@ -312,29 +312,65 @@ function GeographicCard() {
   const discoveryServices: Array<{ name: string; searches: number }> = selectedState ? [
     { name: "PMJAY Hospital Discovery", searches: Math.round(354484 * share) },
     { name: "Blood Bank Discovery", searches: Math.round(163185 * share) },
-    { name: "Ambulance Discovery", searches: Math.round(356 * share) },
-    { name: "Jan Aushadhi Kendra Discovery", searches: Math.round(1435 * share) },
     { name: "Jan Aushadhi Medicine Discovery", searches: Math.round(986 * share) },
     { name: "NOTTO Service Discovery", searches: Math.round(742 * share) },
     { name: "AMRIT Pharmacy Discovery", searches: Math.round(1180 * share) },
+    { name: "Dialysis Centre Discovery", searches: Math.round(612 * share) },
   ] : [];
 
   const fulfilmentServices: Array<{ name: string; searches: number; bookings: number; status: "live" | "paused" }> = selectedState ? [
     { name: "Physical Consultation", searches: Math.round(3554 * share), bookings: Math.round(184 * share), status: "live" },
     { name: "Teleconsultation", searches: Math.round(92000 * share), bookings: Math.round(3816 * share), status: "paused" },
+    { name: "Ambulance Booking", searches: Math.round(356 * share), bookings: Math.round(128 * share), status: "live" },
   ] : [];
 
 
   return (
     <ChartContainer label="WHERE THE ACTION IS" title="Geographic Performance"
       right={
-        <select value={serviceFilter} onChange={(e) => setServiceFilter(e.target.value)}
-          className="text-xs border border-white/30 bg-white/10 text-white rounded px-2 py-1">
-          {["All Services", ...SERVICES].map((s) => <option key={s} className="text-foreground">{s}</option>)}
-        </select>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 rounded border border-white/30 bg-white/10 p-0.5">
+            {(["map", "table"] as const).map((m) => (
+              <button key={m} onClick={() => setMode(m)}
+                className={`text-[11px] px-2 py-1 rounded capitalize ${mode === m ? "bg-white text-[var(--color-navy)] font-semibold" : "text-white/90 hover:bg-white/10"}`}>
+                {m}
+              </button>
+            ))}
+          </div>
+          <select value={serviceFilter} onChange={(e) => setServiceFilter(e.target.value)}
+            className="text-xs border border-white/30 bg-white/10 text-white rounded px-2 py-1">
+            {["All Services", ...SERVICES].map((s) => <option key={s} className="text-foreground">{s}</option>)}
+          </select>
+        </div>
       }
-      onDownload={() => downloadCSV("geographic-performance.csv", data)}
+      onDownload={() => openSheet(METRIC_SHEETS.geographic)}
     >
+      {mode === "table" ? (
+        <div className="max-h-[520px] overflow-y-auto">
+          <table className="w-full text-xs">
+            <thead className="sticky top-0 bg-white">
+              <tr className="border-b border-border text-left">
+                <th className="py-1.5 pr-2 text-[10px] tracking-wider text-muted-foreground font-semibold w-6">#</th>
+                <th className="py-1.5 px-2 text-[10px] tracking-wider text-[var(--color-navy)] font-semibold">STATE / UT</th>
+                <th className="py-1.5 px-2 text-[10px] tracking-wider text-[var(--color-navy)] font-semibold text-right">SEARCHES</th>
+                <th className="py-1.5 px-2 text-[10px] tracking-wider text-[var(--color-navy)] font-semibold text-right">SHARE</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sorted.map((s, i) => (
+                <tr key={s.name} className={i % 2 ? "bg-muted/40" : ""}>
+                  <td className="py-1.5 pr-2 text-muted-foreground">{i + 1}</td>
+                  <td className="py-1.5 px-2 font-medium">{s.name}</td>
+                  <td className="py-1.5 px-2 text-right num-amber tabular-nums">{s.value.toLocaleString("en-IN")}</td>
+                  <td className="py-1.5 px-2 text-right tabular-nums text-muted-foreground">
+                    {totalNational > 0 ? ((s.value / (totalNational || 1)) * 100).toFixed(1) : "0.0"}%
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
         <div className="lg:col-span-3">
           <IndiaMap data={data} max={max} onSelect={(n) => setSelectedState((cur) => cur === n ? null : n)} selected={selectedState} />
