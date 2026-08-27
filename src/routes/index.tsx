@@ -1,20 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { ArrowUpRight, ArrowRight, Search, X, EyeOff } from "lucide-react";
+import { ArrowUpRight, Search, X, EyeOff } from "lucide-react";
 import { DashboardHeader } from "@/components/uhi/DashboardHeader";
 import { ServiceCard } from "@/components/uhi/ServiceCard";
 import { CombinedGrowthChart } from "@/components/uhi/CombinedGrowthChart";
 import { KPICard, CountUp, ChartContainer, StatusBadge, downloadCSV, Tooltip, ServiceTag } from "@/components/uhi/primitives";
-import { euaPartners, hspaPartners, integrationJourney, metricsLogic, serviceStatus, serviceColor, states, SERVICES, hasBooking } from "@/lib/uhi-data";
+import { integrators, metricsLogic, serviceStatus, serviceColor, states, SERVICES, METRIC_SHEETS, openSheet } from "@/lib/uhi-data";
 import { Info } from "lucide-react";
 import { IndiaMap } from "@/components/uhi/IndiaMap";
-import { AuditSaturationSection } from "@/components/uhi/AuditSaturationSection";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Unified Health Interface – Gateway at a Glance | ABDM" },
-      { name: "description", content: "UHI Insights Dashboard: live services, partners, geographic performance and adoption metrics for the Ayushman Bharat Digital Mission." },
+      { name: "description", content: "UHI Insights Dashboard: live services, integrators, geographic performance and adoption metrics for the Ayushman Bharat Digital Mission." },
       { property: "og:title", content: "UHI – Gateway at a Glance" },
       { property: "og:description", content: "Headline performance across UHI live services." },
       { property: "og:url", content: "/" },
@@ -26,7 +25,6 @@ export const Route = createFileRoute("/")({
 
 function Dashboard() {
   const [service, setService] = useState("All");
-  const [partnerService, setPartnerService] = useState("All Services");
   const [showMetricsLogic, setShowMetricsLogic] = useState(false);
   const [view, setView] = useState<"public" | "private">("private");
   const isPrivate = view === "private";
@@ -38,10 +36,8 @@ function Dashboard() {
       <main className="px-3 sm:px-5 py-4 mx-auto max-w-[1600px] space-y-5">
         {/* GATEWAY AT A GLANCE */}
         <Section label="DASHBOARD OVERVIEW" title="Gateway at a Glance">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 items-stretch">
-
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 items-stretch">
             <KPICard title="Total Live Services" value={<CountUp value={9} />}
-              footnote="Discovery + booking services live on UHI"
               tooltip={<LiveServicesTooltip />}
             />
             <KPICard title="Total Searches"
@@ -49,20 +45,13 @@ function Dashboard() {
               footnote={<span className="text-[var(--color-live)] font-medium">↗ +123.6% vs last quarter</span>}
               tooltip="Aggregate searches across all live services."
             />
-            <KPICard title="Total Network Partners" value={<CountUp value={28} />}
-              footnote="Unique integrators (EUA, HSPA or both)"
-              tooltip="Number of unique integrators counted once, whether they operate as an End User App (EUA), a Provider App (HSPA), or both."
+            <KPICard title="Total Bookings" value={<CountUp value={4128} />}
+              tooltip="Aggregated Bookings across Teleconsultation, Physical Consultation and Ambulance Booking services."
             />
-            <KPICard title="Total Bookings" value={<CountUp value={4000} />}
-              footnote="Teleconsultation · Physical Consultation"
-              tooltip="Total completed bookings from Teleconsultation + Physical Consultation."
-            />
-            <KPICard title="End User Applications (EUAs) Integrated" value={<CountUp value={22} />}
-              footnote="Live across all services"
-              tooltip="Count of End User Applications (EUAs) that have reached Go Live status across all live services."
+            <KPICard title="Citizen-Facing Applications (EUAs) Integrated" value={<CountUp value={22} />}
+              tooltip="Count of Citizen-Facing Applications (EUAs) that have reached Go Live status across all live services."
             />
             <KPICard title="Provider Applications (HSPAs) Integrated" value={<CountUp value={9} />}
-              footnote="Live across all services"
               tooltip="Count of Provider Applications (HSPAs) live across all services."
             />
           </div>
@@ -71,64 +60,28 @@ function Dashboard() {
         {/* UHI LIVE SERVICES */}
         <Section label="SERVICE-LEVEL PERFORMANCE" title="UHI Live Services">
           <SubsectionLabel>DISCOVERY SERVICES</SubsectionLabel>
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 mb-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 mb-5">
             <ServiceCard service="PMJAY Hospital Discovery" kind="discovery" />
             <ServiceCard service="Blood Bank Discovery" kind="discovery" />
-            <ServiceCard service="Ambulance Discovery" kind="discovery" />
-            <ServiceCard service="Jan Aushadhi Kendra Discovery" kind="discovery" />
             <ServiceCard service="Jan Aushadhi Medicine Discovery" kind="discovery" />
             <ServiceCard service="NOTTO Service Discovery" kind="discovery" />
             <ServiceCard service="AMRIT Pharmacy Discovery" kind="discovery" />
+            <ServiceCard service="Dialysis Centre Discovery" kind="discovery" />
           </div>
           <SubsectionLabel>BOOKING / FULFILMENT SERVICES</SubsectionLabel>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
             <ServiceCard service="Physical Consultation" kind="fulfilment" />
             <ServiceCard service="Teleconsultation" kind="fulfilment" />
+            <ServiceCard service="Ambulance Booking" kind="fulfilment" />
           </div>
         </Section>
-
-
-
 
         {/* COMBINED GROWTH */}
         <CombinedGrowthChart />
 
-        {/* PARTNER REGISTRY */}
-        <Section label="NETWORK PARTNERS" title="End User & Provider Applications Registry">
-          <div className="flex items-center gap-3 mb-3">
-            <span className="text-[11px] tracking-wider text-muted-foreground font-semibold">FILTER BY SERVICE</span>
-            <select value={partnerService} onChange={(e) => setPartnerService(e.target.value)}
-              className="text-xs border border-border rounded-md px-3 py-1.5 bg-white min-w-[180px]">
-              {["All Services", ...SERVICES].map((s) => <option key={s}>{s}</option>)}
-            </select>
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <PartnerTable
-              title="List of End User Applications (EUAs)"
-              rows={euaPartners.filter((p) => partnerService === "All Services" || p.service.includes(partnerService.replace(" Discovery", "")))
-                .map((p) => ({
-                  name: p.name,
-                  services: splitServices(p.service),
-                  searches: p.searches,
-                  bookings: hasBooking(p.service) ? Math.round(p.searches * 0.04) : null,
-                  onboarded: p.onboarded,
-                }))}
-              onDownload={() => downloadCSV("eua-partners.csv", euaPartners)}
-            />
-            <PartnerTable
-              title="List of Provider Applications (HSPAs)"
-              rows={hspaPartners.filter((p) => partnerService === "All Services" || p.service.includes(partnerService.replace(" Discovery", "")))
-                .map((p) => ({
-                  name: p.name,
-                  services: splitServices(p.service),
-                  searches: Math.max(0, p.bookings * 25),
-                  bookings: hasBooking(p.service) ? p.bookings : null,
-                  onboarded: p.onboarded,
-                }))}
-              onDownload={() => downloadCSV("hspa-partners.csv", hspaPartners)}
-            />
-          </div>
-
+        {/* INTEGRATION TABLE */}
+        <Section label="NETWORK PARTNERS" title="Integration Table">
+          <IntegrationTable />
         </Section>
 
         {/* GEOGRAPHIC */}
@@ -144,45 +97,37 @@ function Dashboard() {
             </div>
 
             {/* Detailed Indicators + Registries in one line */}
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-3 items-start">
-              <div className="lg:col-span-2 min-w-0">
+            <div className="grid grid-cols-1 lg:grid-cols-6 gap-3 items-start">
+              <div className="lg:col-span-3 min-w-0">
                 <h2 className="text-xl font-semibold tracking-tight mb-3 h-7 flex items-center">Detailed Indicators</h2>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <KPICard title="Search Growth (QoQ)" value={<span className="text-[var(--color-live)]">+38% <ArrowUpRight className="inline size-6"/></span>}
                     footnote="Quarter-on-quarter total searches"
                     tooltip="(Current quarter searches − Previous quarter searches) ÷ Previous quarter searches × 100."
                   />
                   <KPICard title="Booking Growth (QoQ)" value={<span className="text-[var(--color-live)]">+24% <ArrowUpRight className="inline size-6"/></span>}
                     footnote="Quarter-on-quarter completed bookings"
-                    tooltip="(Current quarter bookings − Previous quarter bookings) ÷ Previous quarter bookings × 100. Covers Teleconsultation + Physical Consultation."
+                    tooltip="(Current quarter bookings − Previous quarter bookings) ÷ Previous quarter bookings × 100."
+                  />
+                  <KPICard title="Total Network Partners" value={<CountUp value={28} />}
+                    tooltip="Number of Unique EUAs, HSPAs, or Both."
                   />
                 </div>
               </div>
               <div className="lg:col-span-3 min-w-0">
                 <h2 className="text-xl font-semibold tracking-tight mb-3 h-7 flex items-center gap-2">
                   Registries in UHI
-                  <Tooltip content="Only applicable for Booking Services: Physical Consultation, Ambulance Booking, etc.">
+                  <Tooltip content="Only for Booking Services: Physical Consultation, Ambulance Booking, etc.">
                     <Info className="size-4" />
                   </Tooltip>
                 </h2>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <SmallStatCard title="ABHA Saturation" value="68.4%" foot="↗ +4.2pp QoQ" tip="Requests with ABHA ID or address ÷ Total API endpoint hits." />
                   <SmallStatCard title="HFR Saturation" value="74.2%" foot="↗ +2.1pp QoQ" tip="Providers in UHI linked to HFR ÷ Total providers in UHI." />
                   <SmallStatCard title="HPR Saturation" value="61.8%" foot="↗ +5.4pp QoQ" tip="Doctors in UHI linked to HPR ÷ Total doctors in UHI." />
                 </div>
               </div>
             </div>
-
-            {/* Integration Journey + Audit Saturation */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-stretch">
-              <div className="min-w-0 flex [&>div]:w-full [&>div]:h-full">
-                <IntegrationJourneyCard />
-              </div>
-              <div className="min-w-0 flex [&>div]:w-full [&>div]:h-full">
-                <AuditSaturationSection />
-              </div>
-            </div>
-
           </div>
         )}
 
@@ -194,9 +139,6 @@ function Dashboard() {
   );
 }
 
-function splitServices(s: string): string[] {
-  return s.split("·").map((x) => x.trim()).filter(Boolean);
-}
 
 
 function Section({ label, title, desc, descItalic, children }: { label?: string; title: string; desc?: string; descItalic?: boolean; children: React.ReactNode }) {
