@@ -208,7 +208,7 @@ function MultiSelect({ label, options, selected, onToggle }: {
   return (
     <div className="relative">
       <button onClick={() => setOpen((o) => !o)}
-        className="text-xs border border-white/30 bg-white/10 text-white rounded px-2 py-1 min-w-[150px] text-left">
+        className="text-xs border border-border bg-white text-foreground rounded px-2 py-1 min-w-[150px] text-left">
         {label}{selected.length ? ` · ${selected.length}` : ""} ▾
       </button>
       {open && (
