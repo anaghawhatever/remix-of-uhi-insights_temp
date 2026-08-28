@@ -319,29 +319,31 @@ export type Integrator = {
   service: ServiceKey;
   onboardDate: string; // YYYY-MM-DD
   goLiveDate: string;
+  searches: number;
+  bookings: number | null; // null for non-booking services
 };
 
 export const integrators: Integrator[] = [
-  { name: "e-Raktkosh", role: "HSPA", service: "Blood Bank Discovery", onboardDate: "2024-09-15", goLiveDate: "2025-06-29" },
-  { name: "Driefcase Healthtech Pvt Ltd", role: "EUA", service: "Blood Bank Discovery", onboardDate: "2024-12-02", goLiveDate: "2025-08-30" },
-  { name: "Skearth Private Limited", role: "EUA", service: "Blood Bank Discovery", onboardDate: "2025-02-04", goLiveDate: "2025-10-29" },
-  { name: "Jdeanz Healthtech Pvt Ltd", role: "EUA", service: "Blood Bank Discovery", onboardDate: "2025-02-18", goLiveDate: "2025-11-08" },
-  { name: "Ublood Private Limited", role: "EUA", service: "Blood Bank Discovery", onboardDate: "2025-03-12", goLiveDate: "2025-11-30" },
-  { name: "Anahat Solutions Pvt Ltd", role: "EUA", service: "Blood Bank Discovery", onboardDate: "2024-11-20", goLiveDate: "2025-07-30" },
-  { name: "Secure", role: "EUA", service: "PMJAY Hospital Discovery", onboardDate: "2025-05-10", goLiveDate: "2025-10-15" },
-  { name: "PMJAY Connect", role: "EUA", service: "PMJAY Hospital Discovery", onboardDate: "2025-06-22", goLiveDate: "2025-12-01" },
-  { name: "Pmjay", role: "HSPA", service: "PMJAY Hospital Discovery", onboardDate: "2025-05-01", goLiveDate: "2025-11-04" },
-  { name: "Apollo 24/7", role: "HSPA", service: "Physical Consultation Booking", onboardDate: "2025-09-08", goLiveDate: "2026-03-26" },
-  { name: "Pristyn Care", role: "EUA", service: "Physical Consultation Booking", onboardDate: "2025-10-04", goLiveDate: "2026-03-20" },
-  { name: "DocsApp", role: "EUA", service: "Teleconsultation", onboardDate: "2023-01-15", goLiveDate: "2023-06-12" },
-  { name: "eSanjeevani", role: "HSPA", service: "Teleconsultation", onboardDate: "2023-02-01", goLiveDate: "2023-07-04" },
-  { name: "C-Dac E-Sushrut", role: "HSPA", service: "Teleconsultation", onboardDate: "2023-01-20", goLiveDate: "2023-06-25" },
-  { name: "AmbuFleet", role: "EUA", service: "Ambulance Booking", onboardDate: "2025-11-12", goLiveDate: "2026-05-02" },
-  { name: "Ziqitza HealthCare", role: "HSPA", service: "Ambulance Booking", onboardDate: "2025-12-05", goLiveDate: "2026-05-20" },
-  { name: "MedNet Dialysis", role: "HSPA", service: "Dialysis Centre Discovery", onboardDate: "2026-01-14", goLiveDate: "2026-07-08" },
-  { name: "NephroCare App", role: "EUA", service: "Dialysis Centre Discovery", onboardDate: "2026-01-28", goLiveDate: "2026-07-15" },
-  { name: "AMRIT Connect", role: "EUA", service: "AMRIT Pharmacy Discovery", onboardDate: "2025-12-18", goLiveDate: "2026-06-10" },
-  { name: "NOTTO Portal", role: "HSPA", service: "NOTTO Service Discovery", onboardDate: "2025-11-30", goLiveDate: "2026-05-12" },
+  { name: "e-Raktkosh", role: "HSPA", service: "Blood Bank Discovery", onboardDate: "2024-09-15", goLiveDate: "2025-06-29" , searches: 24180, bookings: null },
+  { name: "Driefcase Healthtech Pvt Ltd", role: "EUA", service: "Blood Bank Discovery", onboardDate: "2024-12-02", goLiveDate: "2025-08-30" , searches: 11240, bookings: null },
+  { name: "Skearth Private Limited", role: "EUA", service: "Blood Bank Discovery", onboardDate: "2025-02-04", goLiveDate: "2025-10-29" , searches: 8420, bookings: null },
+  { name: "Jdeanz Healthtech Pvt Ltd", role: "EUA", service: "Blood Bank Discovery", onboardDate: "2025-02-18", goLiveDate: "2025-11-08" , searches: 6180, bookings: null },
+  { name: "Ublood Private Limited", role: "EUA", service: "Blood Bank Discovery", onboardDate: "2025-03-12", goLiveDate: "2025-11-30" , searches: 14907, bookings: null },
+  { name: "Anahat Solutions Pvt Ltd", role: "EUA", service: "Blood Bank Discovery", onboardDate: "2024-11-20", goLiveDate: "2025-07-30" , searches: 27809, bookings: null },
+  { name: "Secure", role: "EUA", service: "PMJAY Hospital Discovery", onboardDate: "2025-05-10", goLiveDate: "2025-10-15" , searches: 32420, bookings: null },
+  { name: "PMJAY Connect", role: "EUA", service: "PMJAY Hospital Discovery", onboardDate: "2025-06-22", goLiveDate: "2025-12-01" , searches: 12420, bookings: null },
+  { name: "Pmjay", role: "HSPA", service: "PMJAY Hospital Discovery", onboardDate: "2025-05-01", goLiveDate: "2025-11-04" , searches: 18640, bookings: null },
+  { name: "Apollo 24/7", role: "HSPA", service: "Physical Consultation Booking", onboardDate: "2025-09-08", goLiveDate: "2026-03-26" , searches: 2140, bookings: 184 },
+  { name: "Pristyn Care", role: "EUA", service: "Physical Consultation Booking", onboardDate: "2025-10-04", goLiveDate: "2026-03-20" , searches: 4533, bookings: 142 },
+  { name: "DocsApp", role: "EUA", service: "Teleconsultation", onboardDate: "2023-01-15", goLiveDate: "2023-06-12" , searches: 8200, bookings: 980 },
+  { name: "eSanjeevani", role: "HSPA", service: "Teleconsultation", onboardDate: "2023-02-01", goLiveDate: "2023-07-04" , searches: 41200, bookings: 1100 },
+  { name: "C-Dac E-Sushrut", role: "HSPA", service: "Teleconsultation", onboardDate: "2023-01-20", goLiveDate: "2023-06-25" , searches: 22800, bookings: 820 },
+  { name: "AmbuFleet", role: "EUA", service: "Ambulance Booking", onboardDate: "2025-11-12", goLiveDate: "2026-05-02" , searches: 9140, bookings: 128 },
+  { name: "Ziqitza HealthCare", role: "HSPA", service: "Ambulance Booking", onboardDate: "2025-12-05", goLiveDate: "2026-05-20" , searches: 3120, bookings: 96 },
+  { name: "MedNet Dialysis", role: "HSPA", service: "Dialysis Centre Discovery", onboardDate: "2026-01-14", goLiveDate: "2026-07-08" , searches: 412, bookings: null },
+  { name: "NephroCare App", role: "EUA", service: "Dialysis Centre Discovery", onboardDate: "2026-01-28", goLiveDate: "2026-07-15" , searches: 286, bookings: null },
+  { name: "AMRIT Connect", role: "EUA", service: "AMRIT Pharmacy Discovery", onboardDate: "2025-12-18", goLiveDate: "2026-06-10" , searches: 1180, bookings: null },
+  { name: "NOTTO Portal", role: "HSPA", service: "NOTTO Service Discovery", onboardDate: "2025-11-30", goLiveDate: "2026-05-12" , searches: 742, bookings: null },
 ];
 
 // State name → key used in topojson india-states.json (st_nm)
