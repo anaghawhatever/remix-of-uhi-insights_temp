@@ -46,7 +46,7 @@ function Dashboard() {
               tooltip="Aggregate searches across all live services."
             />
             <KPICard title="Total Bookings" value={<CountUp value={4128} />}
-              tooltip="Aggregated Bookings across Teleconsultation, Physical Consultation and Ambulance Booking services."
+              tooltip="Aggregated Bookings across Teleconsultation, Physical Consultation Booking and Ambulance Booking services."
             />
             <KPICard title="Citizen-Facing Applications (EUAs) Integrated" value={<CountUp value={22} />}
               tooltip="Count of Citizen-Facing Applications (EUAs) that have reached Go Live status across all live services."
@@ -63,14 +63,14 @@ function Dashboard() {
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 mb-5">
             <ServiceCard service="PMJAY Hospital Discovery" kind="discovery" />
             <ServiceCard service="Blood Bank Discovery" kind="discovery" />
-            <ServiceCard service="Jan Aushadhi Medicine Discovery" kind="discovery" />
+            <ServiceCard service="Jan Aushadhi Kendra Discovery" kind="discovery" />
             <ServiceCard service="NOTTO Service Discovery" kind="discovery" />
             <ServiceCard service="AMRIT Pharmacy Discovery" kind="discovery" />
             <ServiceCard service="Dialysis Centre Discovery" kind="discovery" />
           </div>
           <SubsectionLabel>BOOKING / FULFILMENT SERVICES</SubsectionLabel>
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
-            <ServiceCard service="Physical Consultation" kind="fulfilment" />
+            <ServiceCard service="Physical Consultation Booking" kind="fulfilment" />
             <ServiceCard service="Teleconsultation" kind="fulfilment" />
             <ServiceCard service="Ambulance Booking" kind="fulfilment" />
           </div>
@@ -117,7 +117,7 @@ function Dashboard() {
               <div className="lg:col-span-3 min-w-0">
                 <h2 className="text-xl font-semibold tracking-tight mb-3 h-7 flex items-center gap-2">
                   Registries in UHI
-                  <Tooltip content="Only for Booking Services: Physical Consultation, Ambulance Booking, etc.">
+                  <Tooltip content="Only for Booking Services: Physical Consultation Booking, Ambulance Booking, etc.">
                     <Info className="size-4" />
                   </Tooltip>
                 </h2>
@@ -312,14 +312,14 @@ function GeographicCard() {
   const discoveryServices: Array<{ name: string; searches: number }> = selectedState ? [
     { name: "PMJAY Hospital Discovery", searches: Math.round(354484 * share) },
     { name: "Blood Bank Discovery", searches: Math.round(163185 * share) },
-    { name: "Jan Aushadhi Medicine Discovery", searches: Math.round(986 * share) },
+    { name: "Jan Aushadhi Kendra Discovery", searches: Math.round(986 * share) },
     { name: "NOTTO Service Discovery", searches: Math.round(742 * share) },
     { name: "AMRIT Pharmacy Discovery", searches: Math.round(1180 * share) },
     { name: "Dialysis Centre Discovery", searches: Math.round(612 * share) },
   ] : [];
 
   const fulfilmentServices: Array<{ name: string; searches: number; bookings: number; status: "live" | "paused" }> = selectedState ? [
-    { name: "Physical Consultation", searches: Math.round(3554 * share), bookings: Math.round(184 * share), status: "live" },
+    { name: "Physical Consultation Booking", searches: Math.round(3554 * share), bookings: Math.round(184 * share), status: "live" },
     { name: "Teleconsultation", searches: Math.round(92000 * share), bookings: Math.round(3816 * share), status: "paused" },
     { name: "Ambulance Booking", searches: Math.round(356 * share), bookings: Math.round(128 * share), status: "live" },
   ] : [];
