@@ -274,7 +274,8 @@ function IntegrationTable() {
               <th className="py-1.5 pr-2 text-[10px] tracking-wider text-muted-foreground font-semibold w-6">#</th>
               {th("Role", "role")}
               {th("Integrator Name", "name")}
-              {th("Service", "service")}
+              {th("# Searches", "searches")}
+              {th("# Bookings", "bookings")}
               {th("Go Live Date", "goLiveDate")}
             </tr>
           </thead>
@@ -284,7 +285,8 @@ function IntegrationTable() {
                 <td className="py-1.5 pr-2 text-muted-foreground">{i + 1}</td>
                 <td className="py-1.5 px-2 font-semibold text-[var(--color-navy)]">{r.role}</td>
                 <td className="py-1.5 px-2 font-medium">{r.name}</td>
-                <td className="py-1.5 px-2"><ServiceTag name={r.service} /></td>
+                <td className="py-1.5 px-2 tabular-nums">{r.searches.toLocaleString("en-IN")}</td>
+                <td className="py-1.5 px-2 tabular-nums">{r.bookings === null ? "—" : r.bookings.toLocaleString("en-IN")}</td>
                 <td className="py-1.5 px-2 tabular-nums text-muted-foreground">{r.goLiveDate}</td>
               </tr>
             ))}
