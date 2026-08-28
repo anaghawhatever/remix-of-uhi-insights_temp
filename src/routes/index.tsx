@@ -212,11 +212,11 @@ function MultiSelect({ label, options, selected, onToggle }: {
         {label}{selected.length ? ` · ${selected.length}` : ""} ▾
       </button>
       {open && (
-        <div className="absolute right-0 z-30 mt-1 w-64 max-h-64 overflow-auto rounded-md border border-border bg-white p-1 shadow-lg">
+        <div className="absolute right-0 z-30 mt-1 w-64 max-h-64 overflow-auto rounded-md border border-border bg-white p-1 shadow-lg text-foreground">
           {options.map((o) => (
-            <label key={o} className="flex items-center gap-2 rounded px-2 py-1 text-xs hover:bg-muted cursor-pointer">
-              <input type="checkbox" checked={selected.includes(o)} onChange={() => onToggle(o)} />
-              <span className="truncate">{o}</span>
+            <label key={o} className="flex items-center gap-2 rounded px-2 py-1 text-xs text-foreground hover:bg-muted cursor-pointer">
+              <input type="checkbox" checked={selected.includes(o)} onChange={() => onToggle(o)} className="accent-[#1a56a0]" />
+              <span className="truncate text-foreground">{o}</span>
             </label>
           ))}
         </div>
