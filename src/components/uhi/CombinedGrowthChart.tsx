@@ -10,9 +10,9 @@ const SERIES: Array<{ key: string; name: string; color: string; paused?: boolean
   { key: "PMJAY", name: "PMJAY Hospital Discovery", color: "var(--color-chart-blue)" },
   { key: "Blood", name: "Blood Bank Discovery", color: "var(--color-bar-coral)" },
   { key: "Tele", name: "Teleconsultation", color: "var(--color-chart-teal)", paused: true },
-  { key: "Phys", name: "Physical Consultation", color: "var(--color-chart-purple)" },
+  { key: "Phys", name: "Physical Consultation Booking", color: "var(--color-chart-purple)" },
   { key: "Amb", name: "Ambulance Booking", color: "var(--color-chart-orange)" },
-  { key: "JAM", name: "Jan Aushadhi Medicine Discovery", color: "oklch(0.6 0.15 140)" },
+  { key: "JAM", name: "Jan Aushadhi Kendra Discovery", color: "oklch(0.6 0.15 140)" },
   { key: "NOTTO", name: "NOTTO Service Discovery", color: "oklch(0.5 0.18 280)" },
   { key: "AMRIT", name: "AMRIT Pharmacy Discovery", color: "oklch(0.55 0.16 20)" },
 ];

@@ -2,11 +2,10 @@
 export type ServiceKey =
   | "PMJAY Hospital Discovery"
   | "Blood Bank Discovery"
-  | "Physical Consultation"
+  | "Physical Consultation Booking"
   | "Teleconsultation"
   | "Ambulance Booking"
   | "Jan Aushadhi Kendra Discovery"
-  | "Jan Aushadhi Medicine Discovery"
   | "NOTTO Service Discovery"
   | "AMRIT Pharmacy Discovery"
   | "Dialysis Centre Discovery";
@@ -14,10 +13,10 @@ export type ServiceKey =
 export const SERVICES: ServiceKey[] = [
   "PMJAY Hospital Discovery",
   "Blood Bank Discovery",
-  "Physical Consultation",
+  "Physical Consultation Booking",
   "Teleconsultation",
   "Ambulance Booking",
-  "Jan Aushadhi Medicine Discovery",
+  "Jan Aushadhi Kendra Discovery",
   "NOTTO Service Discovery",
   "AMRIT Pharmacy Discovery",
   "Dialysis Centre Discovery",
@@ -38,7 +37,7 @@ export const openSheet = (url: string) => {
 // Services where a booking is part of the flow
 export const BOOKING_SERVICES: ServiceKey[] = [
   "Teleconsultation",
-  "Physical Consultation",
+  "Physical Consultation Booking",
   "Ambulance Booking",
 ];
 
@@ -49,10 +48,9 @@ export const serviceStatus: Record<ServiceKey, "live" | "paused"> = {
   "PMJAY Hospital Discovery": "live",
   "Blood Bank Discovery": "live",
   "Teleconsultation": "paused",
-  "Physical Consultation": "live",
+  "Physical Consultation Booking": "live",
   "Ambulance Booking": "live",
   "Jan Aushadhi Kendra Discovery": "live",
-  "Jan Aushadhi Medicine Discovery": "live",
   "NOTTO Service Discovery": "live",
   "AMRIT Pharmacy Discovery": "live",
   "Dialysis Centre Discovery": "live",
@@ -62,11 +60,10 @@ export const serviceColor: Record<string, string> = {
   "PMJAY Hospital Discovery": "var(--color-chart-blue)",
   "Blood Bank Discovery": "var(--color-bar-coral)",
   "Teleconsultation": "var(--color-chart-teal)",
-  "Physical Consultation": "var(--color-chart-purple)",
+  "Physical Consultation Booking": "var(--color-chart-purple)",
   "Ambulance Booking": "var(--color-chart-orange)",
   "Ambulance Discovery": "var(--color-chart-orange)",
-  "Jan Aushadhi Kendra Discovery": "var(--color-chart-green)",
-  "Jan Aushadhi Medicine Discovery": "oklch(0.6 0.15 140)",
+  "Jan Aushadhi Kendra Discovery": "oklch(0.6 0.15 140)",
   "AMRIT Pharmacy Discovery": "oklch(0.55 0.16 20)",
   "NOTTO Service Discovery": "oklch(0.5 0.18 280)",
   "Dialysis Centre Discovery": "oklch(0.55 0.14 200)",
@@ -117,6 +114,10 @@ export const liveServices = {
     extraLabel: "Fleet Size",
     extraValue: "5,000+",
     monthly: [
+      { month: "Jan", value: 0 },
+      { month: "Feb", value: 0 },
+      { month: "Mar", value: 0 },
+      { month: "Apr", value: 0 },
       { month: "May", value: 24 },
       { month: "Jun", value: 46 },
       { month: "Jul", value: 58 },
@@ -140,7 +141,7 @@ export const liveServices = {
       { month: "Jul", value: 240 },
     ],
   },
-  "Physical Consultation": {
+  "Physical Consultation Booking": {
     totalBookings: 184,
     totalSearches: 3554,
     euas: 3,
@@ -149,6 +150,8 @@ export const liveServices = {
     extraLabel: "Doctors Available",
     extraValue: "184",
     monthly: [
+      { month: "Jan", value: 0 },
+      { month: "Feb", value: 0 },
       { month: "Mar", value: 22 },
       { month: "Apr", value: 38 },
       { month: "May", value: 44 },
@@ -157,27 +160,16 @@ export const liveServices = {
     ],
   },
   "Jan Aushadhi Kendra Discovery": {
-    totalSearches: 1435,
+    totalSearches: 986,
     euas: 2,
     hspas: 1,
     liveSince: "Apr 2026",
     extraLabel: "Kendras Listed",
     extraValue: "10,500+",
     monthly: [
-      { month: "Apr", value: 320 },
-      { month: "May", value: 418 },
-      { month: "Jun", value: 510 },
-      { month: "Jul", value: 187 },
-    ],
-  },
-  "Jan Aushadhi Medicine Discovery": {
-    totalSearches: 986,
-    euas: 2,
-    hspas: 1,
-    liveSince: "Apr 2026",
-    extraLabel: "Medicines Listed",
-    extraValue: "2,000+",
-    monthly: [
+      { month: "Jan", value: 0 },
+      { month: "Feb", value: 0 },
+      { month: "Mar", value: 0 },
       { month: "Apr", value: 210 },
       { month: "May", value: 320 },
       { month: "Jun", value: 456 },
@@ -192,6 +184,10 @@ export const liveServices = {
     extraLabel: "Centres Listed",
     extraValue: "650+",
     monthly: [
+      { month: "Jan", value: 0 },
+      { month: "Feb", value: 0 },
+      { month: "Mar", value: 0 },
+      { month: "Apr", value: 0 },
       { month: "May", value: 280 },
       { month: "Jun", value: 462 },
       { month: "Jul", value: 508 },
@@ -205,6 +201,11 @@ export const liveServices = {
     extraLabel: "Pharmacies Listed",
     extraValue: "220+",
     monthly: [
+      { month: "Jan", value: 0 },
+      { month: "Feb", value: 0 },
+      { month: "Mar", value: 0 },
+      { month: "Apr", value: 0 },
+      { month: "May", value: 0 },
       { month: "Jun", value: 540 },
       { month: "Jul", value: 640 },
     ],
@@ -217,6 +218,12 @@ export const liveServices = {
     extraLabel: "Centres Listed",
     extraValue: "1,300+",
     monthly: [
+      { month: "Jan", value: 0 },
+      { month: "Feb", value: 0 },
+      { month: "Mar", value: 0 },
+      { month: "Apr", value: 0 },
+      { month: "May", value: 0 },
+      { month: "Jun", value: 0 },
       { month: "Jul", value: 412 },
     ],
   },
@@ -255,7 +262,7 @@ export const euaPartners = [
   { name: "Secure", service: "PMJAY Hospital Discovery", searches: 32420, onboarded: "Oct 2025" },
   { name: "Anahat Solutions Pvt Ltd", service: "Blood Bank Discovery · PMJAY Hospital Discovery", searches: 27809, onboarded: "Jul 2025" },
   { name: "Ublood Private Limited", service: "Blood Bank Discovery", searches: 14907, onboarded: "Aug 2025" },
-  { name: "Pristyn Care", service: "Teleconsultation · Physical Consultation", searches: 4533, onboarded: "Feb 2024" },
+  { name: "Pristyn Care", service: "Teleconsultation · Physical Consultation Booking", searches: 4533, onboarded: "Feb 2024" },
   { name: "MyHealthRecords", service: "Blood Bank Discovery", searches: 2480, onboarded: "Sep 2025" },
   { name: "DocsApp", service: "Teleconsultation", searches: 8200, onboarded: "Jan 2024" },
   { name: "PMJAY Connect", service: "PMJAY Hospital Discovery", searches: 12420, onboarded: "Dec 2025" },
@@ -265,7 +272,7 @@ export const euaPartners = [
 export const hspaPartners = [
   { name: "C-Dac E-Sushrut", service: "Teleconsultation", bookings: 820, onboarded: "Jun 2023" },
   { name: "eSanjeevani", service: "Teleconsultation", bookings: 1100, onboarded: "Jul 2023" },
-  { name: "Apollo 24/7", service: "Teleconsultation · Physical Consultation", bookings: 184, onboarded: "Mar 2026" },
+  { name: "Apollo 24/7", service: "Teleconsultation · Physical Consultation Booking", bookings: 184, onboarded: "Mar 2026" },
   { name: "Ziqitza HealthCare", service: "Ambulance Booking", bookings: 0, onboarded: "May 2026" },
   { name: "Pmjay", service: "PMJAY Hospital Discovery", bookings: 0, onboarded: "Nov 2025" },
   { name: "Anahat Networks", service: "Blood Bank Discovery", bookings: 0, onboarded: "Aug 2025" },
@@ -303,7 +310,7 @@ export const metricsLogic = [
   { metric: "EUAs Integrated", service: "All", definition: "Count of EUAs live", source: "Onboarding", calc: "Count of Citizen-Facing Applications that have reached Go Live status", unit: "Count", refresh: "On change", location: "Gateway / Service cards" },
   { metric: "Ecosystem Depth", service: "All", definition: "Live EUAs + HSPAs", source: "Onboarding", calc: "Total count of live EUAs + live HSPAs across all services", unit: "Count", refresh: "On change", location: "Detailed Indicators" },
   { metric: "Daily Search Requests", service: "All", definition: "Avg searches per day", source: "Gateway logs", calc: "Total searches ÷ Number of active days in period", unit: "Count/day", refresh: "Daily", location: "Gateway at a Glance" },
-  { metric: "Number of Bookings", service: "Tele + Physical + Ambulance", definition: "Aggregate completed bookings", source: "Fulfilment logs", calc: "Total completed bookings from Teleconsultation + Physical Consultation + Ambulance Booking", unit: "Count", refresh: "Daily", location: "Gateway at a Glance" },
+  { metric: "Number of Bookings", service: "Tele + Physical + Ambulance", definition: "Aggregate completed bookings", source: "Fulfilment logs", calc: "Total completed bookings from Teleconsultation + Physical Consultation Booking + Ambulance Booking", unit: "Count", refresh: "Daily", location: "Gateway at a Glance" },
 ];
 
 export type Integrator = {
@@ -312,29 +319,31 @@ export type Integrator = {
   service: ServiceKey;
   onboardDate: string; // YYYY-MM-DD
   goLiveDate: string;
+  searches: number;
+  bookings: number | null; // null for non-booking services
 };
 
 export const integrators: Integrator[] = [
-  { name: "e-Raktkosh", role: "HSPA", service: "Blood Bank Discovery", onboardDate: "2024-09-15", goLiveDate: "2025-06-29" },
-  { name: "Driefcase Healthtech Pvt Ltd", role: "EUA", service: "Blood Bank Discovery", onboardDate: "2024-12-02", goLiveDate: "2025-08-30" },
-  { name: "Skearth Private Limited", role: "EUA", service: "Blood Bank Discovery", onboardDate: "2025-02-04", goLiveDate: "2025-10-29" },
-  { name: "Jdeanz Healthtech Pvt Ltd", role: "EUA", service: "Blood Bank Discovery", onboardDate: "2025-02-18", goLiveDate: "2025-11-08" },
-  { name: "Ublood Private Limited", role: "EUA", service: "Blood Bank Discovery", onboardDate: "2025-03-12", goLiveDate: "2025-11-30" },
-  { name: "Anahat Solutions Pvt Ltd", role: "EUA", service: "Blood Bank Discovery", onboardDate: "2024-11-20", goLiveDate: "2025-07-30" },
-  { name: "Secure", role: "EUA", service: "PMJAY Hospital Discovery", onboardDate: "2025-05-10", goLiveDate: "2025-10-15" },
-  { name: "PMJAY Connect", role: "EUA", service: "PMJAY Hospital Discovery", onboardDate: "2025-06-22", goLiveDate: "2025-12-01" },
-  { name: "Pmjay", role: "HSPA", service: "PMJAY Hospital Discovery", onboardDate: "2025-05-01", goLiveDate: "2025-11-04" },
-  { name: "Apollo 24/7", role: "HSPA", service: "Physical Consultation", onboardDate: "2025-09-08", goLiveDate: "2026-03-26" },
-  { name: "Pristyn Care", role: "EUA", service: "Physical Consultation", onboardDate: "2025-10-04", goLiveDate: "2026-03-20" },
-  { name: "DocsApp", role: "EUA", service: "Teleconsultation", onboardDate: "2023-01-15", goLiveDate: "2023-06-12" },
-  { name: "eSanjeevani", role: "HSPA", service: "Teleconsultation", onboardDate: "2023-02-01", goLiveDate: "2023-07-04" },
-  { name: "C-Dac E-Sushrut", role: "HSPA", service: "Teleconsultation", onboardDate: "2023-01-20", goLiveDate: "2023-06-25" },
-  { name: "AmbuFleet", role: "EUA", service: "Ambulance Booking", onboardDate: "2025-11-12", goLiveDate: "2026-05-02" },
-  { name: "Ziqitza HealthCare", role: "HSPA", service: "Ambulance Booking", onboardDate: "2025-12-05", goLiveDate: "2026-05-20" },
-  { name: "MedNet Dialysis", role: "HSPA", service: "Dialysis Centre Discovery", onboardDate: "2026-01-14", goLiveDate: "2026-07-08" },
-  { name: "NephroCare App", role: "EUA", service: "Dialysis Centre Discovery", onboardDate: "2026-01-28", goLiveDate: "2026-07-15" },
-  { name: "AMRIT Connect", role: "EUA", service: "AMRIT Pharmacy Discovery", onboardDate: "2025-12-18", goLiveDate: "2026-06-10" },
-  { name: "NOTTO Portal", role: "HSPA", service: "NOTTO Service Discovery", onboardDate: "2025-11-30", goLiveDate: "2026-05-12" },
+  { name: "e-Raktkosh", role: "HSPA", service: "Blood Bank Discovery", onboardDate: "2024-09-15", goLiveDate: "2025-06-29" , searches: 24180, bookings: null },
+  { name: "Driefcase Healthtech Pvt Ltd", role: "EUA", service: "Blood Bank Discovery", onboardDate: "2024-12-02", goLiveDate: "2025-08-30" , searches: 11240, bookings: null },
+  { name: "Skearth Private Limited", role: "EUA", service: "Blood Bank Discovery", onboardDate: "2025-02-04", goLiveDate: "2025-10-29" , searches: 8420, bookings: null },
+  { name: "Jdeanz Healthtech Pvt Ltd", role: "EUA", service: "Blood Bank Discovery", onboardDate: "2025-02-18", goLiveDate: "2025-11-08" , searches: 6180, bookings: null },
+  { name: "Ublood Private Limited", role: "EUA", service: "Blood Bank Discovery", onboardDate: "2025-03-12", goLiveDate: "2025-11-30" , searches: 14907, bookings: null },
+  { name: "Anahat Solutions Pvt Ltd", role: "EUA", service: "Blood Bank Discovery", onboardDate: "2024-11-20", goLiveDate: "2025-07-30" , searches: 27809, bookings: null },
+  { name: "Secure", role: "EUA", service: "PMJAY Hospital Discovery", onboardDate: "2025-05-10", goLiveDate: "2025-10-15" , searches: 32420, bookings: null },
+  { name: "PMJAY Connect", role: "EUA", service: "PMJAY Hospital Discovery", onboardDate: "2025-06-22", goLiveDate: "2025-12-01" , searches: 12420, bookings: null },
+  { name: "Pmjay", role: "HSPA", service: "PMJAY Hospital Discovery", onboardDate: "2025-05-01", goLiveDate: "2025-11-04" , searches: 18640, bookings: null },
+  { name: "Apollo 24/7", role: "HSPA", service: "Physical Consultation Booking", onboardDate: "2025-09-08", goLiveDate: "2026-03-26" , searches: 2140, bookings: 184 },
+  { name: "Pristyn Care", role: "EUA", service: "Physical Consultation Booking", onboardDate: "2025-10-04", goLiveDate: "2026-03-20" , searches: 4533, bookings: 142 },
+  { name: "DocsApp", role: "EUA", service: "Teleconsultation", onboardDate: "2023-01-15", goLiveDate: "2023-06-12" , searches: 8200, bookings: 980 },
+  { name: "eSanjeevani", role: "HSPA", service: "Teleconsultation", onboardDate: "2023-02-01", goLiveDate: "2023-07-04" , searches: 41200, bookings: 1100 },
+  { name: "C-Dac E-Sushrut", role: "HSPA", service: "Teleconsultation", onboardDate: "2023-01-20", goLiveDate: "2023-06-25" , searches: 22800, bookings: 820 },
+  { name: "AmbuFleet", role: "EUA", service: "Ambulance Booking", onboardDate: "2025-11-12", goLiveDate: "2026-05-02" , searches: 9140, bookings: 128 },
+  { name: "Ziqitza HealthCare", role: "HSPA", service: "Ambulance Booking", onboardDate: "2025-12-05", goLiveDate: "2026-05-20" , searches: 3120, bookings: 96 },
+  { name: "MedNet Dialysis", role: "HSPA", service: "Dialysis Centre Discovery", onboardDate: "2026-01-14", goLiveDate: "2026-07-08" , searches: 412, bookings: null },
+  { name: "NephroCare App", role: "EUA", service: "Dialysis Centre Discovery", onboardDate: "2026-01-28", goLiveDate: "2026-07-15" , searches: 286, bookings: null },
+  { name: "AMRIT Connect", role: "EUA", service: "AMRIT Pharmacy Discovery", onboardDate: "2025-12-18", goLiveDate: "2026-06-10" , searches: 1180, bookings: null },
+  { name: "NOTTO Portal", role: "HSPA", service: "NOTTO Service Discovery", onboardDate: "2025-11-30", goLiveDate: "2026-05-12" , searches: 742, bookings: null },
 ];
 
 // State name → key used in topojson india-states.json (st_nm)

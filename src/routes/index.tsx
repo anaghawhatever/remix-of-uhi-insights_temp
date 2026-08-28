@@ -4,7 +4,7 @@ import { ArrowUpRight, Search, X, EyeOff } from "lucide-react";
 import { DashboardHeader } from "@/components/uhi/DashboardHeader";
 import { ServiceCard } from "@/components/uhi/ServiceCard";
 import { CombinedGrowthChart } from "@/components/uhi/CombinedGrowthChart";
-import { KPICard, CountUp, ChartContainer, StatusBadge, Tooltip, ServiceTag } from "@/components/uhi/primitives";
+import { KPICard, CountUp, ChartContainer, StatusBadge, Tooltip } from "@/components/uhi/primitives";
 import { integrators, metricsLogic, serviceStatus, serviceColor, states, SERVICES, METRIC_SHEETS, openSheet } from "@/lib/uhi-data";
 import { Info } from "lucide-react";
 import { IndiaMap } from "@/components/uhi/IndiaMap";
@@ -46,7 +46,7 @@ function Dashboard() {
               tooltip="Aggregate searches across all live services."
             />
             <KPICard title="Total Bookings" value={<CountUp value={4128} />}
-              tooltip="Aggregated Bookings across Teleconsultation, Physical Consultation and Ambulance Booking services."
+              tooltip="Aggregated Bookings across Teleconsultation, Physical Consultation Booking and Ambulance Booking services."
             />
             <KPICard title="Citizen-Facing Applications (EUAs) Integrated" value={<CountUp value={22} />}
               tooltip="Count of Citizen-Facing Applications (EUAs) that have reached Go Live status across all live services."
@@ -63,14 +63,14 @@ function Dashboard() {
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 mb-5">
             <ServiceCard service="PMJAY Hospital Discovery" kind="discovery" />
             <ServiceCard service="Blood Bank Discovery" kind="discovery" />
-            <ServiceCard service="Jan Aushadhi Medicine Discovery" kind="discovery" />
+            <ServiceCard service="Jan Aushadhi Kendra Discovery" kind="discovery" />
             <ServiceCard service="NOTTO Service Discovery" kind="discovery" />
             <ServiceCard service="AMRIT Pharmacy Discovery" kind="discovery" />
             <ServiceCard service="Dialysis Centre Discovery" kind="discovery" />
           </div>
           <SubsectionLabel>BOOKING / FULFILMENT SERVICES</SubsectionLabel>
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
-            <ServiceCard service="Physical Consultation" kind="fulfilment" />
+            <ServiceCard service="Physical Consultation Booking" kind="fulfilment" />
             <ServiceCard service="Teleconsultation" kind="fulfilment" />
             <ServiceCard service="Ambulance Booking" kind="fulfilment" />
           </div>
@@ -117,7 +117,7 @@ function Dashboard() {
               <div className="lg:col-span-3 min-w-0">
                 <h2 className="text-xl font-semibold tracking-tight mb-3 h-7 flex items-center gap-2">
                   Registries in UHI
-                  <Tooltip content="Only for Booking Services: Physical Consultation, Ambulance Booking, etc.">
+                  <Tooltip content="Only for Booking Services: Physical Consultation Booking, Ambulance Booking, etc.">
                     <Info className="size-4" />
                   </Tooltip>
                 </h2>
@@ -208,7 +208,7 @@ function MultiSelect({ label, options, selected, onToggle }: {
   return (
     <div className="relative">
       <button onClick={() => setOpen((o) => !o)}
-        className="text-xs border border-white/30 bg-white/10 text-white rounded px-2 py-1 min-w-[150px] text-left">
+        className="text-xs border border-border bg-white text-foreground rounded px-2 py-1 min-w-[150px] text-left">
         {label}{selected.length ? ` · ${selected.length}` : ""} ▾
       </button>
       {open && (
@@ -228,7 +228,7 @@ function MultiSelect({ label, options, selected, onToggle }: {
 function IntegrationTable() {
   const [svcFilter, setSvcFilter] = useState<string[]>([]);
   const [roleFilter, setRoleFilter] = useState<string[]>([]);
-  const [sortKey, setSortKey] = useState<"name" | "role" | "service" | "goLiveDate">("goLiveDate");
+  const [sortKey, setSortKey] = useState<"name" | "role" | "searches" | "bookings" | "goLiveDate">("goLiveDate");
   const [dir, setDir] = useState<"asc" | "desc">("desc");
 
   const rows = useMemo(() => {
@@ -236,9 +236,14 @@ function IntegrationTable() {
       (svcFilter.length === 0 || svcFilter.includes(r.service)) &&
       (roleFilter.length === 0 || roleFilter.includes(r.role))
     );
-    return [...filtered].sort((a, b) =>
-      dir === "asc" ? a[sortKey].localeCompare(b[sortKey]) : b[sortKey].localeCompare(a[sortKey])
-    );
+    return [...filtered].sort((a, b) => {
+      const av = a[sortKey] ?? 0;
+      const bv = b[sortKey] ?? 0;
+      const cmp = typeof av === "number" && typeof bv === "number"
+        ? av - bv
+        : String(av).localeCompare(String(bv));
+      return dir === "asc" ? cmp : -cmp;
+    });
   }, [svcFilter, roleFilter, sortKey, dir]);
 
   const th = (label: string, key: typeof sortKey) => (
@@ -269,7 +274,8 @@ function IntegrationTable() {
               <th className="py-1.5 pr-2 text-[10px] tracking-wider text-muted-foreground font-semibold w-6">#</th>
               {th("Role", "role")}
               {th("Integrator Name", "name")}
-              {th("Service", "service")}
+              {th("# Searches", "searches")}
+              {th("# Bookings", "bookings")}
               {th("Go Live Date", "goLiveDate")}
             </tr>
           </thead>
@@ -279,7 +285,8 @@ function IntegrationTable() {
                 <td className="py-1.5 pr-2 text-muted-foreground">{i + 1}</td>
                 <td className="py-1.5 px-2 font-semibold text-[var(--color-navy)]">{r.role}</td>
                 <td className="py-1.5 px-2 font-medium">{r.name}</td>
-                <td className="py-1.5 px-2"><ServiceTag name={r.service} /></td>
+                <td className="py-1.5 px-2 tabular-nums">{r.searches.toLocaleString("en-IN")}</td>
+                <td className="py-1.5 px-2 tabular-nums">{r.bookings === null ? "—" : r.bookings.toLocaleString("en-IN")}</td>
                 <td className="py-1.5 px-2 tabular-nums text-muted-foreground">{r.goLiveDate}</td>
               </tr>
             ))}
@@ -312,14 +319,14 @@ function GeographicCard() {
   const discoveryServices: Array<{ name: string; searches: number }> = selectedState ? [
     { name: "PMJAY Hospital Discovery", searches: Math.round(354484 * share) },
     { name: "Blood Bank Discovery", searches: Math.round(163185 * share) },
-    { name: "Jan Aushadhi Medicine Discovery", searches: Math.round(986 * share) },
+    { name: "Jan Aushadhi Kendra Discovery", searches: Math.round(986 * share) },
     { name: "NOTTO Service Discovery", searches: Math.round(742 * share) },
     { name: "AMRIT Pharmacy Discovery", searches: Math.round(1180 * share) },
     { name: "Dialysis Centre Discovery", searches: Math.round(612 * share) },
   ] : [];
 
   const fulfilmentServices: Array<{ name: string; searches: number; bookings: number; status: "live" | "paused" }> = selectedState ? [
-    { name: "Physical Consultation", searches: Math.round(3554 * share), bookings: Math.round(184 * share), status: "live" },
+    { name: "Physical Consultation Booking", searches: Math.round(3554 * share), bookings: Math.round(184 * share), status: "live" },
     { name: "Teleconsultation", searches: Math.round(92000 * share), bookings: Math.round(3816 * share), status: "paused" },
     { name: "Ambulance Booking", searches: Math.round(356 * share), bookings: Math.round(128 * share), status: "live" },
   ] : [];
