@@ -228,7 +228,7 @@ function MultiSelect({ label, options, selected, onToggle }: {
 function IntegrationTable() {
   const [svcFilter, setSvcFilter] = useState<string[]>([]);
   const [roleFilter, setRoleFilter] = useState<string[]>([]);
-  const [sortKey, setSortKey] = useState<"name" | "role" | "service" | "goLiveDate">("goLiveDate");
+  const [sortKey, setSortKey] = useState<"name" | "role" | "searches" | "bookings" | "goLiveDate">("goLiveDate");
   const [dir, setDir] = useState<"asc" | "desc">("desc");
 
   const rows = useMemo(() => {
@@ -236,9 +236,14 @@ function IntegrationTable() {
       (svcFilter.length === 0 || svcFilter.includes(r.service)) &&
       (roleFilter.length === 0 || roleFilter.includes(r.role))
     );
-    return [...filtered].sort((a, b) =>
-      dir === "asc" ? a[sortKey].localeCompare(b[sortKey]) : b[sortKey].localeCompare(a[sortKey])
-    );
+    return [...filtered].sort((a, b) => {
+      const av = a[sortKey] ?? 0;
+      const bv = b[sortKey] ?? 0;
+      const cmp = typeof av === "number" && typeof bv === "number"
+        ? av - bv
+        : String(av).localeCompare(String(bv));
+      return dir === "asc" ? cmp : -cmp;
+    });
   }, [svcFilter, roleFilter, sortKey, dir]);
 
   const th = (label: string, key: typeof sortKey) => (
