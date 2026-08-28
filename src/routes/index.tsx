@@ -4,7 +4,7 @@ import { ArrowUpRight, Search, X, EyeOff } from "lucide-react";
 import { DashboardHeader } from "@/components/uhi/DashboardHeader";
 import { ServiceCard } from "@/components/uhi/ServiceCard";
 import { CombinedGrowthChart } from "@/components/uhi/CombinedGrowthChart";
-import { KPICard, CountUp, ChartContainer, StatusBadge, downloadCSV, Tooltip, ServiceTag } from "@/components/uhi/primitives";
+import { KPICard, CountUp, ChartContainer, StatusBadge, Tooltip, ServiceTag } from "@/components/uhi/primitives";
 import { integrators, metricsLogic, serviceStatus, serviceColor, states, SERVICES, METRIC_SHEETS, openSheet } from "@/lib/uhi-data";
 import { Info } from "lucide-react";
 import { IndiaMap } from "@/components/uhi/IndiaMap";
