@@ -302,16 +302,20 @@ function IntegrationTable() {
 
 function GeographicCard() {
   const [mode, setMode] = useState<"map" | "table">("map");
-  const [serviceFilter, setServiceFilter] = useState("All Services");
+  const [serviceFilters, setServiceFilters] = useState<string[]>([]);
   const [selectedState, setSelectedState] = useState<string | null>(null);
+  const serviceFilterLabel = serviceFilters.length === 0
+    ? "All Services"
+    : serviceFilters.length === 1 ? serviceFilters[0] : `${serviceFilters.length} services`;
 
   const data = useMemo(() => {
-    const mult = serviceFilter === "All Services" ? 1 : 0.3;
+    const mult = serviceFilters.length === 0 ? 1 : Math.min(1, 0.3 * serviceFilters.length);
     return states.map((s) => ({ ...s, value: Math.round(s.value * mult) }));
-  }, [serviceFilter]);
+  }, [serviceFilters]);
 
   const sorted = useMemo(() => [...data].sort((a, b) => b.value - a.value), [data]);
   const max = Math.max(...data.map((d) => d.value));
+
 
   // Per-state per-service breakdown (proportional synth from national totals)
   const totalNational = states.reduce((a, s) => a + s.value, 0);
