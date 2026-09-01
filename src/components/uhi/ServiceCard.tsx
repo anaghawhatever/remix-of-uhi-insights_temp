@@ -17,9 +17,6 @@ export function ServiceCard({ service, kind }: Props) {
   const accent = isDiscovery ? "var(--color-bar-coral)" : "var(--color-chart-teal)";
   const iconBg = serviceColor[service];
 
-
-  const handleDownload = () => openSheet(METRIC_SHEETS.serviceCards);
-
   return (
     <div className="card-cream p-3 sm:p-4 flex flex-col gap-2.5 min-w-0">
       <div className="flex items-start gap-2.5 min-w-0">
