@@ -49,11 +49,12 @@ function Dashboard() {
               tooltip="Aggregated Bookings across Teleconsultation, Physical Consultation Booking and Ambulance Booking services."
             />
             <KPICard title="Citizen-Facing Applications (EUAs) Integrated" value={<CountUp value={22} />}
-              tooltip="Count of Citizen-Facing Applications (EUAs) that have reached Go Live status across all live services."
+              tooltip="Citizen-facing apps that are live on UHI and can send requests on behalf of users."
             />
             <KPICard title="Provider Applications (HSPAs) Integrated" value={<CountUp value={9} />}
-              tooltip="Count of Provider Applications (HSPAs) live across all services."
+              tooltip="Provider-side applications that are live on UHI and fulfil user requests."
             />
+
           </div>
         </Section>
 
@@ -103,14 +104,14 @@ function Dashboard() {
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <KPICard title="Search Growth (QoQ)" value={<span className="text-[var(--color-live)]">+38% <ArrowUpRight className="inline size-6"/></span>}
                     footnote="Quarter-on-quarter total searches"
-                    tooltip="(Current quarter searches − Previous quarter searches) ÷ Previous quarter searches × 100."
+                    tooltip="How much search volume grew compared with the previous quarter."
                   />
                   <KPICard title="Booking Growth (QoQ)" value={<span className="text-[var(--color-live)]">+24% <ArrowUpRight className="inline size-6"/></span>}
                     footnote="Quarter-on-quarter completed bookings"
-                    tooltip="(Current quarter bookings − Previous quarter bookings) ÷ Previous quarter bookings × 100."
+                    tooltip="How much completed booking volume grew compared with the previous quarter."
                   />
                   <KPICard title="Total Network Partners" value={<CountUp value={28} />}
-                    tooltip="Number of Unique EUAs, HSPAs, or Both."
+                    tooltip="Unique organisations on the UHI network, whether they act as an EUA, an HSPA, or both."
                   />
                 </div>
               </div>
@@ -122,9 +123,10 @@ function Dashboard() {
                   </Tooltip>
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <SmallStatCard title="ABHA Saturation" value="68.4%" foot="↗ +4.2pp QoQ" tip="Requests with ABHA ID or address ÷ Total API endpoint hits." />
-                  <SmallStatCard title="HFR Saturation" value="74.2%" foot="↗ +2.1pp QoQ" tip="Providers in UHI linked to HFR ÷ Total providers in UHI." />
-                  <SmallStatCard title="HPR Saturation" value="61.8%" foot="↗ +5.4pp QoQ" tip="Doctors in UHI linked to HPR ÷ Total doctors in UHI." />
+                  <SmallStatCard title="ABHA Saturation" value="68.4%" foot="↗ +4.2pp QoQ" tip="How often UHI traffic carries a verified ABHA identity." />
+                  <SmallStatCard title="HFR Saturation" value="74.2%" foot="↗ +2.1pp QoQ" tip="How many UHI providers are registered in the Health Facility Registry." />
+                  <SmallStatCard title="HPR Saturation" value="61.8%" foot="↗ +5.4pp QoQ" tip="How many UHI doctors are registered in the Healthcare Professionals Registry." />
+
                 </div>
               </div>
             </div>
@@ -300,16 +302,20 @@ function IntegrationTable() {
 
 function GeographicCard() {
   const [mode, setMode] = useState<"map" | "table">("map");
-  const [serviceFilter, setServiceFilter] = useState("All Services");
+  const [serviceFilters, setServiceFilters] = useState<string[]>([]);
   const [selectedState, setSelectedState] = useState<string | null>(null);
+  const serviceFilterLabel = serviceFilters.length === 0
+    ? "All Services"
+    : serviceFilters.length === 1 ? serviceFilters[0] : `${serviceFilters.length} services`;
 
   const data = useMemo(() => {
-    const mult = serviceFilter === "All Services" ? 1 : 0.3;
+    const mult = serviceFilters.length === 0 ? 1 : Math.min(1, 0.3 * serviceFilters.length);
     return states.map((s) => ({ ...s, value: Math.round(s.value * mult) }));
-  }, [serviceFilter]);
+  }, [serviceFilters]);
 
   const sorted = useMemo(() => [...data].sort((a, b) => b.value - a.value), [data]);
   const max = Math.max(...data.map((d) => d.value));
+
 
   // Per-state per-service breakdown (proportional synth from national totals)
   const totalNational = states.reduce((a, s) => a + s.value, 0);
@@ -344,10 +350,9 @@ function GeographicCard() {
               </button>
             ))}
           </div>
-          <select value={serviceFilter} onChange={(e) => setServiceFilter(e.target.value)}
-            className="text-xs border border-white/30 bg-white/10 text-white rounded px-2 py-1">
-            {["All Services", ...SERVICES].map((s) => <option key={s} className="text-foreground">{s}</option>)}
-          </select>
+          <MultiSelect label="Service" options={[...SERVICES]} selected={serviceFilters}
+            onToggle={(v) => setServiceFilters((s) => s.includes(v) ? s.filter((x) => x !== v) : [...s, v])} />
+
         </div>
       }
       onDownload={() => openSheet(METRIC_SHEETS.geographic)}
@@ -441,7 +446,7 @@ function GeographicCard() {
             </div>
           ) : (
             <>
-              <div className="text-[11px] tracking-wider text-[var(--color-navy)] font-semibold mb-2">TOP STATES · {serviceFilter.toUpperCase()}</div>
+              <div className="text-[11px] tracking-wider text-[var(--color-navy)] font-semibold mb-2">TOP STATES · {serviceFilterLabel.toUpperCase()}</div>
               <div className="max-h-[520px] overflow-y-auto pr-2">
                 <table className="w-full text-sm">
                   <tbody>
