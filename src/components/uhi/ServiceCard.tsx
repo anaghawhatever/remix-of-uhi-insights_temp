@@ -1,7 +1,7 @@
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip as RTooltip, Label } from "recharts";
-import { liveServices, serviceStatus, serviceColor, METRIC_SHEETS, openSheet, type ServiceKey } from "@/lib/uhi-data";
+import { liveServices, serviceStatus, serviceColor, type ServiceKey } from "@/lib/uhi-data";
 import { StatusBadge, CountUp, Tooltip } from "./primitives";
-import { Info, ArrowRight, Download } from "lucide-react";
+import { Info, ArrowRight } from "lucide-react";
 
 type Props = { service: ServiceKey; kind: "discovery" | "fulfilment" };
 
