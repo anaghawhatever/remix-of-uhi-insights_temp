@@ -446,7 +446,7 @@ function GeographicCard() {
             </div>
           ) : (
             <>
-              <div className="text-[11px] tracking-wider text-[var(--color-navy)] font-semibold mb-2">TOP STATES · {serviceFilter.toUpperCase()}</div>
+              <div className="text-[11px] tracking-wider text-[var(--color-navy)] font-semibold mb-2">TOP STATES · {serviceFilterLabel.toUpperCase()}</div>
               <div className="max-h-[520px] overflow-y-auto pr-2">
                 <table className="w-full text-sm">
                   <tbody>
