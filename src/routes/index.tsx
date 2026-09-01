@@ -49,11 +49,12 @@ function Dashboard() {
               tooltip="Aggregated Bookings across Teleconsultation, Physical Consultation Booking and Ambulance Booking services."
             />
             <KPICard title="Citizen-Facing Applications (EUAs) Integrated" value={<CountUp value={22} />}
-              tooltip="Count of Citizen-Facing Applications (EUAs) that have reached Go Live status across all live services."
+              tooltip="Citizen-facing apps that are live on UHI and can send requests on behalf of users."
             />
             <KPICard title="Provider Applications (HSPAs) Integrated" value={<CountUp value={9} />}
-              tooltip="Count of Provider Applications (HSPAs) live across all services."
+              tooltip="Provider-side applications that are live on UHI and fulfil user requests."
             />
+
           </div>
         </Section>
 
