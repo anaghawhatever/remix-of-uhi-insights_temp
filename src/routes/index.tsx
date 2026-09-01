@@ -350,10 +350,9 @@ function GeographicCard() {
               </button>
             ))}
           </div>
-          <select value={serviceFilter} onChange={(e) => setServiceFilter(e.target.value)}
-            className="text-xs border border-white/30 bg-white/10 text-white rounded px-2 py-1">
-            {["All Services", ...SERVICES].map((s) => <option key={s} className="text-foreground">{s}</option>)}
-          </select>
+          <MultiSelect label="Service" options={[...SERVICES]} selected={serviceFilters}
+            onToggle={(v) => setServiceFilters((s) => s.includes(v) ? s.filter((x) => x !== v) : [...s, v])} />
+
         </div>
       }
       onDownload={() => openSheet(METRIC_SHEETS.geographic)}
