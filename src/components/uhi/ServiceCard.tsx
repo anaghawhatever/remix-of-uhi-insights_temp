@@ -1,7 +1,7 @@
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip as RTooltip, Label } from "recharts";
-import { liveServices, serviceStatus, serviceColor, METRIC_SHEETS, openSheet, type ServiceKey } from "@/lib/uhi-data";
+import { liveServices, serviceStatus, serviceColor, type ServiceKey } from "@/lib/uhi-data";
 import { StatusBadge, CountUp, Tooltip } from "./primitives";
-import { Info, ArrowRight, Download } from "lucide-react";
+import { Info, ArrowRight } from "lucide-react";
 
 type Props = { service: ServiceKey; kind: "discovery" | "fulfilment" };
 
@@ -17,9 +17,6 @@ export function ServiceCard({ service, kind }: Props) {
   const accent = isDiscovery ? "var(--color-bar-coral)" : "var(--color-chart-teal)";
   const iconBg = serviceColor[service];
 
-
-  const handleDownload = () => openSheet(METRIC_SHEETS.serviceCards);
-
   return (
     <div className="card-cream p-3 sm:p-4 flex flex-col gap-2.5 min-w-0">
       <div className="flex items-start gap-2.5 min-w-0">
@@ -32,9 +29,6 @@ export function ServiceCard({ service, kind }: Props) {
             <StatusBadge status={status} />
           </div>
         </div>
-        <button onClick={handleDownload} aria-label="Download" className="shrink-0 text-muted-foreground hover:text-foreground p-1 -m-1">
-          <Download className="size-4" />
-        </button>
       </div>
 
       {/* Top metrics: for discovery just Total Searches; for fulfilment both Searches + Bookings */}
