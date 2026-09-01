@@ -29,9 +29,6 @@ export function ServiceCard({ service, kind }: Props) {
             <StatusBadge status={status} />
           </div>
         </div>
-        <button onClick={handleDownload} aria-label="Download" className="shrink-0 text-muted-foreground hover:text-foreground p-1 -m-1">
-          <Download className="size-4" />
-        </button>
       </div>
 
       {/* Top metrics: for discovery just Total Searches; for fulfilment both Searches + Bookings */}
