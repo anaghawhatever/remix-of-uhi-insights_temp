@@ -32,7 +32,7 @@ jobs:
         run: npm run build
 
       - name: List build output
-        run: ls -la
+        run: ls -la .output/public/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
